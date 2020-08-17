@@ -1,0 +1,14 @@
+<Project>
+
+  <!-- Coalesce EnableThisAssemblyClass to a boolean value;
+       force to false for projects in unsupported languages. -->
+  <PropertyGroup>
+		<EnableThisAssemblyClass Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'">false</EnableThisAssemblyClass>
+		<EnableThisAssemblyClass Condition="'$(BV_ThisAssemblyClassFile)' == ''">false</EnableThisAssemblyClass>
+    <EnableThisAssemblyClass Condition="'$(EnableThisAssemblyClass)' == ''">true</EnableThisAssemblyClass>
+  </PropertyGroup>
+  
+  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
+          Condition="$(EnableThisAssemblyClass)" />
+    
+</Project>

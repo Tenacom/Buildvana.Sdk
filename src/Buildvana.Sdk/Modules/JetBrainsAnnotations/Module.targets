@@ -1,0 +1,18 @@
+<Project>
+
+  <PropertyGroup>
+    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' == ''">true</UseJetBrainsAnnotations>
+    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' != 'true'">false</UseJetBrainsAnnotations>
+  </PropertyGroup>
+
+  <!-- Add ReSharper-related package references where appropriate. -->
+  <ItemGroup Condition="$(UseJetBrainsAnnotations)">
+    <PackageReference Include="JetBrains.Annotations"
+                      IsImplicitlyDefined="true"
+                      PrivateAssets="All" />
+    <PackageReference Include="ReSharper.ExportAnnotations.Task"
+                      IsImplicitlyDefined="true"
+                      PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>

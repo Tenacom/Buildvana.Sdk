@@ -1,0 +1,40 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="$(MSBuildThisFileDirectory)build\MSBuild.Packaging.props"/>
+
+  <!-- Branding, ownership, and licensing -->
+  <PropertyGroup>
+    <Product>Buildvana.Sdk</Product>
+    <Authors>rdeago</Authors>
+    <Owners>Buildvana</Owners>
+    <Copyright>Copyright (C) 2020 Buildvana contributors.</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)LICENSE" Link="LICENSE" Visible="false" Pack="true" />
+    <Content Include="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES" Link="THIRD-PARTY-NOTICES" Visible="false" Pack="true" />
+  </ItemGroup>
+
+  <!-- Package Central Version Management -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <!-- Repository and documentation -->
+  <PropertyGroup>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Buildvana/Buildvana.Sdk</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Buildvana/Buildvana</PackageProjectUrl>
+    <PackageReleaseNotes>Release notes are available at https://github.com/Buildvana/Buildvana.Sdk/blob/master/CHANGELOG.md</PackageReleaseNotes>
+  </PropertyGroup>
+  
+  <!-- Package icon -->
+  <PropertyGroup>
+    <PackageIcon>$(Product).png</PackageIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)graphics\PackageIcon.png" Link="$(Product).png" Visible="false" Pack="true" />
+  </ItemGroup>
+
+</Project>

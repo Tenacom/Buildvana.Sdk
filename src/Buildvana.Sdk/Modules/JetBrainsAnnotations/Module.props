@@ -1,0 +1,8 @@
+<Project>
+
+  <!-- Use (and automatically export) JetBrains annotations by default. -->
+  <PropertyGroup>
+    <UseJetBrainsAnnotations>true</UseJetBrainsAnnotations>
+  </PropertyGroup>
+
+</Project>

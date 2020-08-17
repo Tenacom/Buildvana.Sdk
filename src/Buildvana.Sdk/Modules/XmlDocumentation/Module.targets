@@ -1,0 +1,19 @@
+<Project>
+
+  <!-- If XML documentation generation is disabled:
+         * suppress documentation-related compiler warnings, as suggested in https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA0001.md
+         * also suppress documentation-related StyleCop warnings because of https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3097
+         * suppress warning SA0001 (see also https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3092 for a reason why)
+         * disable publishing of the documentation file, because it's not supposed to be there to start with
+  -->
+  <PropertyGroup Condition="!$(GenerateDocumentationFile)">
+    <NoWarn Condition="'$(NoWarn)' != ''">$(NoWarn);</NoWarn>
+    <NoWarn>$(NoWarn)CS1573;CS1591;CS1712</NoWarn>
+    <NoWarn>$(NoWarn);SA0001</NoWarn>
+    <NoWarn>$(NoWarn);SA1600;SA1601;SA1602;SA1603;SA1604;SA1605;SA1606;SA1607;SA1608;SA1609</NoWarn>
+    <NoWarn>$(NoWarn);SA1610;SA1611;SA1612;SA1613;SA1614;SA1615;SA1616;SA1617;SA1618;SA1619</NoWarn>
+    <NoWarn>$(NoWarn);SA1620;SA1621;SA1622;SA1623;SA1624;SA1625;SA1626;SA1627;SA1628;SA1629</NoWarn>
+    <PublishDocumentationFile>false</PublishDocumentationFile>
+  </PropertyGroup>
+
+</Project>

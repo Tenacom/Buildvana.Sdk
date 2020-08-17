@@ -1,0 +1,213 @@
+<Project>
+
+  <!-- Put packages in artifacts folder. -->
+  <PropertyGroup>
+    <PackageOutputPath>$(ArtifactsDirectory)$(Configuration)\</PackageOutputPath>
+  </PropertyGroup>
+
+  <!-- Make Owners default to Authors. -->
+  <PropertyGroup>
+    <Owners Condition="'$(Owners)' == ''">$(Authors)</Owners>
+  </PropertyGroup>
+
+  <!-- ===================================================================================== -->
+
+  <!-- Coalesce LicenseFileInPackage to a boolean value.
+       Default is true, unless LicensePackageExpression is defined. -->
+  <PropertyGroup>
+    <LicenseFileInPackage Condition="'$(PackageLicenseExpression)' != ''">false</LicenseFileInPackage>
+    <LicenseFileInPackage Condition="'$(LicenseFileInPackage)' == ''">true</LicenseFileInPackage>
+    <LicenseFileInPackage Condition="'$(LicenseFileInPackage)' != 'true'">false</LicenseFileInPackage>
+  </PropertyGroup>
+
+  <!-- Include a license file in package:
+       - if LicenseFileInPackage is false, just don't;
+       - if PackageLicensePath is specified, use it;
+       - otherwise, if PackageLicenseFile is specified, look for it in project directory and going up.
+         If a file is found, set PackageLicensePath to its full path;
+       - otherwise, look for a default license file. If a file is found,
+         set PackageLicensePath to its full path and PackageLicenseFile to its filename. -->
+  <Choose>
+    <When Condition="!$(LicenseFileInPackage)">
+      <PropertyGroup>
+        <PackageLicenseFile />
+        <PackageLicensePath />
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PackageLicensePath)' != ''">
+      <PropertyGroup>
+        <PackageLicenseFile>$([System.IO.Path]::GetFileName('$(PackageLicensePath)'))</PackageLicenseFile>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="!Exists('$(PackageLicensePath)')"
+                            Include="BVE1500"
+                            Text="Specified license file '$(PackageLicensePath)' does not exist." />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(PackageLicenseFile)' != ''">
+      <PropertyGroup>
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('$(PackageLicenseFile)', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="'$(PackageLicensePath)' == ''"
+                            Include="BVE1501"
+                            Text="Specified license file '$(PackageLicenseFile)' was not found." />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('LICENSE', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' == ''">$([MSBuild]::GetPathOfFileAbove('LICENSE.txt', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' == ''">$([MSBuild]::GetPathOfFileAbove('LICENSE.md', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicenseFile Condition="'$(PackageLicensePath)' != ''">$([System.IO.Path]::GetFileName('$(PackageLicensePath)'))</PackageLicenseFile>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="'$(PackageLicensePath)' == ''"
+                            Include="BVE1502"
+                            Text="No license file found." />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Add license file to project items so the Pack target can find it.. -->
+  <ItemGroup Condition="'$(PackageLicensePath)' != '' And '$(PackageLicenseFile)' != ''">
+    <AdditionalFiles Remove="$(PackageLicensePath)" />
+    <AdditionalFiles Include="$(PackageLicensePath)" Link="$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+  <!-- Coalesce PackageRequireLicenseAcceptance to a boolean value. Default is false. -->
+  <PropertyGroup>
+    <PackageRequireLicenseAcceptance Condition="'$(LicensePackageExpression)' == '' And !$(LicenseFileInPackage)">false</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance Condition="'$(PackageRequireLicenseAcceptance)' != 'true'">false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <!-- ===================================================================================== -->
+
+  <!-- Coalesce ThirdPartyNoticeInPackage to a boolean value. Default is true. -->
+  <PropertyGroup>
+    <ThirdPartyNoticeInPackage Condition="'$(ThirdPartyNoticeInPackage)' == ''">true</ThirdPartyNoticeInPackage>
+    <ThirdPartyNoticeInPackage Condition="'$(ThirdPartyNoticeInPackage)' != 'true'">false</ThirdPartyNoticeInPackage>
+  </PropertyGroup>
+
+  <!-- Include a third-party notice in package:
+       - if ThirdPartyNoticeInPackage is false, just don't;
+       - if PackageThirdPartyNoticePath is specified, use it;
+       - otherwise, if PackageThirdPartyNoticeFile is specified, look for it in project directory and going up.
+         If a file is found, set PackageThirdPartyNoticePath to its full path;
+       - otherwise, look for a default third-party notice file. If a file is found,
+         set PackageThirdPartyNoticePath to its full path and PackageThirdPartyNoticeFile to its filename. -->
+  <Choose>
+    <When Condition="!$(ThirdPartyNoticeInPackage)">
+      <PropertyGroup>
+        <PackageThirdPartyNoticeFile />
+        <PackageThirdPartyNoticePath />
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PackageThirdPartyNoticePath)' != ''">
+      <PropertyGroup>
+        <PackageThirdPartyNoticeFile>$([System.IO.Path]::GetFileName('$(PackageThirdPartyNoticePath)'))</PackageThirdPartyNoticeFile>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="!Exists('$(PackageThirdPartyNoticePath)')"
+                            Include="BVE1503"
+                            Text="Specified third-party notice file '$(PackageThirdPartyNoticePath)' does not exist." />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(PackageThirdPartyNoticeFile)' != ''">
+      <PropertyGroup>
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('$(PackageThirdPartyNoticeFile)', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
+                            Include="BVE1504"
+                            Text="Specified third-party notice file '$(PackageThirdPartyNoticeFile)' was not found." />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICE', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' == ''">$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICE.txt', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' == ''">$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICE.md', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticeFile Condition="'$(PackageThirdPartyNoticePath)' != ''">$([System.IO.Path]::GetFileName('$(PackageThirdPartyNoticePath)'))</PackageThirdPartyNoticeFile>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
+                            Include="BVE1505"
+                            Text="No third-party notice file found." />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Add third-party notice file to project items so the Pack target can find it.. -->
+  <ItemGroup Condition="'$(PackageThirdPartyNoticePath)' != '' And '$(PackageThirdPartyNoticeFile)' != ''">
+    <AdditionalFiles Remove="$(PackageThirdPartyNoticePath)" />
+    <AdditionalFiles Include="$(PackageThirdPartyNoticePath)" Link="$(PackageThirdPartyNoticeFile)" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+  <!-- ===================================================================================== -->
+
+  <!-- Coalesce IconInPackage to a boolean value. Default is true. -->
+  <PropertyGroup>
+    <IconInPackage Condition="'$(IconInPackage)' == ''">true</IconInPackage>
+    <IconInPackage Condition="'$(IconInPackage)' != 'true'">false</IconInPackage>
+  </PropertyGroup>
+
+  <!-- Use a package icon:
+       - if IconInPackage is false, just don't;
+       - if PackageIconPath is specified, use it;
+       - otherwise, if PackageIcon is specified, look for it in project directory and going up.
+         If a file is found, set PackageIconPath to its full path;
+       - otherwise, look for a default icon file. If a file is found,
+        set PackageIconPath to its full path and PackageIcon to its filename. -->
+  <Choose>
+    <When Condition="!$(IconInPackage)">
+      <PropertyGroup>
+        <PackageIcon />
+        <PackageIconPath />
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PackageIconPath)' != ''">
+      <PropertyGroup>
+        <PackageIcon>$([System.IO.Path]::GetFileName('$(PackageIconPath)'))</PackageIcon>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="!Exists('$(PackageIconPath)')"
+                            Include="BVE1506"
+                            Text="Specified package icon file '$(PackageIconPath)' does not exist." />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(PackageIcon)' != ''">
+      <PropertyGroup>
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('$(PackageIcon)', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="'$(PackageIconPath)' == ''"
+                            Include="BVE1507"
+                            Text="Specified package icon file '$(PackageIcon)' was not found." />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('LICENSE', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' == ''">$([MSBuild]::GetPathOfFileAbove('icon.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' == ''">$([MSBuild]::GetPathOfFileAbove('$(Product).png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' == ''">$([MSBuild]::GetPathOfFileAbove('$(MSBuildProjectName).png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIcon Condition="'$(PackageIconPath)' != ''">$([System.IO.Path]::GetFileName('$(PackageIconPath)'))</PackageIcon>
+      </PropertyGroup>
+      <ItemGroup>
+        <BV_EvaluationError Condition="'$(PackageIconPath)' == ''"
+                            Include="BVE1508"
+                            Text="No package icon file found." />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Add icon file to project items so the Pack target can find it. -->
+  <ItemGroup Condition="'$(PackageIconPath)' != '' And '$(PackageIcon)' != ''">
+    <AdditionalFiles Remove="$(PackageIconPath)" />
+    <AdditionalFiles Include="$(PackageIconPath)" Link="$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+  <!-- ===================================================================================== -->
+
+</Project>

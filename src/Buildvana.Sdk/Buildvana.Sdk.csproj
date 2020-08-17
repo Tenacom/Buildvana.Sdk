@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageOnlyBuild>true</PackageOnlyBuild>
+    <Title>Buildvana SDK</Title>
+    <Summary>An opinionated, best-practices-based, CI-friendly, VS-friendly, MSBuild-powered build system for .NET projects.</Summary>
+    <Description>Documentation is available here: https://github.com/Buildvana/Buildvana.Sdk/blob/master/README.md</Description>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Modules\**\*" Pack="true" />
+    <Content Include="Sdk\**\*" Pack="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Aliased\**\*" Pack="false" />
+  </ItemGroup>
+
+</Project>

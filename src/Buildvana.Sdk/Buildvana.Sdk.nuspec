@@ -1,0 +1,36 @@
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <title>$title$</title>
+    <owners>$authors$</owners>
+    <authors>$authors$</authors>
+    <version>$version$</version>
+    <copyright>$copyright$</copyright>
+    <summary>$summary$</summary>
+    <description>$description$</description>
+    <icon>$id$.png</icon>
+    <tags>$tags$</tags>
+    <license type="expression">MIT</license>
+    <projectUrl>$projectUrl$</projectUrl>
+    <releaseNotes>$releaseNotes$</releaseNotes>
+    <repository type="$repositoryType$" url="$repositoryUrl$" commit="$sourceRevisionId$" />
+    <requireLicenseAcceptance>$requireLicenseAcceptance$</requireLicenseAcceptance>
+    <developmentDependency>$developmentDependency$</developmentDependency>
+    <serviceable>$serviceable$</serviceable>
+    <packageTypes>
+      <packageType name="$packageType$" />
+    </packageTypes>
+  </metadata>
+  <files>
+    <file src="..\..\THIRD-PARTY-NOTICES" target="THIRD-PARTY-NOTICES" />
+    <file src="..\..\graphics\PackageIcon.png" target="$id$.png" />
+    <file src="Modules\**\*" target="Modules" />
+    <file src="Sdk\**\*" target="Sdk" />
+    <file src="Aliased\ImportFiles.proj" target="Sdk\Import.BeforeCommon.props.proj" />
+    <file src="Aliased\ImportFiles.proj" target="Sdk\Import.Common.props.proj" />
+    <file src="Aliased\ImportFiles.proj" target="Sdk\Import.AfterCommon.props.proj" />
+    <file src="Aliased\ImportFiles.proj" target="Sdk\Import.BeforeCommon.targets.proj" />
+    <file src="Aliased\ImportFiles.proj" target="Sdk\Import.Common.targets.proj" />
+    <file src="Aliased\ImportFiles.proj" target="Sdk\Import.AfterCommon.targets.proj" />
+  </files>
+</package>

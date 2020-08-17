@@ -1,0 +1,14 @@
+<Project>
+
+  <!-- IsPackable default = true for libraries, otherwise false. -->
+  <PropertyGroup Condition="'$(IsPackable)' == ''">
+    <IsPackable Condition="'$(BV_IsLibraryProject)' == 'true'">true</IsPackable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(IsPackable)' != 'true'">
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  
+  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
+          Condition="$(IsPackable)" />
+
+</Project>
