@@ -1,0 +1,5 @@
+*.pdf   -text
+*.doc   -text
+*.docx  -text
+*.sh     eol=lf
+*        text=auto
