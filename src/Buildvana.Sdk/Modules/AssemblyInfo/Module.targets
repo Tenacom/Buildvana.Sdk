@@ -1,0 +1,24 @@
+<Project>
+
+  <!-- Suppress warning CS3021: type or method does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute.
+       The assembly actually has a CLSCompliant attribute; it's just that the IDE does not see it, because it's not in the source. -->
+  <PropertyGroup Condition="'$(GenerateAssemblyCLSCompliantAttribute)' == 'true' And '$(CLSCompliant)' != ''">
+    <NoWarn Condition="'$(NoWarn)' != ''">$(NoWarn);</NoWarn>
+    <NoWarn>$(NoWarn)CS3021</NoWarn>
+  </PropertyGroup>
+
+  <!-- Generate CLSCompliant attribute. -->
+  <ItemGroup Condition="'$(GenerateAssemblyCLSCompliantAttribute)' == 'true' And '$(CLSCompliant)' != ''">
+    <LiteralAssemblyAttribute Include="System.CLSCompliant">
+      <_Parameter1>$(CLSCompliant)</_Parameter1>
+    </LiteralAssemblyAttribute>
+  </ItemGroup>
+
+  <!-- Generate ComVisible attribute. -->
+  <ItemGroup Condition="'$(GenerateAssemblyComVisibleAttribute)' == 'true' And '$(ComVisible)' != ''">
+    <LiteralAssemblyAttribute Include="System.Runtime.InteropServices.ComVisible">
+      <_Parameter1>$(ComVisible)</_Parameter1>
+    </LiteralAssemblyAttribute>
+  </ItemGroup>
+
+</Project>

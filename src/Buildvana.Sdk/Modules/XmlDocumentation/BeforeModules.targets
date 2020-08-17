@@ -1,0 +1,11 @@
+<Project>
+
+  <!-- GenerateDocumentationFile default = true for libraries (except for test projects), false for other projects. -->
+  <PropertyGroup Condition="'$(GenerateDocumentationFile)' == ''">
+    <GenerateDocumentationFile Condition="'$(BV_IsLibraryProject)' == 'true'">true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(GenerateDocumentationFile)' != 'true'">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+</Project>

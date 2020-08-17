@@ -1,0 +1,218 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--
+    Import files from HomeDirectory down to the project's directory.
+    Works during MSBuild's evaluation phase.
+    
+    NOTES:
+      * Only existing files will be imported.
+      * A maximum of 10 files will be imported, for the following reasons:
+          - MSBuild lacks "real" loops, especially outside of targets;
+          - MSBuild imports the same file at most once, thus ruling out tricks based on recursive imports.    
+  -->
+
+  <!-- Initialize the name of the files to import.
+         * If the name of this file starts with "Import.", then:
+             - the remainder of the name of this file, excluding the ".proj" extension, is the name of the files to import;
+             - any files found will be imported by this file;
+             - the _Import_FullPaths property will be empty.
+         * If the name of this file starts with "PrepareImport.", then:
+             - the remainder of the name of this file, excluding the ".proj" extension, is the name of the files to import;
+             - any files found will not be imported by this file;
+             - the _Import_FullPaths property will contain a semicolon-separated list
+               of the full paths of the found files.
+         * If the name of this file doesn't start with either of the two above prefixes:
+             - no import will take place;
+             - the _Import_FullPaths property will be empty.
+
+       Note that this file must always have a ".proj" extension,
+       because of how NuGet interprets targets of included files.
+       https://docs.microsoft.com/en-us/nuget/reference/nuspec#including-content-files
+       Therefore, to import files called "MyFile.ext", this file shall be renamed "Import.MyFile.ext.proj".
+   -->
+  <PropertyGroup>
+    <_Import_Filename>$(MSBuildThisFile)</_Import_Filename>
+    <_Import_Filename Condition="$(_Import_Filename.EndsWith('.proj'))">$(_Import_Filename.Remove($(_Import_Filename.LastIndexOf('.'))))</_Import_Filename>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_Import_DoImport />
+    <_Import_DoImport Condition="$(_Import_Filename.StartsWith('PrepareImport.'))">false</_Import_DoImport>
+    <_Import_DoImport Condition="$(_Import_Filename.StartsWith('Import.'))">true</_Import_DoImport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_DoImport)' != ''">
+    <_Import_Filename>$(_Import_Filename.Substring($([MSBuild]::Add($(_Import_Filename.IndexOf('.')), 1))))</_Import_Filename>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_DoImport)' == ''">
+    <_Import_Filename />
+    <_Import_DoImport>false</_Import_DoImport>
+  </PropertyGroup>
+
+  <!-- Initialize parameters and result. -->
+  <PropertyGroup>
+    <_Import_Directory>$(MSBuildProjectDirectory)</_Import_Directory>
+    <_Import_TopmostDirectory>$(HomeDirectory)</_Import_TopmostDirectory>
+    <_Import_FullPaths /> <!-- Full paths of files to import. -->
+  </PropertyGroup>
+
+  <!-- Build the list of files to import,
+       starting at _Import_Directory and going up until _Import_TopmostDirectory.
+       Always prepend to the list so it is built in reverse order;
+       this way, files in inner directories can override properties
+       set in outer directories.
+       Also make sure that if _ImportDirectory is not contained in _Import_TopmostDirectory
+       the list remains empty and no error is raised.
+
+       NOTE: All "Find file #" blocks should be identical! -->
+
+  <!-- Find file #1 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #2 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #3 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #4 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #5 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #6 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #7 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #8 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #9 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Find file #10 -->  
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_Directory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(_Import_Directory)', '$(_Import_Filename)'))</_Import_Directory>
+    <!-- Ensure a trailing slash is present, otherwise, if _ImportDirectory == _Import_TopmostDirectory, StartsWith will fail. -->
+    <_Import_Directory Condition="'$(_Import_Directory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(_Import_Directory)'))</_Import_Directory>
+    <!-- Bail out if not found, or found outside of _Import_TopmostDirectory. -->
+    <_Import_Directory Condition="!$(_Import_Directory.StartsWith('$(_Import_TopmostDirectory)'))" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_Import_Directory)' != ''">
+    <_Import_FullPaths Condition="'$(_Import_FullPaths)' != ''">;$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_FullPaths>$([System.IO.Path]::Combine('$(_Import_Directory)', '$(_Import_Filename)'))$(_Import_FullPaths)</_Import_FullPaths>
+    <_Import_Directory>$([MSBuild]::NormalizeDirectory('$(_Import_Directory)..'))</_Import_Directory>
+  </PropertyGroup>
+
+  <!-- Import the found files, if any, and if told to do so. -->
+  <Import Condition="'$(_Import_FullPaths)' != '' And $(_Import_DoImport)" Project="$(_Import_FullPaths)" />
+
+  <!-- Reset "local" properties. Don't reset the file list if it's needed by the caller. -->
+  <PropertyGroup>
+    <_Import_Filename />
+    <_Import_Directory />
+    <_Import_TopmostDirectory />
+    <_Import_FullPaths Condition="!$(_Import_DoImport)"/>
+  </PropertyGroup>
+
+</Project>

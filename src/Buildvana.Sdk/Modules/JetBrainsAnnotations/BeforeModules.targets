@@ -1,0 +1,9 @@
+<Project>
+
+  <!-- UseJetBrainsAnnotations default = true -->
+  <PropertyGroup>
+    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' == ''">true</UseJetBrainsAnnotations>
+    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' != 'true'">false</UseJetBrainsAnnotations>
+  </PropertyGroup>
+
+</Project>

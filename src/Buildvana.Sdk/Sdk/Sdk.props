@@ -1,0 +1,121 @@
+﻿<Project InitialTargets="BV_CheckSdkTargetsImport;BV_LogEvaluationErrors;BV_CreateArtifactsDirectory">
+
+  <!-- Signal that Sdk.props has been imported. -->
+  <PropertyGroup>
+    <BV_SdkPropsHasBeenImported>true</BV_SdkPropsHasBeenImported>
+  </PropertyGroup>
+
+  <!-- Rules for HomeDirectory:
+         * the Git submodule above the project's directory (look for a file named .git)
+         * the Git repository above the project's directory (look for a file named HEAD in a .git subdirectory)
+           NOTE: Check for ".git/HEAD", not ".git\HEAD", because the latter only works on Windows.
+                 MSBuild doesn't convert directory separators on the second argument to GetDirectoryNameOfFileAbove,
+                 probably due to https://github.com/microsoft/msbuild/issues/1024 -->
+  <PropertyGroup>
+    <HomeDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git'))</HomeDirectory>
+    <HomeDirectory Condition="'$(HomeDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git/HEAD'))</HomeDirectory>
+  </PropertyGroup>
+  
+  <!-- Normalize HomeDirectory if found. -->
+  <PropertyGroup>
+    <HomeDirectory Condition="'$(HomeDirectory)' != ''">$([MSBuild]::NormalizeDirectory('$(HomeDirectory)'))</HomeDirectory>
+  </PropertyGroup>
+
+  <!-- Check that HomeDirectory has been configured. -->
+  <ItemGroup>
+    <BV_EvaluationError Condition="'$(HomeDirectory)' == ''"
+                        Include="BVE1003"
+                        Text="Home directory not defined." />
+  </ItemGroup>
+
+  <!-- BV_IsConfigured is true if HomeDirectory is configured. -->
+  <PropertyGroup>
+    <BV_IsConfigured>true</BV_IsConfigured>
+    <BV_IsConfigured Condition="'$(HomeDirectory)' == ''">false</BV_IsConfigured>
+  </PropertyGroup>
+
+  <!-- ArtifactsDirectory = 'artifacts' directory under HomeDirectory. -->
+  <PropertyGroup Condition="$(BV_IsConfigured)">
+    <ArtifactsDirectory Condition="$(BV_IsConfigured)">$(HomeDirectory)artifacts\</ArtifactsDirectory>
+  </PropertyGroup>
+
+  <!-- BuildvanaSdkDirectory is where this file is. -->
+  <PropertyGroup>
+    <BuildvanaSdkDirectory>$(MSBuildThisFileDirectory)</BuildvanaSdkDirectory>
+  </PropertyGroup>
+
+  <!-- BuildvanaModulesDirectory is where modules are. -->
+  <PropertyGroup>
+    <BuildvanaModulesDirectory>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..\Modules'))</BuildvanaModulesDirectory>
+  </PropertyGroup>
+
+  <!-- Determine whether this is a test project. -->
+  <PropertyGroup Condition="'$(BV_IsTestProject)' == ''">
+    <BV_IsTestProject Condition="'$(TestProjectType)' != '' Or '$(IsTestProject)' == 'true'">true</BV_IsTestProject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(BV_IsTestProject)' != 'true'">
+    <BV_IsTestProject>false</BV_IsTestProject>
+  </PropertyGroup>
+
+  <!-- Determine whether this is a non-test library project. -->
+  <PropertyGroup Condition="'$(BV_IsLibraryProject)' == ''">
+    <BV_IsLibraryProject Condition="'$(OutputType)' == 'Library' And '$(BV_IsTestProject)' != 'true'">true</BV_IsLibraryProject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(BV_IsLibraryProject)' != 'true'">
+    <BV_IsLibraryProject>false</BV_IsLibraryProject>
+  </PropertyGroup>
+
+  <!-- Determine whether this is an executable project. -->
+  <PropertyGroup Condition="'$(BV_IsExeProject)' == ''">
+    <BV_IsExeProject Condition="'$(OutputType)' == 'Exe' Or '$(OutputType)' == 'WinExe'">true</BV_IsExeProject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(BV_IsExeProject)' != 'true'">
+    <BV_IsExeProject>false</BV_IsExeProject>
+  </PropertyGroup>
+
+  <!-- Import modules -->
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\BeforeModules.props" />
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\Module.props" />
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\AfterModules.props" />
+
+  <!-- Import BeforeCommon.props, Common.props, and AfterCommon.props files  -->
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.props.proj" />
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.Common.props.proj" />
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.AfterCommon.props.proj" />
+
+  <!-- Check whether Sdk.targets has been imported. -->
+  <Target Name="BV_CheckSdkTargetsImport">
+
+    <ItemGroup>
+      <BV_EvaluationError Condition="'$(BV_SdkTargetsHasBeenImported)' != 'true'"
+                          Include="BVE1001"
+                          Text="Sdk.targets not imported." />
+    </ItemGroup>
+
+  </Target>
+
+  <!-- Log evaluation warnings and errors, if any. -->
+  <Target Name="BV_LogEvaluationErrors">
+
+    <Warning
+      Condition="'@(BV_EvaluationWarning)' != ''"
+      Code="%(Identity)"
+      Text="%(Text)"
+      File="$(MSBuildProjectFullPath)" />
+
+    <Error
+      Condition="'@(BV_EvaluationError)' != ''"
+      Code="%(Identity)"
+      Text="%(Text)"
+      File="$(MSBuildProjectFullPath)" />
+
+  </Target>
+
+  <!-- Create ArtifactsDirectory if necessary. -->
+  <Target Name="BV_CreateArtifactsDirectory">
+
+    <MakeDir Directories="$(ArtifactsDirectory)" />
+
+  </Target>
+
+</Project>

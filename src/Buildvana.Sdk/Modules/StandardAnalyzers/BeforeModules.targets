@@ -1,0 +1,21 @@
+<Project>
+
+  <!-- UseStandardAnalyzers default = true, except for test projects. -->
+  <PropertyGroup Condition="'$(UseStandardAnalyzers)' == ''">
+    <UseStandardAnalyzers>true</UseStandardAnalyzers>
+    <UseStandardAnalyzers Condition="$(BV_IsTestProject)">false</UseStandardAnalyzers>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(UseStandardAnalyzers)' != 'true'">
+    <UseStandardAnalyzers>false</UseStandardAnalyzers>
+  </PropertyGroup>
+
+  <!-- UsePublicApiAnalyzers default = true only on library projects. -->
+  <PropertyGroup Condition="'$(UsePublicApiAnalyzers)' == ''">
+    <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
+    <UsePublicApiAnalyzers Condition="$(BV_IsLibraryProject)">true</UsePublicApiAnalyzers>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(UsePublicApiAnalyzers)' != 'true'">
+    <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
+  </PropertyGroup>
+
+</Project>

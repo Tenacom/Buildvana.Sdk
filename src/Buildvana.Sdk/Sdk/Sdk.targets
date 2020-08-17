@@ -1,0 +1,50 @@
+﻿<Project InitialTargets="BV_CheckSdkPropsImport">
+
+  <!-- Signal that Sdk.targets has been imported. -->
+  <PropertyGroup>
+    <BV_SdkTargetsHasBeenImported>true</BV_SdkTargetsHasBeenImported>
+  </PropertyGroup>
+
+  <!-- If Sdk.props has not been imported, BV_IsConfigured will be empty.
+       Set it to false to skip importing modules and common targets. -->
+  <PropertyGroup>
+    <BV_IsConfigured Condition="'$(BV_IsConfigured)' != 'true'">false</BV_IsConfigured>
+  </PropertyGroup>
+
+  <!-- Check that Sdk.props and Sdk.targets are from the same directory.
+       Otherwise it probably means they've been imported from different SDK versions
+       and may be incompatible with each other. -->
+  <ItemGroup>
+    <BV_EvaluationError Condition="'$(BuildvanaSdkDirectory)' != '' And '$(BuildvanaSdkDirectory)' != '$(MSBuildThisFileDirectory)'"
+                        Include="BVE1002"
+                        Text="Sdk.props and Sdk.targets are in different directories." />
+  </ItemGroup>
+  
+  <!-- Import BeforeCommon.targets, Common.targets, and AfterCommon.targets files  -->
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.targets.proj" />
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.Common.targets.proj" />
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.AfterCommon.targets.proj" />
+
+  <!-- Import modules -->
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\BeforeModules.targets" />
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\Module.targets" />
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\AfterModules.targets" />
+
+  <!-- Import PackageVersions.props after everything else, because it updates PackageReference items,
+       so the relevant items must already exist. -->
+  <Import Condition="$(BV_IsConfigured)" Project="$(MSBuildThisFileDirectory)PackageVersions.props" />
+
+  <!-- Check whether Sdk.props has been imported.
+       We cannot use BV_EvaluationError for this,
+       because the logic that handles it is in Sdk.props. -->
+  <Target Name="BV_CheckSdkPropsImport">
+
+    <Error
+      Condition="'$(BV_SdkPropsHasBeenImported)' != 'true'"
+      Code="BVE1000"
+      Text="Sdk.props not imported."
+      File="$(MSBuildProjectFullPath)" />
+
+  </Target>
+
+</Project>

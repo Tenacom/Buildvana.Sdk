@@ -1,0 +1,30 @@
+<Project InitialTargets="BV_ParseVersionFile">
+
+  <Target Name="BV_ParseVersionFile">
+
+    <Error Condition="'$(VersionFileFullPath)' == ''"
+           Code="BVE1600"
+           Text="Version file '$(VersionFileName)' not found." />
+    <Error Condition="$(BV_VersionFileFullPathAutomatic) And !$(VersionFileFullPath.StartsWith('$(HomeDirectory)'))"
+           Code="BVE1601"
+           Text="Version file '$(VersionFileName)' found outside repository." />
+    <Error Condition="!$([System.IO.File]::Exists('$(VersionFileFullPath)'))"
+           Code="BVE1602"
+           Text="Version file '$(VersionFileFullPath)' not found." />
+
+    <Buildvana.Tasks.ParseVersionFile VersionFileFullPath="$(VersionFileFullPath)">
+      <Output TaskParameter="Version" PropertyName="Version" />
+      <Output TaskParameter="VersionPrefix" PropertyName="VersionPrefix" />
+      <Output TaskParameter="VersionSuffix" PropertyName="VersionSuffix" />
+      <Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />
+      <Output TaskParameter="AssemblyFileVersion" PropertyName="AssemblyFileVersion" />
+      <Output TaskParameter="AssemblyInformationalVersion" PropertyName="AssemblyInformationalVersion" />
+    </Buildvana.Tasks.ParseVersionFile>
+
+    <PropertyGroup>
+      <PackageVersion>$(Version)</PackageVersion>
+    </PropertyGroup>
+
+  </Target>
+
+</Project>

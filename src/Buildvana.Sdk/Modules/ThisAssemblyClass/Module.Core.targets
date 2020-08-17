@@ -1,0 +1,84 @@
+<Project>
+  
+  <PropertyGroup>
+    <BV_ThisAssemblyClassFile />
+    <BV_ThisAssemblyClassFile Condition="'$(DefaultLanguageSourceExtension)' != ''">$(IntermediateOutputPath)Buildvana_ThisAssembly.g$(DefaultLanguageSourceExtension)</BV_ThisAssemblyClassFile>
+    <ThisAssemblyClassName Condition="'$(ThisAssemblyClassName)' == ''">ThisAssembly</ThisAssemblyClassName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ThisAssemblyConstant Remove="Version" />
+    <ThisAssemblyConstant Remove="FileVersion" />
+    <ThisAssemblyConstant Remove="InformationalVersion" />
+    <ThisAssemblyConstant Remove="Company" />
+    <ThisAssemblyConstant Remove="Copyright" />
+    <ThisAssemblyConstant Remove="Description" />
+    <ThisAssemblyConstant Remove="Product" />
+    <ThisAssemblyConstant Remove="Title" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ThisAssemblyConstant Include="Version" Type="string" Value="$(AssemblyVersion)" />
+    <ThisAssemblyConstant Include="FileVersion" Type="string" Value="$(FileVersion)" />
+    <ThisAssemblyConstant Include="InformationalVersion" Type="string" Value="$(InformationalVersion)" />
+    <ThisAssemblyConstant Include="Company" Type="string" Value="$(Company)" />
+    <ThisAssemblyConstant Include="Copyright" Type="string" Value="$(Copyright)" />
+    <ThisAssemblyConstant Include="Description" Type="string" Value="$(Description)" />
+    <ThisAssemblyConstant Include="Product" Type="string" Value="$(Product)" />
+    <ThisAssemblyConstant Include="Title" Type="string" Value="$(AssemblyTitle)" />
+  </ItemGroup>
+
+  <!-- This must run before every invocation of CoreCompile to ensure that all compiler runs
+       see the generated assembly info. There is at least one scenario involving Xaml
+       where CoreCompile is invoked without other potential hooks such as Compile or CoreBuild,
+       etc., so we hook directly on to CoreCompile. Furthermore, we  must run *after*
+       PrepareForBuild to ensure that the intermediate directory has been created. -->
+  <Target Name="BV_GenerateThisAssemblyClass"
+          BeforeTargets="CoreCompile"
+          DependsOnTargets="PrepareForBuild;BV_GenerateThisAssemblyClassCore" />
+
+  <!-- To allow version changes to be respected on incremental builds (e.g. through CLI parameters),
+       create a hash of all assembly attributes so that the cache file will change with the calculated
+       assembly attribute values and msbuild will then execute BV_GenerateThisAssemblyClassCore
+       to generate a new file. -->
+  <Target Name="BV_CreateThisAssemblyClassCache">
+
+    <PropertyGroup>
+      <BV_ThisAssemblyClassCacheFile>$(IntermediateOutputPath)BV_ThisAssembly.cache</BV_ThisAssemblyClassCacheFile>
+    </PropertyGroup>
+
+    <Hash ItemsToHash="@(ThisAssemblyConstant->'%(Identity)%(Type)%(Value)')">
+      <Output TaskParameter="HashResult" PropertyName="BV_ThisAssemblyClassHash" />
+    </Hash>
+
+    <WriteLinesToFile Lines="$(BV_ThisAssemblyClassHash)"
+                      File="$(BV_ThisAssemblyClassCacheFile)"
+                      Overwrite="True"
+                      WriteOnlyWhenDifferent="True" />
+
+    <ItemGroup>
+      <FileWrites Include="$(BV_ThisAssemblyClassCacheFile)" />
+    </ItemGroup>
+
+  </Target>
+
+  <Target Name="BV_GenerateThisAssemblyClassCore"
+          DependsOnTargets="BV_CreateThisAssemblyClassCache"
+          Inputs="$(BV_ThisAssemblyClassCacheFile)"
+          Outputs="$(BV_ThisAssemblyClassFile)">
+
+    <Buildvana.Tasks.WriteThisAssemblyClass Language="$(Language)"
+                                            OutputPath="$(BV_ThisAssemblyClassFile)"
+                                            ClassName="$(ThisAssemblyClassName)"
+                                            Namespace="$(ThisAssemblyClassNamespace)"
+                                            Constants="@(ThisAssemblyConstant)" />
+
+		<ItemGroup>
+			<Compile Remove="$(BV_ThisAssemblyClassFile)" />			
+			<Compile Include="$(BV_ThisAssemblyClassFile)" Visible="False" />
+      <FileWrites Include="$(BV_ThisAssemblyClassFile)" />
+		</ItemGroup>
+
+	</Target>
+
+</Project>
