@@ -49,29 +49,29 @@
     <BuildvanaModulesDirectory>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..\Modules'))</BuildvanaModulesDirectory>
   </PropertyGroup>
 
-  <!-- Determine whether this is a test project. -->
-  <PropertyGroup Condition="'$(BV_IsTestProject)' == ''">
-    <BV_IsTestProject Condition="'$(TestProjectType)' != '' Or '$(IsTestProject)' == 'true'">true</BV_IsTestProject>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BV_IsTestProject)' != 'true'">
+  <!-- Determine the kind of project. -->
+  <PropertyGroup>
     <BV_IsTestProject>false</BV_IsTestProject>
-  </PropertyGroup>
-
-  <!-- Determine whether this is a non-test library project. -->
-  <PropertyGroup Condition="'$(BV_IsLibraryProject)' == ''">
-    <BV_IsLibraryProject Condition="'$(OutputType)' == 'Library' And '$(BV_IsTestProject)' != 'true'">true</BV_IsLibraryProject>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BV_IsLibraryProject)' != 'true'">
     <BV_IsLibraryProject>false</BV_IsLibraryProject>
-  </PropertyGroup>
-
-  <!-- Determine whether this is an executable project. -->
-  <PropertyGroup Condition="'$(BV_IsExeProject)' == ''">
-    <BV_IsExeProject Condition="'$(OutputType)' == 'Exe' Or '$(OutputType)' == 'WinExe'">true</BV_IsExeProject>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BV_IsExeProject)' != 'true'">
     <BV_IsExeProject>false</BV_IsExeProject>
   </PropertyGroup>
+  <Choose>
+    <When Condition="'$(TestProjectType)' != '' Or '$(IsTestProject)' == 'true'">
+      <PropertyGroup Condition="!$(BV_IsNoTargetsProject)">
+        <BV_IsTestProject>true</BV_IsTestProject>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(OutputType)' == 'Library' And '$(BV_IsTestProject)' != 'true'">
+      <PropertyGroup>
+        <BV_IsLibraryProject>true</BV_IsLibraryProject>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(OutputType)' == 'Exe' Or '$(OutputType)' == 'WinExe'">
+      <PropertyGroup Condition="!$(BV_IsNoTargetsProject)">
+        <BV_IsExeProject>true</BV_IsExeProject>
+      </PropertyGroup>
+    </When>
+  </Choose>
 
   <!-- Import modules -->
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\BeforeModules.props" />
