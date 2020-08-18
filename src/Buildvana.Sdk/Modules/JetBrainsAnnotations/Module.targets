@@ -1,7 +1,8 @@
 <Project>
 
-  <!-- Add ReSharper-related package references where appropriate. -->
-  <ItemGroup Condition="$(UseJetBrainsAnnotations)">
+  <!-- Add ReSharper-related package references where appropriate,
+       except for no-targets projects. -->
+  <ItemGroup Condition="$(UseJetBrainsAnnotations) And !$(BV_IsNoTargetsProject)">
     <PackageReference Include="JetBrains.Annotations"
                       IsImplicitlyDefined="true"
                       PrivateAssets="All" />

@@ -1,9 +1,9 @@
 <Project>
 
-  <!-- UseStandardAnalyzers default = true, except for test projects. -->
+  <!-- UseStandardAnalyzers default = true, except for test projects and no-target projects. -->
   <PropertyGroup Condition="'$(UseStandardAnalyzers)' == ''">
     <UseStandardAnalyzers>true</UseStandardAnalyzers>
-    <UseStandardAnalyzers Condition="$(BV_IsTestProject)">false</UseStandardAnalyzers>
+    <UseStandardAnalyzers Condition="$(BV_IsTestProject) Or $(BV_IsNoTargetsProject)">false</UseStandardAnalyzers>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseStandardAnalyzers)' != 'true'">
     <UseStandardAnalyzers>false</UseStandardAnalyzers>

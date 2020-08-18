@@ -51,11 +51,17 @@
 
   <!-- Determine the kind of project. -->
   <PropertyGroup>
+    <BV_IsNoTargetsProject>false</BV_IsNoTargetsProject>
     <BV_IsTestProject>false</BV_IsTestProject>
     <BV_IsLibraryProject>false</BV_IsLibraryProject>
     <BV_IsExeProject>false</BV_IsExeProject>
   </PropertyGroup>
   <Choose>
+    <When Condition="'$(UsingMicrosoftNoTargetsSdk)' == 'true'">
+      <PropertyGroup>
+        <BV_IsNoTargetsProject>true</BV_IsNoTargetsProject>
+      </PropertyGroup>
+    </When>
     <When Condition="'$(TestProjectType)' != '' Or '$(IsTestProject)' == 'true'">
       <PropertyGroup Condition="!$(BV_IsNoTargetsProject)">
         <BV_IsTestProject>true</BV_IsTestProject>
