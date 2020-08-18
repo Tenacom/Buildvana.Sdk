@@ -384,4 +384,48 @@
 
   <!-- ===================================================================================== -->
 
+  <!-- Automatically use a <project_name>.nuspec file if present alongside the project file. -->
+  <PropertyGroup Condition="'$(NuspecFile)' == ''">
+    <NuspecFile Condition="Exists('$(MSBuildProjectDirectory)\$(MSBuildProjectName).nuspec')">$(MSBuildProjectName).nuspec</NuspecFile>
+  </PropertyGroup>
+
+  <!-- Set NuspecProperties if there is a .nuspec file to use. -->
+  <PropertyGroup Condition="'$(NuspecFile)' != ''">
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);BV_SetNuspecProperties</GenerateNuspecDependsOn>
+  </PropertyGroup>
+
+  <Target Name="BV_SetNuspecProperties">
+
+    <PropertyGroup>
+      <!-- Reset 'SourceRevisionId' to default value when not set -->
+      <SourceRevisionId Condition="'$(SourceRevisionId)' == ''">0</SourceRevisionId>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <NuspecProperties>
+        id=$(PackageId);
+        title=$(Title);
+        version=$(PackageVersion);
+        summary=$(Summary);
+        description=$(Description);
+        owners=$(Owners.Replace(';',','));
+        authors=$(Authors.Replace(';',','));
+        copyright=$(Copyright);
+        tags=$(PackageTags.Replace(';',','));
+        repositoryType=$(RepositoryType);
+        repositoryUrl=$(RepositoryUrl);
+        projectUrl=$(PackageProjectUrl);
+        licenseFile=$(PackageLicenseFile);
+        icon=$([System.IO.Path]::GetFileName('$(PackageIcon)'));
+        requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);
+        packageType=$(PackageType);
+        releaseNotes=$(PackageReleaseNotes);
+        sourceRevisionId=$(SourceRevisionId);
+        developmentDependency=$(DevelopmentDependency);
+        serviceable=$(Serviceable)
+      </NuspecProperties>
+    </PropertyGroup>
+
+  </Target>
+
 </Project>
