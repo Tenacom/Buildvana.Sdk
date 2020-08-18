@@ -1,0 +1,20 @@
+<Project>
+
+  <!-- Branding, ownership, and licensing -->
+  <PropertyGroup>
+    <Product>Buildvana.Sdk</Product>
+    <Authors>rdeago</Authors>
+    <Owners>Buildvana</Owners>
+    <Copyright>Copyright (C) 2020 Riccardo De Agostini.</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <!-- Repository and documentation -->
+  <PropertyGroup>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Buildvana/Buildvana.Sdk</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Buildvana/Buildvana</PackageProjectUrl>
+    <PackageReleaseNotes>Release notes are available at https://github.com/Buildvana/Buildvana.Sdk/blob/master/CHANGELOG.md</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>
