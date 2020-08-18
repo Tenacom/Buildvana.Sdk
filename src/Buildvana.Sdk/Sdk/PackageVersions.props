@@ -1,9 +1,9 @@
 <Project>
 
-  <!-- All versions of automatically added dependencies are grouped here for easier updating.
-       Please keep the versions below up-to-date with latest versions appearing on nuget.org.
-       If there is some compelling reason to NOT update one or more of this packages,
-       there MUST be a comment stating so. -->
+  <!-- All versions of automatically added dependencies are grouped here for easier updating. -->
+  <!-- NOTE TO CONTRIBUTORS: Please keep the versions below up-to-date with latest versions appearing on nuget.org.
+                             If there is some compelling reason to NOT update one or more of this packages,
+                             there MUST be a comment stating so. -->
   <ItemGroup>
     <PackageReference Update="JetBrains.Annotations" Version="2020.1.0" />
     <PackageReference Update="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" />
