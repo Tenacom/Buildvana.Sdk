@@ -55,12 +55,59 @@
       </ItemGroup>
     </When>
     <Otherwise>
+      <!-- Default license file can be one of (in order of discovery):
+             - LICENSE
+             - LICENSE.txt
+             - LICENSE.md
+             - License
+             - License.txt
+             - License.md
+             - license
+             - license.txt
+             - license.md
+             
+           Files found outside repository are ignored. -->
       <PropertyGroup>
         <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('LICENSE', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
-        <PackageLicensePath Condition="'$(PackageLicensePath)' == ''">$([MSBuild]::GetPathOfFileAbove('LICENSE.txt', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
-        <PackageLicensePath Condition="'$(PackageLicensePath)' == ''">$([MSBuild]::GetPathOfFileAbove('LICENSE.md', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
-        <PackageLicenseFile Condition="'$(PackageLicensePath)' != ''">$([System.IO.Path]::GetFileName('$(PackageLicensePath)'))</PackageLicenseFile>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
       </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('LICENSE.txt', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('LICENSE.md', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('License', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('License.txt', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('License.md', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('license', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('license.txt', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('license.md', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <!-- Use found filename to set PackageLicenseFile. -->
+      <PropertyGroup Condition="'$(PackageLicensePath)' != ''">
+        <PackageLicenseFile>$([System.IO.Path]::GetFileName('$(PackageLicensePath)'))</PackageLicenseFile>
+      </PropertyGroup>
+      <!-- Error if not found. -->
       <ItemGroup>
         <BV_EvaluationError Condition="'$(PackageLicensePath)' == ''"
                             Include="BVE1502"
@@ -124,12 +171,59 @@
       </ItemGroup>
     </When>
     <Otherwise>
+      <!-- Default third-party notice file can be one of (in order of discovery):
+             - THIRD-PARTY-NOTICES
+             - THIRD-PARTY-NOTICES.txt
+             - THIRD-PARTY-NOTICES.md
+             - third-party-notices
+             - third-party-notices.txt
+             - third-party-notices.md
+             - ThirdPartyNotices
+             - ThirdPartyNotices.txt
+             - ThirdPartyNotices.md
+             
+           Files found outside repository are ignored. -->
       <PropertyGroup>
-        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICE', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
-        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' == ''">$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICE.txt', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
-        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' == ''">$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICE.md', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
-        <PackageThirdPartyNoticeFile Condition="'$(PackageThirdPartyNoticePath)' != ''">$([System.IO.Path]::GetFileName('$(PackageThirdPartyNoticePath)'))</PackageThirdPartyNoticeFile>
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICES', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
       </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICES.txt', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICES.md', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('third-party-notices', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('third-party-notices.txt', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('third-party-notices.md', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('ThirdPartyNotices', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('ThirdPartyNotices.txt', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('ThirdPartyNotices.md', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <!-- Use found filename to set PackageThirdPartyNoticeFile. -->
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' != ''">
+        <PackageThirdPartyNoticeFile>$([System.IO.Path]::GetFileName('$(PackageThirdPartyNoticePath)'))</PackageThirdPartyNoticeFile>
+      </PropertyGroup>
+      <!-- Error if not found. -->
       <ItemGroup>
         <BV_EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
                             Include="BVE1505"
@@ -187,13 +281,93 @@
       </ItemGroup>
     </When>
     <Otherwise>
+      <!-- Default icon file can be one of (in order of discovery):
+             - <project_name>.package.png
+             - <project_name>.package.png in a "graphics" subfolder
+             - <project_name>.package.png in a "branding" subfolder
+             - <product_name>.package.png
+             - <product_name>.package.png in a "graphics" subfolder
+             - <product_name>.package.png in a "branding" subfolder
+             - PackageIcon.png
+             - PackageIcon.png in a "graphics" subfolder
+             - PackageIcon.png in a "branding" subfolder
+             - icon.png
+             - icon.png in a "graphics" subfolder
+             - icon.png in a "branding" subfolder
+             
+           Files found outside repository are ignored.
+             
+           To look for a file in a specific subfolder, since GetPathOfFileAbove only accepts filenames,
+           use GetDirectoryNameOfFileAbove and combine it with the searched-for subpath later if found. -->
       <PropertyGroup>
-        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('LICENSE', '$(MSBuildProjectDirectory)'))</PackageIconPath>
-        <PackageIconPath Condition="'$(PackageIconPath)' == ''">$([MSBuild]::GetPathOfFileAbove('icon.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
-        <PackageIconPath Condition="'$(PackageIconPath)' == ''">$([MSBuild]::GetPathOfFileAbove('$(Product).png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
-        <PackageIconPath Condition="'$(PackageIconPath)' == ''">$([MSBuild]::GetPathOfFileAbove('$(MSBuildProjectName).png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
-        <PackageIcon Condition="'$(PackageIconPath)' != ''">$([System.IO.Path]::GetFileName('$(PackageIconPath)'))</PackageIcon>
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('$(MSBuildProjectName).package.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
       </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>graphics/$(MSBuildProjectName).package.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>branding/$(MSBuildProjectName).package.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('$(Product).package.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>graphics/$(Product).package.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>branding/$(Product).package.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('PackageIcon.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>graphics/PackageIcon.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>branding/PackageIcon.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('icon.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>graphics/icon.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>branding/icon.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <!-- Use found filename to set PackageIcon. -->
+      <PropertyGroup Condition="'$(PackageIconPath)' != ''">
+        <PackageIcon>$([System.IO.Path]::GetFileName('$(PackageIconPath)'))</PackageIcon>
+      </PropertyGroup>
+      <!-- Error if not found. -->
       <ItemGroup>
         <BV_EvaluationError Condition="'$(PackageIconPath)' == ''"
                             Include="BVE1508"
