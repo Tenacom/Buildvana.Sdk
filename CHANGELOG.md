@@ -9,6 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes so far.
 
-## [1.0.0](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0) (2020-xx-xx)
+## [0.1.0](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/0.1.0) (2020-09-11)
 
 Initial release.
