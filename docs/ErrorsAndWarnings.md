@@ -1,7 +1,7 @@
 # Errors and warnings
 
 - [Overview](#overview)
-- [Buildvana SDK (1000-1099)](#buildvana-sdk-1000-1099)
+- [Buildvana SDK core (1000-1099)](#buildvana-sdk-core-1000-1099)
 - [AssemblyInfo module (1100-1199)](#assemblyinfo-module-1100-1199)
 - [AssemblySigning module (1200-1299)](#assemblysigning-module-1200-1299)
 - [JetBrainsAnnotations module (1300-1399)](#jetbrainsannotations-module-1300-1399)
@@ -18,7 +18,7 @@ All errors defined by the Buildvana SDK have a `BVE` prefix, while warnings have
 
 Each module, as well as the SDK itself, is assigned a contiguous range of 100 error and 100 warning numbers, as listed below.
 
-## Buildvana SDK (1000-1099)
+## Buildvana SDK core (1000-1099)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
