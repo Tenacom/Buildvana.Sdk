@@ -30,6 +30,6 @@
 
     { "name": "invalid", "color": "666", "description": "[issue] Problem caused by user or third-party code, or otherwise not a valid issue." },
     { "name": "duplicate", "color": "666", "description": "[issue] Duplicate of another issue." },
-    { "name": "by_design", "color": "666", "description": "[issue] The lamented behavior is by design." }
+    { "name": "by_design", "color": "666", "description": "[issue] The lamented behavior is by design." },
     { "name": "wontfix", "color": "666", "description": "[issue] Valid issue, but will not be acted upon (see comments)." }
 ]
