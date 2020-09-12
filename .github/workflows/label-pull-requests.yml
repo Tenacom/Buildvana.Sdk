@@ -1,0 +1,22 @@
+on:
+  pull_request_target:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+
+  set_labels:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Update repository labels
+        uses: lannonbr/issue-label-manager-action@2.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Assign labels to pull request
+        uses: actions/labeler@main
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"

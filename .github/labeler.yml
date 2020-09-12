@@ -1,0 +1,11 @@
+area-ci:
+  - any: ['.github/workflows/**/*']
+
+area-deps:
+  - "**/PackageVersions.props"
+
+area-docs:
+  - any: ['.github/**/*', '**/LICENSE', '**/README.md', '**/THIRD-PARTY-NOTICES']
+
+area-repo:
+  - any: ['.github/*.yml', '.github/**/*.md']
