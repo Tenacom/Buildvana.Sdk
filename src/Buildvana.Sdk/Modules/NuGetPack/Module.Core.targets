@@ -118,8 +118,8 @@
 
   <!-- Add license file to project items so the Pack target can find it.. -->
   <ItemGroup Condition="'$(PackageLicensePath)' != '' And '$(PackageLicenseFile)' != ''">
-    <AdditionalFiles Remove="$(PackageLicensePath)" />
-    <AdditionalFiles Include="$(PackageLicensePath)" Link="$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
+    <Content Remove="$(PackageLicensePath)" />
+    <Content Include="$(PackageLicensePath)" Link="$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
   <!-- Coalesce PackageRequireLicenseAcceptance to a boolean value. Default is false. -->
@@ -234,8 +234,8 @@
 
   <!-- Add third-party notice file to project items so the Pack target can find it.. -->
   <ItemGroup Condition="'$(PackageThirdPartyNoticePath)' != '' And '$(PackageThirdPartyNoticeFile)' != ''">
-    <AdditionalFiles Remove="$(PackageThirdPartyNoticePath)" />
-    <AdditionalFiles Include="$(PackageThirdPartyNoticePath)" Link="$(PackageThirdPartyNoticeFile)" Pack="true" PackagePath="" Visible="false" />
+    <Content Remove="$(PackageThirdPartyNoticePath)" />
+    <Content Include="$(PackageThirdPartyNoticePath)" Link="$(PackageThirdPartyNoticeFile)" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
   <!-- ===================================================================================== -->
@@ -378,8 +378,8 @@
 
   <!-- Add icon file to project items so the Pack target can find it. -->
   <ItemGroup Condition="'$(PackageIconPath)' != '' And '$(PackageIcon)' != ''">
-    <AdditionalFiles Remove="$(PackageIconPath)" />
-    <AdditionalFiles Include="$(PackageIconPath)" Link="$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
+    <Content Remove="$(PackageIconPath)" />
+    <Content Include="$(PackageIconPath)" Link="$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
   <!-- ===================================================================================== -->
