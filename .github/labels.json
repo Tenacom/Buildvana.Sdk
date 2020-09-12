@@ -1,0 +1,35 @@
+[
+    { "name": "v1.x", "color": "9c3", "description": "[issue/PR] affects version 1." },
+
+    { "name": "area-sdk", "color": "ccc", "description": "[issue/PR] affects SDK core files." },
+    { "name": "area-assembly_info", "color": "ccc", "description": "[issue/PR] affects the AssemblyInfo module." },
+    { "name": "area-assembly_signing", "color": "ccc", "description": "[issue/PR] affects the AssemblySigning module." },
+    { "name": "area-jetbrains_annotations", "color": "ccc", "description": "[issue/PR] affects the JetBrainsAnnotations module." },
+    { "name": "area-literal_assembly_attributesk", "color": "ccc", "description": "[issue/PR] affects the LiteralAssemblyAttributes module." },
+    { "name": "area-nuget_pack", "color": "ccc", "description": "[issue/PR] affects the NuGetPack module." },
+    { "name": "area-parse_version_file", "color": "ccc", "description": "[issue/PR] affects the ParseVersionFile module." },
+    { "name": "area-standard_analyzers", "color": "ccc", "description": "[issue/PR] affects the StandardAnalyzers module." },
+    { "name": "area-thisassembly_class", "color": "ccc", "description": "[issue/PR] affects the ThisAssemblyClass module." },
+    { "name": "area-xml_documentation", "color": "ccc", "description": "[issue/PR] affects the XmlDocumentation module." },
+    
+    { "name": "area-build", "color": "ccc", "description": "[issue/PR] affects project files and/or build settings." },
+    { "name": "area-repo", "color": "ccc", "description": "[issue/PR] affects repository settings, e.g. issue templates." },
+    { "name": "area-deps", "color": "ccc", "description": "[issue/PR] adds, updates, or removes dependencies." },
+    { "name": "area-docs", "color": "ccc", "description": "[issue/PR] affects documentation." },
+    { "name": "area-ci", "color": "ccc", "description": "[issue/PR] affects CI / CD / actions." },
+
+    { "name": "bug", "color": "c00", "description": "[issue/PR] raises / solves a bug." },
+    { "name": "enhancement", "color": "36c", "description": "[issue/PR] requests / implements new or improved functionality." },
+    { "name": "refactor", "color": "069", "description": "[issue/PR] requests / implements a refactor of existing code without affecting functionality." },
+    { "name": "style", "color": "cfc", "description": "[PR] contains code style changes." },
+    { "name": "design", "color": "cfc", "description": "[issue] Design discussion." },
+
+    { "name": "breaking", "color": "fc0", "description": "[issue/PR] requires / contains breaking changes." },
+    { "name": "help_wanted", "color": "c36", "description": "[issue/PR] needs help to solve / finalize." },
+    { "name": "easy", "color": "ccf", "description": "[issue] Easy issue, good pick for new collaborators." },
+
+    { "name": "invalid", "color": "666", "description": "[issue] Problem caused by user or third-party code, or otherwise not a valid issue." },
+    { "name": "duplicate", "color": "666", "description": "[issue] Duplicate of another issue." },
+    { "name": "by_design", "color": "666", "description": "[issue] The lamented behavior is by design." }
+    { "name": "wontfix", "color": "666", "description": "[issue] Valid issue, but will not be acted upon (see comments)." }
+]
