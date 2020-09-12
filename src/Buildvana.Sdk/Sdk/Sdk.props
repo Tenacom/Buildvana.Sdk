@@ -72,8 +72,19 @@
 
   </Target>
 
-  <!-- Log evaluation warnings and errors, if any. -->
+  <!-- Output messages, warnings, and errors generated during the evaluation phase. -->
   <Target Name="BV_LogEvaluationErrors">
+
+    <!-- Evaluation messages have a default importance of High in Debug builds, Normal in Release builds. -->
+    <PropertyGroup Condition="'$(EvaluationMessageImportance)' == ''">
+      <EvaluationMessageImportance Condition="'$(Configuration)' != 'Debug'">Normal</EvaluationMessageImportance>
+      <EvaluationMessageImportance Condition="'$(Configuration)' == 'Debug'">High</EvaluationMessageImportance>
+    </PropertyGroup>
+    
+    <Message
+      Condition="'@(EvaluationMessage)' != ''"
+      Text="%(Identity)"
+      Importance="$(EvaluationMessageImportance)" />
 
     <Warning
       Condition="'@(EvaluationWarning)' != ''"
