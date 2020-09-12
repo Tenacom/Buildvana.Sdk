@@ -23,9 +23,10 @@
 
   <!-- Check that HomeDirectory has been configured. -->
   <ItemGroup>
-    <BV_EvaluationError Condition="'$(HomeDirectory)' == ''"
-                        Include="BVE1003"
-                        Text="Home directory not defined." />
+    <EvaluationError
+      Condition="'$(HomeDirectory)' == ''"
+      Include="BVE1003"
+      Text="Home directory not defined." />
   </ItemGroup>
 
   <!-- BV_IsConfigured is true if HomeDirectory is configured. -->
@@ -63,9 +64,10 @@
   <Target Name="BV_CheckSdkTargetsImport">
 
     <ItemGroup>
-      <BV_EvaluationError Condition="'$(BV_SdkTargetsHasBeenImported)' != 'true'"
-                          Include="BVE1001"
-                          Text="Sdk.targets not imported." />
+      <EvaluationError
+        Condition="'$(BV_SdkTargetsHasBeenImported)' != 'true'"
+        Include="BVE1001"
+        Text="Sdk.targets not imported." />
     </ItemGroup>
 
   </Target>
@@ -74,13 +76,13 @@
   <Target Name="BV_LogEvaluationErrors">
 
     <Warning
-      Condition="'@(BV_EvaluationWarning)' != ''"
+      Condition="'@(EvaluationWarning)' != ''"
       Code="%(Identity)"
       Text="%(Text)"
       File="$(MSBuildProjectFullPath)" />
 
     <Error
-      Condition="'@(BV_EvaluationError)' != ''"
+      Condition="'@(EvaluationError)' != ''"
       Code="%(Identity)"
       Text="%(Text)"
       File="$(MSBuildProjectFullPath)" />

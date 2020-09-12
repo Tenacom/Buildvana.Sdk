@@ -15,9 +15,10 @@
        Otherwise it probably means they've been imported from different SDK versions
        and may be incompatible with each other. -->
   <ItemGroup>
-    <BV_EvaluationError Condition="'$(BuildvanaSdkDirectory)' != '' And '$(BuildvanaSdkDirectory)' != '$(MSBuildThisFileDirectory)'"
-                        Include="BVE1002"
-                        Text="Sdk.props and Sdk.targets are in different directories." />
+    <EvaluationError
+      Condition="'$(BuildvanaSdkDirectory)' != '' And '$(BuildvanaSdkDirectory)' != '$(MSBuildThisFileDirectory)'"
+      Include="BVE1002"
+      Text="Sdk.props and Sdk.targets are in different directories." />
   </ItemGroup>
 
   <!-- Determine the kind of project. -->
@@ -65,7 +66,7 @@
   <Import Condition="$(BV_IsConfigured)" Project="$(MSBuildThisFileDirectory)PackageVersions.props" />
 
   <!-- Check whether Sdk.props has been imported.
-       We cannot use BV_EvaluationError for this,
+       We cannot use EvaluationError for this,
        because the logic that handles it is in Sdk.props. -->
   <Target Name="BV_CheckSdkPropsImport">
 
