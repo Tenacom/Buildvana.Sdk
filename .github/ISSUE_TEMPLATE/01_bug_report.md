@@ -8,7 +8,7 @@ assignees: ''
 
 <!-- This is just a template - feel free to delete any and all of it and replace as appropriate. -->
 
-### Description
+## Description
 
 <!--
 * Please share a clear and concise description of the problem.
@@ -34,7 +34,7 @@ GitHub's syntax highlighting supports more languages that would be practical to 
 Here's the complete list: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
 -->
 
-### Configuration
+## Configuration
 
 <!--
 * Which kind of projects are you using Buildvana SDK for?
@@ -43,13 +43,13 @@ Here's the complete list: https://github.com/github/linguist/blob/master/lib/lin
 * Do you know whether the problem is specific to that configuration?
   -->
 
-### Regression?
+## Regression?
 
 <!--
 * Did this work in a previous release? If you can try a previous release to find out, that can help us narrow down the problem. If you don't know, that's OK.
   -->
 
-### Other information
+## Other information
 
 <!--
 * Please include any relevant error messages. Please prefer pasted text over images (so it shows up in searches).
