@@ -1,3 +1,4 @@
+name: Define issue labels
 on: issues
 
 jobs:
