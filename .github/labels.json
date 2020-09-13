@@ -1,7 +1,7 @@
 [
     { "name": "v1.x", "color": "9c3", "description": "[issue/PR] affects version 1." },
 
-    { "name": "area-sdk", "color": "ccc", "description": "[issue/PR] affects SDK core files." },
+    { "name": "area-core", "color": "ccc", "description": "[issue/PR] affects SDK core files." },
     { "name": "area-assembly_info", "color": "ccc", "description": "[issue/PR] affects the AssemblyInfo module." },
     { "name": "area-assembly_signing", "color": "ccc", "description": "[issue/PR] affects the AssemblySigning module." },
     { "name": "area-jetbrains_annotations", "color": "ccc", "description": "[issue/PR] affects the JetBrainsAnnotations module." },
