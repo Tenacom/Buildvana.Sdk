@@ -18,4 +18,13 @@
     <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
   </PropertyGroup>
 
+  <!-- AllowUnderscoresInMemberNames default = true only on test projects. -->
+  <PropertyGroup Condition="'$(AllowUnderscoresInMemberNames)' == ''">
+    <AllowUnderscoresInMemberNames>false</AllowUnderscoresInMemberNames>
+    <AllowUnderscoresInMemberNames Condition="$(BV_IsTestProject)">true</AllowUnderscoresInMemberNames>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(AllowUnderscoresInMemberNames)' != 'true'">
+    <AllowUnderscoresInMemberNames>false</AllowUnderscoresInMemberNames>
+  </PropertyGroup>
+
 </Project>

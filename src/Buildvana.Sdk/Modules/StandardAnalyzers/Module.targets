@@ -48,4 +48,10 @@
     <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI.Unshipped.txt" />
   </ItemGroup>
 
+  <!-- Suppress warning CA1707 if AllowUnderscoresInMemberNames is true. -->
+  <PropertyGroup Condition="'$(AllowUnderscoresInMemberNames)' == 'true'">
+    <NoWarn Condition="'$(NoWarn)' != ''">$(NoWarn);</NoWarn>
+    <NoWarn>$(NoWarn)CA1707</NoWarn>
+  </PropertyGroup>
+
 </Project>
