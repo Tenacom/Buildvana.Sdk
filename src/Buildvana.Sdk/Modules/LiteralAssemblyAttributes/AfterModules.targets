@@ -10,9 +10,13 @@
        see the generated assembly info. There is at least one scenario involving Xaml
        where CoreCompile is invoked without other potential hooks such as Compile or CoreBuild,
        etc., so we hook directly on to CoreCompile. Furthermore, we  must run *after*
-       PrepareForBuild to ensure that the intermediate directory has been created. -->
+       PrepareForBuild to ensure that the intermediate directory has been created.
+       
+
+      Targets that generate Compile items are also expected to run before
+      BeforeCompile targets (common targets convention). -->
   <Target Name="BV_GenerateLiteralAssemblyInfo"
-          BeforeTargets="CoreCompile"
+          BeforeTargets="BeforeCompile;CoreCompile"
           DependsOnTargets="PrepareForBuild;BV_GenerateLiteralAssemblyInfoCore"
           Condition="'$(GenerateLiteralAssemblyInfo)' == 'true'" />
 
@@ -27,7 +31,7 @@
     </PropertyGroup>
 
     <!-- We only use up to _Parameter1 for most attributes, but other targets may add additional assembly attributes with multiple parameters. -->
-    <Hash ItemsToHash="@(LiteralAssemblyAttribute->'%(Identity)%(_Parameter1)%(_Parameter2)%(_Parameter3)%(_Parameter4)%(_Parameter5)%(_Parameter6)%(_Parameter7)%(_Parameter8)')">
+    <Hash ItemsToHash="@(LiteralAssemblyAttribute->'%(Identity)%(_Parameter1)%(_Parameter2)%(_Parameter3)%(_Parameter4)%(_Parameter5)%(_Parameter6)%(_Parameter7)%(_Parameter8)%(_Parameter9)%(_Parameter10)')">
       <Output TaskParameter="HashResult" PropertyName="BV_LiteralAssemblyAttributesHash" />
     </Hash>
 
@@ -45,10 +49,17 @@
           Inputs="$(BV_GeneratedLiteralAssemblyInfoInputsCacheFile)"
           Outputs="$(GeneratedLiteralAssemblyInfoFile)">
 
-    <Buildvana.Tasks.WriteLiteralAssemblyAttributes LiteralAssemblyAttributes="@(LiteralAssemblyAttribute)" Language="$(Language)" OutputFile="$(GeneratedLiteralAssemblyInfoFile)">
-      <Output TaskParameter="OutputFile" ItemName="Compile" />
-      <Output TaskParameter="OutputFile" ItemName="FileWrites" />
-    </Buildvana.Tasks.WriteLiteralAssemblyAttributes>
+    <Buildvana.Tasks.WriteLiteralAssemblyAttributes
+      LiteralAssemblyAttributes="@(LiteralAssemblyAttribute)"
+      Language="$(Language)"
+      OutputPath="$(GeneratedLiteralAssemblyInfoFile)" />
+
+    <ItemGroup>
+      <Compile Remove="$(GeneratedLiteralAssemblyInfoFile)" />
+      <Compile Include="$(GeneratedLiteralAssemblyInfoFile)" />
+      <FileWrites Remove="$(GeneratedLiteralAssemblyInfoFile)" />
+      <FileWrites Include="$(GeneratedLiteralAssemblyInfoFile)" />
+    </ItemGroup>
 
   </Target>
 
