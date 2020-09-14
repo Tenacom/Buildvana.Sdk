@@ -34,7 +34,7 @@
         <BV_IsNoTargetsProject>true</BV_IsNoTargetsProject>
       </PropertyGroup>
     </When>
-    <When Condition="'$(IsTestProject)' == 'true'">
+    <When Condition="($(MSBuildProjectName.EndsWith('.Tests')) And '$(IsTestProject)' != 'false') Or '$(IsTestProject)' == 'true'">
       <PropertyGroup>
         <BV_IsTestProject>true</BV_IsTestProject>
       </PropertyGroup>
