@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased changes
 
-No unreleased changes so far.
+### Added
+
+- **[potentially breaking]** A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.  
+  To opt out of this convention, explicitly set `IsTestProject` to `true` or `false`.
 
 ## [1.0.0-alpha.2](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.2) (2020-09-13)
 
