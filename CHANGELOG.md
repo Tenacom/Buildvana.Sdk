@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **[potentially breaking]** A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.  
   To opt out of this convention, explicitly set `IsTestProject` to `true` or `false`.
 
+### Updated
+
+- Using `StyleCop.Analyzers` version 1.2.0-beta.205
+
 ## [1.0.0-alpha.2](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.2) (2020-09-13)
 
 ### Added
