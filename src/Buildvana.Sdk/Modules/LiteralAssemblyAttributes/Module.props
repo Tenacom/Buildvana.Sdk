@@ -4,8 +4,7 @@
     <ParameterGroup>
       <Language ParameterType="System.String" Required="true" />
       <LiteralAssemblyAttributes ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
-      <OutputDirectory ParameterType="Microsoft.Build.Framework.ITaskItem" />
-      <OutputFile ParameterType="Microsoft.Build.Framework.ITaskItem" Output="true" />
+      <OutputPath ParameterType="System.String" Required="true" />
     </ParameterGroup>
     <Task>
       <Code Type="Class" Language="cs" Source="$(MSBuildThisFileDirectory)WriteLiteralAssemblyAttributes.cs" />

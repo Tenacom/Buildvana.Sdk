@@ -16,16 +16,19 @@ using Microsoft.Build.Utilities;
 
 namespace Buildvana.Tasks
 {
-    public class WriteLiteralAssemblyAttributes : TaskExtension
+    internal static class Messages
     {
-        private const string ErrorFmt_UnsupportedLanguage = "BVE1400: Language '{0}' is not supported.";
-        private const string Error_MissingOutputPath = "BVE1401: The 'OutputPath' parameter is missing or empty.";
-        const string ErrorFmt_CouldNotWriteOutput = "BVE1402: The file '{0}' could not be created. {1}";
-        const string ErrorFmt_InvalidParameterName = "BVE1403: The parameter '{0}' has an invalid name.";
-        const string ErrorFmt_InvalidParameterIndex = "BVE1404: The parameter '{0}' has an invalid parameter index.";
-        const string ErrorFmt_SkippedNumberedParameter = "BVE1405: The parameter '{0}' was supplied, but not all previously numbered parameters.";
-        const string ErrorFmt_EmptyParameter = "BVE1406: The parameter '{0}' is empty.";
+        public const string ErrorFmt_UnsupportedLanguage = "BVE1400: Language '{0}' is not supported.";
+        public const string Error_MissingOutputPath = "BVE1401: The 'OutputPath' parameter is missing or empty.";
+        public const string ErrorFmt_CouldNotWriteOutput = "BVE1402: The file '{0}' could not be created. {1}";
+        public const string ErrorFmt_InvalidParameterName = "BVE1403: The parameter '{0}' has an invalid name.";
+        public const string ErrorFmt_InvalidParameterIndex = "BVE1404: The parameter '{0}' has an invalid parameter index.";
+        public const string ErrorFmt_SkippedNumberedParameter = "BVE1405: The parameter '{0}' was supplied, but not all previously numbered parameters.";
+        public const string ErrorFmt_EmptyParameter = "BVE1406: The parameter '{0}' is empty.";
+    }
 
+    public class WriteLiteralAssemblyAttributes : Task
+    {
         static readonly IReadOnlyDictionary<string, Func<AttributeCompilerBase>> AttributeCompilers
             = new Dictionary<string, Func<AttributeCompilerBase>> {
                 { "C#", () => new CSharpAttributeCompiler() },
@@ -52,12 +55,12 @@ namespace Buildvana.Tasks
                 Language = Language ?? string.Empty;
                 if (!AttributeCompilers.TryGetValue(Language, out var createCompiler))
                 {
-                    throw new BuildErrorException(ErrorFmt_UnsupportedLanguage, Language);
+                    throw new BuildErrorException(Messages.ErrorFmt_UnsupportedLanguage, Language);
                 }
 
                 if (string.IsNullOrEmpty(OutputPath))
                 {
-                    throw new BuildErrorException(Error_MissingOutputPath);
+                    throw new BuildErrorException(Messages.Error_MissingOutputPath);
                 }
     
                 var compiler = createCompiler();
@@ -73,7 +76,7 @@ namespace Buildvana.Tasks
                 }
                 catch (Exception ex) when (IsIORelatedException(ex))
                 {
-                    throw new BuildErrorException(ErrorFmt_CouldNotWriteOutput, OutputPath ?? string.Empty, ex.Message);
+                    throw new BuildErrorException(Messages.ErrorFmt_CouldNotWriteOutput, OutputPath ?? string.Empty, ex.Message);
                 }
             }
             catch (BuildErrorException ex)
@@ -135,23 +138,29 @@ namespace Buildvana.Tasks
                 var value = (string)entry.Value;
 
                 if (string.IsNullOrWhiteSpace(value))
-                    throw new BuildErrorException(ErrorFmt_EmptyParameter, name);
+                    throw new BuildErrorException(Messages.ErrorFmt_EmptyParameter, name);
 
                 value = TransformParameterValue(value.Trim());
 
                 if (name.StartsWith("_Parameter", StringComparison.OrdinalIgnoreCase))
                 {
                     if (!Int32.TryParse(name.Substring("_Parameter".Length), out int index))
-                        throw new BuildErrorException(ErrorFmt_InvalidParameterName, name);
+                        throw new BuildErrorException(Messages.ErrorFmt_InvalidParameterName, name);
 
                     if (index < 1)
-                        throw new BuildErrorException(ErrorFmt_InvalidParameterIndex, name);
+                        throw new BuildErrorException(Messages.ErrorFmt_InvalidParameterIndex, name);
 
-                    if (index > orderedParameters.Count)
-                        throw new BuildErrorException(ErrorFmt_SkippedNumberedParameter, index);
+                    if (index > orderedParameters.Count + 1)
+                        throw new BuildErrorException(Messages.ErrorFmt_SkippedNumberedParameter, index);
 
-                    // "_Parameter01" and "_Parameter1" would overwrite each other
-                    orderedParameters[index - 1] = value;
+                    // "_Parameter01" and "_Parameter1" would overwrite each other.
+                    if (index > orderedParameters.Count) {
+                        orderedParameters.Add(value);
+                    }
+                    else
+                    {
+                        orderedParameters[index - 1] = value;
+                    }
                 }
                 else
                 {
@@ -168,7 +177,7 @@ namespace Buildvana.Tasks
                 }
                 else if (encounteredNull)
                 {
-                    throw new BuildErrorException(ErrorFmt_SkippedNumberedParameter, i + 1);
+                    throw new BuildErrorException(Messages.ErrorFmt_SkippedNumberedParameter, i + 1);
                 }
             }
             
@@ -177,7 +186,7 @@ namespace Buildvana.Tasks
 
         protected abstract void AppendAttributeCore(StringBuilder sb, string attributeType, IReadOnlyList<string> orderedParameters, IReadOnlyDictionary<string, string> namedParameters);
 
-        protected abstract string TransformParameter(string parameter);
+        protected abstract string TransformParameterValue(string value);
     }
 
     sealed class CSharpAttributeCompiler : AttributeCompilerBase
@@ -188,7 +197,7 @@ namespace Buildvana.Tasks
         {
             sb.Append("[assembly:").Append(attributeType);
             
-            if (orderedParameters.Count > 0 || namedParametersCount > 0)
+            if (orderedParameters.Count > 0 || namedParameters.Count > 0)
             {
                 sb.Append('(');
                 var first = true;
@@ -239,7 +248,7 @@ namespace Buildvana.Tasks
         {
             sb.Append("<Assembly: ").Append(attributeType);
             
-            if (orderedParameters.Count > 0 || namedParametersCount > 0)
+            if (orderedParameters.Count > 0 || namedParameters.Count > 0)
             {
                 sb.Append('(');
                 var first = true;
