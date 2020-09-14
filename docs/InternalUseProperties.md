@@ -46,6 +46,8 @@ By default, XML documentation generation is enabled for this type of project.
 
 This property is `true` if the project is a unit test project.
 
+Buildvana SDK normally considers every project whose name ends with `.Tests` a unit test project. Individual projects may opt out of this convention by explicitly set the `IsTestProject` property (_not_ `BV_IsTestProject` directly!) to `true` or `false`.
+
 By default, standard analyzers are enabled and public API analyzers are disabled for this type of project.
 
 By default, XML documentation generation is disabled for this type of project.
