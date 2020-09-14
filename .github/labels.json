@@ -5,7 +5,7 @@
     { "name": "area-assembly_info", "color": "ccc", "description": "[issue/PR] affects the AssemblyInfo module." },
     { "name": "area-assembly_signing", "color": "ccc", "description": "[issue/PR] affects the AssemblySigning module." },
     { "name": "area-jetbrains_annotations", "color": "ccc", "description": "[issue/PR] affects the JetBrainsAnnotations module." },
-    { "name": "area-literal_assembly_attributesk", "color": "ccc", "description": "[issue/PR] affects the LiteralAssemblyAttributes module." },
+    { "name": "area-literal_assembly_attributes", "color": "ccc", "description": "[issue/PR] affects the LiteralAssemblyAttributes module." },
     { "name": "area-nuget_pack", "color": "ccc", "description": "[issue/PR] affects the NuGetPack module." },
     { "name": "area-parse_version_file", "color": "ccc", "description": "[issue/PR] affects the ParseVersionFile module." },
     { "name": "area-standard_analyzers", "color": "ccc", "description": "[issue/PR] affects the StandardAnalyzers module." },
