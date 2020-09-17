@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes to existing features
 
 ### Bugs fixed in this release
+- The automatically-referenced version of `ReSharper.ExportAnnotations` is now 1.1.0. This release fixes two rather serious bugs that affected Buildvana SDK's functionality. See [their changelog](https://github.com/tenacom/ReSharper.ExportAnnotations/blob/main/CHANGELOG.md) for more information.
 
 ### Known problems introduced by this release
 
