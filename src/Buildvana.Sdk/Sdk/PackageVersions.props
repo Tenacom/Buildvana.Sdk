@@ -8,7 +8,7 @@
     <PackageReference Update="JetBrains.Annotations" Version="2020.1.0" />
     <PackageReference Update="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" />
     <PackageReference Update="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.0" />
-    <PackageReference Update="ReSharper.ExportAnnotations.Task" Version="1.0.0" />
+    <PackageReference Update="ReSharper.ExportAnnotations.Task" Version="1.1.0" />
     <PackageReference Update="StyleCop.Analyzers" Version="1.2.0-beta.205" />
   </ItemGroup>  
 
