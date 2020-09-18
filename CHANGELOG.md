@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased changes
 
 ### New features
+- [#35](https://github.com/Buildvana/Buildvana.Sdk/issues/35) - A package reference to `Microsoft.NETFramework.ReferenceAssemblies` is automatically added to projects targeting .NET Framework so they can be built on non-Windows systems, or without a .NET Targeting  Pack installed.
 
 ### Changes to existing features
 
