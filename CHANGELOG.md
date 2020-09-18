@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0-alpha.4](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.4) (2020-09-14)
 
 ### Changes to existing features
-- #30 The LiteralAssemblyAttributes module now works as expected.
+- [#30](https://github.com/Buildvana/Buildvana.Sdk/issues/30) - The LiteralAssemblyAttributes module now works as expected.
 
 ## [1.0.0-alpha.3](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.3) (2020-09-14)
 
