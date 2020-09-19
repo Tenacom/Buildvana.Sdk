@@ -9,15 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
-- [#35](https://github.com/Buildvana/Buildvana.Sdk/issues/35) - A package reference to `Microsoft.NETFramework.ReferenceAssemblies` is automatically added to projects targeting .NET Framework so they can be built on non-Windows systems, or without a .NET Targeting  Pack installed.
-
 ### Changes to existing features
 
 ### Bugs fixed in this release
 
-- [#36](https://github.com/Buildvana/Buildvana.Sdk/issues/36) - Building projects with [centrally-managed package versions](https://stu.dev/managing-package-versions-centrally) now works.
-
 ### Known problems introduced by this release
+
+## [1.0.0-alpha.6](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.6) (2020-09-19)
+
+### New features
+
+- [#35](https://github.com/Buildvana/Buildvana.Sdk/issues/35) - A package reference to `Microsoft.NETFramework.ReferenceAssemblies` is automatically added to projects targeting .NET Framework so they can be built on non-Windows systems, or without a .NET Targeting  Pack installed.
+
+### Bugs fixed in this release
+
+- [#36](https://github.com/Buildvana/Buildvana.Sdk/issues/36) - Building projects with [centrally-managed package versions](https://stu.dev/managing-package-versions-centrally) now works.
 
 ## [1.0.0-alpha.5](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.5) (2020-09-17)
 
@@ -35,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
-- **[potentially breaking]** #26 A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.  
+- **[potentially breaking]** #26 A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.
   To opt out of this convention, explicitly set `IsTestProject` to `true` or `false`.
 
 ### Changes to existing features
