@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
+- [#36](https://github.com/Buildvana/Buildvana.Sdk/issues/36) - Building projects with [centrally-managed package versions](https://stu.dev/managing-package-versions-centrally) now works.
+
 ### Known problems introduced by this release
 
 ## [1.0.0-alpha.5](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.5) (2020-09-17)

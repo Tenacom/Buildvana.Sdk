@@ -5,12 +5,12 @@
                              If there is some compelling reason to NOT update one or more of this packages,
                              there MUST be a comment stating so. -->
   <ItemGroup>
-    <PackageReference Update="JetBrains.Annotations" Version="2020.1.0" />
-    <PackageReference Update="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" />
-    <PackageReference Update="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.0" />
-    <PackageReference Update="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" />
-    <PackageReference Update="ReSharper.ExportAnnotations.Task" Version="1.1.0" />
-    <PackageReference Update="StyleCop.Analyzers" Version="1.2.0-beta.205" />
+    <BV_PackageVersion Include="JetBrains.Annotations" Version="2020.1.0" />
+    <BV_PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" />
+    <BV_PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.0" />
+    <BV_PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" />
+    <BV_PackageVersion Include="ReSharper.ExportAnnotations.Task" Version="1.1.0" />
+    <BV_PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.205" />
   </ItemGroup>  
 
 </Project>

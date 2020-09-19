@@ -1,4 +1,4 @@
-﻿<Project InitialTargets="BV_CheckSdkPropsImport">
+﻿<Project InitialTargets="BV_CheckSdkPropsImport;BV_ManagePackageReferences">
 
   <!-- Signal that Sdk.targets has been imported. -->
   <PropertyGroup>
@@ -50,7 +50,7 @@
       </PropertyGroup>
     </When>
   </Choose>
-  
+
   <!-- Import BeforeCommon.targets, Common.targets, and AfterCommon.targets files  -->
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.targets.proj" />
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.Common.targets.proj" />
@@ -61,8 +61,7 @@
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\Module.targets" />
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\AfterModules.targets" />
 
-  <!-- Import PackageVersions.props after everything else, because it updates PackageReference items,
-       so the relevant items must already exist. -->
+  <!-- Import our package versions -->
   <Import Condition="$(BV_IsConfigured)" Project="$(MSBuildThisFileDirectory)PackageVersions.props" />
 
   <!-- Check whether Sdk.props has been imported.
@@ -77,5 +76,43 @@
       File="$(MSBuildProjectFullPath)" />
 
   </Target>
+
+  <!-- Set versions for package references added by Buildvana SDK
+       when centrally-managed package versions are enabled -->
+  <Target Name="BV_SetPackageVersions_CentrallyManaged" Condition="'$(ManagePackageVersionsCentrally)' == 'true'">
+
+    <!-- Remove overridden package versions -->
+    <ItemGroup>
+      <BV_PackageVersion Remove="%(PackageVersion.Identity)" />
+    </ItemGroup>
+
+    <!-- Add our package versions to PackageVersion items -->
+    <ItemGroup>
+      <PackageVersion Include="%(BV_PackageVersion.Identity)" Version="%(BV_PackageVersion.Version)" />
+    </ItemGroup>
+
+  </Target>
+
+  <!-- Set versions for package references added by Buildvana SDK
+       when centrally-managed package versions are disabled -->
+  <Target Name="BV_SetPackageVersions_NotCentrallyManaged" Condition="'$(ManagePackageVersionsCentrally)' != 'true'">
+
+    <!-- Remove overridden package versions -->
+    <ItemGroup>
+      <BV_PackageVersion Remove="%(PackageReference.Identity)" Condition="'%(PackageReference.Version)' != ''"/>
+    </ItemGroup>
+
+    <!-- Update PackageReference items with our versions -->
+    <ItemGroup>
+      <PackageReference Update="%(BV_PackageVersion.Identity)" Version="%(BV_PackageVersion.Version)" />
+    </ItemGroup>
+
+  </Target>
+
+  <Target
+    Name="BV_ManagePackageReferences"
+    DependsOnTargets="
+      BV_SetPackageVersions_CentrallyManaged;
+      BV_SetPackageVersions_NotCentrallyManaged" />
 
 </Project>
