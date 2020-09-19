@@ -6,6 +6,7 @@ Part of [the Buildvana project](https://github.com/Buildvana/Buildvana).
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Buildvana/Buildvana.Sdk?include_prereleases)](https://github.com/Buildvana/Buildvana.Sdk/releases)
 [![Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog%20v1.0.0-%23E05735)](https://github.com/Buildvana/Buildvana.Sdk/blob/main/CHANGELOG.md)
 
+[![CodeFactor](https://www.codefactor.io/repository/github/buildvana/buildvana.sdk/badge)](https://www.codefactor.io/repository/github/buildvana/buildvana.sdk)
 [![Last commit](https://img.shields.io/github/last-commit/Buildvana/Buildvana.Sdk.svg)](https://github.com/Buildvana/Buildvana.Sdk/commits/main)
 [![Open issues](https://img.shields.io/github/issues-raw/Buildvana/Buildvana.Sdk.svg?label=open+issues)](https://github.com/Buildvana/Buildvana.Sdk/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 [![Closed issues](https://img.shields.io/github/issues-closed-raw/Buildvana/Buildvana.Sdk.svg?label=closed+issues)](https://github.com/Buildvana/Buildvana.Sdk/issues?q=is%3Aissue+is%3Aclosed+sort%3Aupdated-desc)
