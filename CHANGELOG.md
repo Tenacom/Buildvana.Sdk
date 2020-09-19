@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased changes
 
 ### New features
+
 - [#35](https://github.com/Buildvana/Buildvana.Sdk/issues/35) - A package reference to `Microsoft.NETFramework.ReferenceAssemblies` is automatically added to projects targeting .NET Framework so they can be built on non-Windows systems, or without a .NET Targeting  Pack installed.
 
 ### Changes to existing features
@@ -19,25 +20,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0-alpha.5](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.5) (2020-09-17)
 
 ### Bugs fixed in this release
+
 - The automatically-referenced version of `ReSharper.ExportAnnotations` is now 1.1.0. This release fixes two rather serious bugs that affected Buildvana SDK's functionality. See [their changelog](https://github.com/tenacom/ReSharper.ExportAnnotations/blob/main/CHANGELOG.md) for more information.
 
 ## [1.0.0-alpha.4](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.4) (2020-09-14)
 
 ### Changes to existing features
+
 - [#30](https://github.com/Buildvana/Buildvana.Sdk/issues/30) - The LiteralAssemblyAttributes module now works as expected.
 
 ## [1.0.0-alpha.3](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.3) (2020-09-14)
 
 ### New features
+
 - **[potentially breaking]** #26 A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.  
   To opt out of this convention, explicitly set `IsTestProject` to `true` or `false`.
 
 ### Changes to existing features
+
 - Using `StyleCop.Analyzers` version 1.2.0-beta.205
 
 ## [1.0.0-alpha.2](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.2) (2020-09-13)
 
 ### New features
+
 - #22 Warning CA1707 (Identifiers should not contain underscores) is now suppressed by default in test projects. You can control this feature via the `AllowUnderscoresInMemberNames` property.
 
 ## [1.0.0-alpha.1](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.1) (2020-09-12)
