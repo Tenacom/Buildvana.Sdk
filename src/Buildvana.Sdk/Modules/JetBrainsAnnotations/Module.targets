@@ -3,12 +3,8 @@
   <!-- Add ReSharper-related package references where appropriate,
        except for no-targets projects. -->
   <ItemGroup Condition="$(UseJetBrainsAnnotations) And !$(BV_IsNoTargetsProject)">
-    <PackageReference Include="JetBrains.Annotations"
-                      IsImplicitlyDefined="true"
-                      PrivateAssets="All" />
-    <PackageReference Include="ReSharper.ExportAnnotations.Task"
-                      IsImplicitlyDefined="true"
-                      PrivateAssets="All" />
+    <BV_PackageReference Include="JetBrains.Annotations" PrivateAssets="All" />
+    <BV_PackageReference Include="ReSharper.ExportAnnotations.Task" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
