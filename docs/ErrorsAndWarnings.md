@@ -11,6 +11,7 @@
 - [StandardAnalyzers module (1700-1799)](#standardanalyzers-module-1700-1799)
 - [ThisAssemblyClass module (1800-1899)](#thisassemblyclass-module-1800-1899)
 - [XmlDocumentation module (1900-1999)](#xmldocumentation-module-1900-1999)
+- [ReferenceAssemblies module (2000-2099)](#referenceassemblies-module-2000-2099)
 
 ## Overview
 
@@ -134,6 +135,16 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 | No warnings defined. |  |  |
 
 ## XmlDocumentation module (1900-1999)
+
+| Error code | Message | Description |
+| ---------- | ------- | ----------- |
+| No errors defined. |  |  |
+
+| Warning code | Message | Description |
+| ------------ | ------- | ----------- |
+| No warnings defined. |  |  |
+
+## ReferenceAssemblies module (2000-2099)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
