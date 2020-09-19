@@ -13,7 +13,10 @@
 
   <!-- Automagically add reference assemblies  - see https://github.com/dotnet/designs/pull/33 -->
   <ItemGroup Condition="'$(UseNETFrameworkReferenceAssemblies)' == 'true'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+    <BV_PackageReference
+      Include="Microsoft.NETFramework.ReferenceAssemblies"
+      PrivateAssets="all"
+      IncludeAssets="runtime; build; native; contentfiles; analyzers" />
   </ItemGroup>
 
 </Project>

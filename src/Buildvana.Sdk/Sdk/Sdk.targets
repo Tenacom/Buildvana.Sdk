@@ -1,4 +1,4 @@
-﻿<Project InitialTargets="BV_CheckSdkPropsImport;BV_ManagePackageReferences">
+﻿<Project InitialTargets="BV_CheckSdkPropsImport">
 
   <!-- Signal that Sdk.targets has been imported. -->
   <PropertyGroup>
@@ -64,6 +64,27 @@
   <!-- Import our package versions -->
   <Import Condition="$(BV_IsConfigured)" Project="$(MSBuildThisFileDirectory)PackageVersions.props" />
 
+  <ItemGroup>
+
+    <!-- Let PackageReference items override corresponding BV_PackageReference items -->
+    <BV_PackageReference Remove="@(PackageReference)" />
+
+    <!-- Let PackageVersion items override Version metadata in corresponding BV_PackageVersion items -->
+    <BV_PackageVersion Update="@(PackageVersion)" Version="%(PackageVersion.Version)" Condition="'$(ManagePackageVersionsCentrally)' == 'true'" />
+
+    <!-- Use BV_PackageVersion items to define Version metadata for BV_PackageReference items -->
+    <BV_PackageReference Update="@(BV_PackageVersion)" Version="%(BV_PackageVersion.Version)" />
+
+    <!-- Transform BV_PackageReference items into PackageReference items.
+         No need for PackageVersion items because our packages are defined implicitly.
+         The NoWarn metadata prevents a yellow triangle to appear on each of our packages in the project tree in VS2019 (tested on v16.7.3). -->
+    <PackageReference
+      Include="@(BV_PackageReference)"
+      IsImplicitlyDefined="true"
+      NoWarn="NU1604" />
+
+  </ItemGroup>
+
   <!-- Check whether Sdk.props has been imported.
        We cannot use EvaluationError for this,
        because the logic that handles it is in Sdk.props. -->
@@ -76,43 +97,5 @@
       File="$(MSBuildProjectFullPath)" />
 
   </Target>
-
-  <!-- Set versions for package references added by Buildvana SDK
-       when centrally-managed package versions are enabled -->
-  <Target Name="BV_SetPackageVersions_CentrallyManaged" Condition="'$(ManagePackageVersionsCentrally)' == 'true'">
-
-    <!-- Remove overridden package versions -->
-    <ItemGroup>
-      <BV_PackageVersion Remove="%(PackageVersion.Identity)" />
-    </ItemGroup>
-
-    <!-- Add our package versions to PackageVersion items -->
-    <ItemGroup>
-      <PackageVersion Include="%(BV_PackageVersion.Identity)" Version="%(BV_PackageVersion.Version)" />
-    </ItemGroup>
-
-  </Target>
-
-  <!-- Set versions for package references added by Buildvana SDK
-       when centrally-managed package versions are disabled -->
-  <Target Name="BV_SetPackageVersions_NotCentrallyManaged" Condition="'$(ManagePackageVersionsCentrally)' != 'true'">
-
-    <!-- Remove overridden package versions -->
-    <ItemGroup>
-      <BV_PackageVersion Remove="%(PackageReference.Identity)" Condition="'%(PackageReference.Version)' != ''"/>
-    </ItemGroup>
-
-    <!-- Update PackageReference items with our versions -->
-    <ItemGroup>
-      <PackageReference Update="%(BV_PackageVersion.Identity)" Version="%(BV_PackageVersion.Version)" />
-    </ItemGroup>
-
-  </Target>
-
-  <Target
-    Name="BV_ManagePackageReferences"
-    DependsOnTargets="
-      BV_SetPackageVersions_CentrallyManaged;
-      BV_SetPackageVersions_NotCentrallyManaged" />
 
 </Project>
