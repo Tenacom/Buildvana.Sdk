@@ -7,14 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk", "src\Buildv
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Configuration", "- Configuration", "{B70FD773-A518-43AE-B948-EE7AE99856B8}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Common.props = Common.props
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A336F94E-866E-4892-AC8C-C960C39569CF}"
-	ProjectSection(SolutionItems) = preProject
-		build\MSBuild.Packaging.props = build\MSBuild.Packaging.props
-		build\MSBuild.Packaging.targets = build\MSBuild.Packaging.targets
+		Directory.Packages.props = Directory.Packages.props
+		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Documentation", "- Documentation", "{F2FA2D74-645C-4F7A-A60D-EE2355E5CBA1}"
