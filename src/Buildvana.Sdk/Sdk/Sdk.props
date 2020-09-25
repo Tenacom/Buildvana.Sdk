@@ -15,7 +15,7 @@
     <HomeDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git'))</HomeDirectory>
     <HomeDirectory Condition="'$(HomeDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git/HEAD'))</HomeDirectory>
   </PropertyGroup>
-  
+
   <!-- Normalize HomeDirectory if found. -->
   <PropertyGroup>
     <HomeDirectory Condition="'$(HomeDirectory)' != ''">$([MSBuild]::NormalizeDirectory('$(HomeDirectory)'))</HomeDirectory>
@@ -50,6 +50,23 @@
     <BuildvanaModulesDirectory>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..\Modules'))</BuildvanaModulesDirectory>
   </PropertyGroup>
 
+  <!-- Seelct TFM for compiled tasks -->
+  <PropertyGroup>
+    <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' != 'Core'">net472</BV_SdkTasksTfm>
+    <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' == 'Core'">netcoreapp2.1</BV_SdkTasksTfm>
+  </PropertyGroup>
+
+  <!-- Select compiled tasks assembly -->
+  <PropertyGroup>
+    <BV_SdkTasksAssembly>$(MSBuildThisFileDirectory)$(BV_SdkTasksTfm)\Buildvana.Sdk.Tasks.dll</BV_SdkTasksAssembly>
+  </PropertyGroup>
+
+  <!-- Declare compiled tasks -->
+  <UsingTask TaskName="Buildvana.Sdk.Tasks.ConvertPfxToSnk" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="Buildvana.Sdk.Tasks.ParseVersionFile" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="Buildvana.Sdk.Tasks.WriteThisAssemblyClass" AssemblyFile="$(BV_SdkTasksAssembly)" />
+
   <!-- Import modules -->
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\BeforeModules.props" />
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\Module.props" />
@@ -80,7 +97,7 @@
       <EvaluationMessageImportance Condition="'$(Configuration)' != 'Debug'">Normal</EvaluationMessageImportance>
       <EvaluationMessageImportance Condition="'$(Configuration)' == 'Debug'">High</EvaluationMessageImportance>
     </PropertyGroup>
-    
+
     <Message
       Condition="'@(EvaluationMessage)' != ''"
       Text="%(Identity)"
