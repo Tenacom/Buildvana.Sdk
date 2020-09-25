@@ -5,6 +5,12 @@
 
   "settings": {
 
+    "indentation": {
+      "indentationSize": 4,
+      "tabSize": 4,
+      "useTabs": false
+    },
+
     "spacingRules": {
     },
 
@@ -37,7 +43,7 @@
     },
 
     "documentationRules": {
-      "companyName": "Tenacom",
+      "companyName": "Riccardo De Agostini and Buildvana contributors",
       "copyrightText": "{decoration}\nCopyright (C) {companyName}. All rights reserved.\nLicensed under the {licenseName} license.\nSee {licenseFile} file in the project root for full license information.\n\nPart of this file may be third-party code, distributed under a compatible license.\nSee {thirdPartyNoticeFile} file in the project root for third-party copyright notices.\n{decoration}",
       "variables": {
         "licenseName": "MIT",
