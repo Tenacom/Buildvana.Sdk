@@ -1,28 +1,114 @@
-<Project Sdk="Microsoft.Build.NoTargets/2.0.1">
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Common properties -->
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <IsPackable>true</IsPackable>
+    <TargetFrameworks>net472;netcoreapp2.1</TargetFrameworks>
     <Title>Buildvana SDK</Title>
     <Summary>An opinionated, best-practices-based, CI-friendly, VS-friendly, MSBuild-powered build system for .NET projects.</Summary>
     <Description>Documentation is available here: https://github.com/Buildvana/Buildvana.Sdk/blob/master/README.md</Description>
-    <PackageTags>build;msbuild;sdk;dotnet</PackageTags>
+    <XmlDocs>false</XmlDocs> <!--Do not generate XML documentation -->
+    <ExportJetBrainsAnnotations>false</ExportJetBrainsAnnotations> <!--Do not generate a .ExternalAnnotations.xml file -->
+  </PropertyGroup>
+
+  <!-- NuGet package configuration -->
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageType>MSBuildSdk</PackageType>
+    <PackageTags>build;msbuild;sdk;dotnet</PackageTags>
     <DevelopmentDependency>true</DevelopmentDependency>
     <Serviceable>true</Serviceable>
+    <BuildOutputTargetFolder>Sdk</BuildOutputTargetFolder> <!-- Pack build output in Sdk\$(TargetFramework)\ instead of lib\$(TargetFramework)\ -->
+    <MinClientVersion>4.3</MinClientVersion> <!-- Minimum NuGet client version supporting SemVer 2.0 -->
+    <NoWarn>$(NoWarn);NU5100</NoWarn> <!-- The assembly '...' is not inside the 'lib' folder and hence it won't be added as a reference. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn> <!-- Some target frameworks [...] do not have exact matches [in the lib folder]. -->
   </PropertyGroup>
+
+  <!-- Package contents (besides build output) -->
 
   <PropertyGroup>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
+    <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Modules\**\*" Pack="true" />
-    <Content Include="Sdk\**\*" Pack="true" />
+    <None Include="Modules\**\*" Exclude="*.cs" Pack="true" PackagePath="%(Identity)" />
+    <None Include="Sdk\**\*" Pack="true" PackagePath="%(Identity)" />
   </ItemGroup>
+
+  <!-- Aliased package content - a workaround for project items not allowing duplicates, even with different Link metadata -->
 
   <ItemGroup>
     <None Include="Aliased\**\*" Pack="false" />
   </ItemGroup>
+
+  <ItemGroup>
+    <__AliasedFile Include="Sdk\Import.BeforeCommon.props.proj" Alias="Aliased\ImportFiles.proj" />
+    <__AliasedFile Include="Sdk\Import.Common.props.proj" Alias="Aliased\ImportFiles.proj" />
+    <__AliasedFile Include="Sdk\Import.AfterCommon.props.proj" Alias="Aliased\ImportFiles.proj" />
+    <__AliasedFile Include="Sdk\Import.BeforeCommon.targets.proj" Alias="Aliased\ImportFiles.proj" />
+    <__AliasedFile Include="Sdk\Import.Common.targets.proj" Alias="Aliased\ImportFiles.proj" />
+    <__AliasedFile Include="Sdk\Import.AfterCommon.targets.proj" Alias="Aliased\ImportFiles.proj" />
+  </ItemGroup>
+
+  <!-- References -->
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" />
+    <PackageReference Include="Nullable" />
+  </ItemGroup>
+
+  <!-- SourceLink -->
+
+  <PropertyGroup>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" />
+  </ItemGroup>
+
+  <!-- Make all package references private -->
+
+  <ItemGroup>
+    <PackageReference Update="@(PackageReference)" ExcludeAssets="Runtime" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!-- Create a folder with aliased content. Folder layout will mimic package layout -->
+
+  <Target Name="__RealizeAliases" AfterTargets="Build" Condition="'$(IsInnerBuild)' != 'true'">
+
+    <!-- IntermediateOutputPath is unknown here at evaluation time -->
+    <PropertyGroup>
+      <__AliasedPath>$(IntermediateOutputPath)Aliased\</__AliasedPath>
+    </PropertyGroup>
+
+    <RemoveDir Directories="$(__AliasedPath)" />
+    <MakeDir Directories="$(__AliasedPath)" />
+
+    <Copy SourceFiles="%(__AliasedFile.Alias)" DestinationFiles="$(__AliasedPath)%(__AliasedFile.Identity)" />
+
+  </Target>
+
+  <!-- Include aliased content in package -->
+
+  <Target Name="__IncludeAliasedFiles" BeforeTargets="Pack">
+
+    <!-- IntermediateOutputPath is unknown here at evaluation time -->
+    <PropertyGroup>
+      <__AliasedPath>$(IntermediateOutputPath)Aliased\</__AliasedPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="$(__AliasedPath)**\*" Visible="false" Pack="true" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+
+  </Target>
 
 </Project>

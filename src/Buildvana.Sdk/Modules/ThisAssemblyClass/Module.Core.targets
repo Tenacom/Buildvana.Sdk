@@ -33,9 +33,10 @@
        where CoreCompile is invoked without other potential hooks such as Compile or CoreBuild,
        etc., so we hook directly on to CoreCompile. Furthermore, we  must run *after*
        PrepareForBuild to ensure that the intermediate directory has been created. -->
-  <Target Name="BV_GenerateThisAssemblyClass"
-          BeforeTargets="CoreCompile"
-          DependsOnTargets="PrepareForBuild;BV_GenerateThisAssemblyClassCore" />
+  <Target
+    Name="BV_GenerateThisAssemblyClass"
+    BeforeTargets="CoreCompile"
+    DependsOnTargets="PrepareForBuild;BV_GenerateThisAssemblyClassCore" />
 
   <!-- To allow version changes to be respected on incremental builds (e.g. through CLI parameters),
        create a hash of all assembly attributes so that the cache file will change with the calculated
@@ -51,10 +52,11 @@
       <Output TaskParameter="HashResult" PropertyName="BV_ThisAssemblyClassHash" />
     </Hash>
 
-    <WriteLinesToFile Lines="$(BV_ThisAssemblyClassHash)"
-                      File="$(BV_ThisAssemblyClassCacheFile)"
-                      Overwrite="True"
-                      WriteOnlyWhenDifferent="True" />
+    <WriteLinesToFile
+      Lines="$(BV_ThisAssemblyClassHash)"
+      File="$(BV_ThisAssemblyClassCacheFile)"
+      Overwrite="True"
+      WriteOnlyWhenDifferent="True" />
 
     <ItemGroup>
       <FileWrites Include="$(BV_ThisAssemblyClassCacheFile)" />
@@ -62,16 +64,18 @@
 
   </Target>
 
-  <Target Name="BV_GenerateThisAssemblyClassCore"
-          DependsOnTargets="BV_CreateThisAssemblyClassCache"
-          Inputs="$(BV_ThisAssemblyClassCacheFile)"
-          Outputs="$(BV_ThisAssemblyClassFile)">
+  <Target
+    Name="BV_GenerateThisAssemblyClassCore"
+    DependsOnTargets="BV_CreateThisAssemblyClassCache"
+    Inputs="$(BV_ThisAssemblyClassCacheFile)"
+    Outputs="$(BV_ThisAssemblyClassFile)">
 
-    <Buildvana.Tasks.WriteThisAssemblyClass Language="$(Language)"
-                                            OutputPath="$(BV_ThisAssemblyClassFile)"
-                                            ClassName="$(ThisAssemblyClassName)"
-                                            Namespace="$(ThisAssemblyClassNamespace)"
-                                            Constants="@(ThisAssemblyConstant)" />
+    <Buildvana.Sdk.Tasks.WriteThisAssemblyClass
+      Language="$(Language)"
+      OutputPath="$(BV_ThisAssemblyClassFile)"
+      ClassName="$(ThisAssemblyClassName)"
+      Namespace="$(ThisAssemblyClassNamespace)"
+      Constants="@(ThisAssemblyConstant)" />
 
 		<ItemGroup>
 			<Compile Remove="$(BV_ThisAssemblyClassFile)" />			
