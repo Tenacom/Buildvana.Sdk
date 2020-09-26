@@ -1,12 +1,13 @@
 <Project>
-  
+
   <PropertyGroup>
-    <BV_ThisAssemblyClassFile />
-    <BV_ThisAssemblyClassFile Condition="'$(DefaultLanguageSourceExtension)' != ''">$(IntermediateOutputPath)Buildvana_ThisAssembly.g$(DefaultLanguageSourceExtension)</BV_ThisAssemblyClassFile>
+    <BV_ThisAssemblyClassFile>$(IntermediateOutputPath)Buildvana_ThisAssembly.g$(DefaultLanguageSourceExtension)</BV_ThisAssemblyClassFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <ThisAssemblyClassName Condition="'$(ThisAssemblyClassName)' == ''">ThisAssembly</ThisAssemblyClassName>
   </PropertyGroup>
 
-  <ItemGroup>
     <ThisAssemblyConstant Remove="Version" />
     <ThisAssemblyConstant Remove="FileVersion" />
     <ThisAssemblyConstant Remove="InformationalVersion" />
@@ -15,9 +16,6 @@
     <ThisAssemblyConstant Remove="Description" />
     <ThisAssemblyConstant Remove="Product" />
     <ThisAssemblyConstant Remove="Title" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ThisAssemblyConstant Include="Version" Type="string" Value="$(AssemblyVersion)" />
     <ThisAssemblyConstant Include="FileVersion" Type="string" Value="$(FileVersion)" />
     <ThisAssemblyConstant Include="InformationalVersion" Type="string" Value="$(InformationalVersion)" />
@@ -78,7 +76,7 @@
       Constants="@(ThisAssemblyConstant)" />
 
 		<ItemGroup>
-			<Compile Remove="$(BV_ThisAssemblyClassFile)" />			
+			<Compile Remove="$(BV_ThisAssemblyClassFile)" />
 			<Compile Include="$(BV_ThisAssemblyClassFile)" Visible="False" />
       <FileWrites Include="$(BV_ThisAssemblyClassFile)" />
 		</ItemGroup>
