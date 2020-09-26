@@ -14,25 +14,6 @@
     <EnableDefaultThisAssemblyConstants Condition="'$(EnableDefaultThisAssemblyConstants)' != 'true'">false</EnableDefaultThisAssemblyConstants>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(EnableDefaultThisAssemblyConstants)">
-    <ThisAssemblyConstant Remove="Version" />
-    <ThisAssemblyConstant Remove="FileVersion" />
-    <ThisAssemblyConstant Remove="InformationalVersion" />
-    <ThisAssemblyConstant Remove="Company" />
-    <ThisAssemblyConstant Remove="Copyright" />
-    <ThisAssemblyConstant Remove="Description" />
-    <ThisAssemblyConstant Remove="Product" />
-    <ThisAssemblyConstant Remove="Title" />
-    <ThisAssemblyConstant Include="Version" Type="string" Value="$(AssemblyVersion)" />
-    <ThisAssemblyConstant Include="FileVersion" Type="string" Value="$(FileVersion)" />
-    <ThisAssemblyConstant Include="InformationalVersion" Type="string" Value="$(InformationalVersion)" />
-    <ThisAssemblyConstant Include="Company" Type="string" Value="$(Company)" />
-    <ThisAssemblyConstant Include="Copyright" Type="string" Value="$(Copyright)" />
-    <ThisAssemblyConstant Include="Description" Type="string" Value="$(Description)" />
-    <ThisAssemblyConstant Include="Product" Type="string" Value="$(Product)" />
-    <ThisAssemblyConstant Include="Title" Type="string" Value="$(AssemblyTitle)" />
-  </ItemGroup>
-
   <!-- This must run before every invocation of CoreCompile to ensure that all compiler runs
        see the generated assembly info. There is at least one scenario involving Xaml
        where CoreCompile is invoked without other potential hooks such as Compile or CoreBuild,
@@ -41,7 +22,33 @@
   <Target
     Name="BV_GenerateThisAssemblyClass"
     BeforeTargets="CoreCompile"
-    DependsOnTargets="PrepareForBuild;BV_GenerateThisAssemblyClassCore" />
+    DependsOnTargets="PrepareForBuild;BV_DefineDefaultThisAssemblyConstants;BV_GenerateThisAssemblyClassCore" />
+
+  <Target Name="BV_DefineDefaultThisAssemblyConstants" Condition="$(EnableDefaultThisAssemblyConstants)">
+
+    <ItemGroup>
+      <ThisAssemblyConstant Remove="Version" />
+      <ThisAssemblyConstant Remove="FileVersion" />
+      <ThisAssemblyConstant Remove="InformationalVersion" />
+      <ThisAssemblyConstant Remove="Company" />
+      <ThisAssemblyConstant Remove="Copyright" />
+      <ThisAssemblyConstant Remove="Description" />
+      <ThisAssemblyConstant Remove="Product" />
+      <ThisAssemblyConstant Remove="Title" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ThisAssemblyConstant Include="Version" Type="string" Value="$(AssemblyVersion)" />
+      <ThisAssemblyConstant Include="FileVersion" Type="string" Value="$(FileVersion)" />
+      <ThisAssemblyConstant Include="InformationalVersion" Type="string" Value="$(InformationalVersion)" />
+      <ThisAssemblyConstant Include="Company" Type="string" Value="$(Company)" />
+      <ThisAssemblyConstant Include="Copyright" Type="string" Value="$(Copyright)" />
+      <ThisAssemblyConstant Include="Description" Type="string" Value="$(Description)" />
+      <ThisAssemblyConstant Include="Product" Type="string" Value="$(Product)" />
+      <ThisAssemblyConstant Include="Title" Type="string" Value="$(AssemblyTitle)" />
+    </ItemGroup>
+
+  </Target>
 
   <!-- To allow version changes to be respected on incremental builds (e.g. through CLI parameters),
        create a hash of all assembly attributes so that the cache file will change with the calculated
