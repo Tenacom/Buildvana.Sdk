@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- https://github.com/Buildvana/Buildvana.Sdk/issues/41 - Buildvana SDK now uses compiled tasks instead of inline tasks, thus improving build performance.
+
 ### Changes to existing features
 
 ### Bugs fixed in this release
