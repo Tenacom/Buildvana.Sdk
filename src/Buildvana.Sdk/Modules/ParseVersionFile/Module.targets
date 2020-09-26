@@ -3,13 +3,13 @@
   <Target Name="BV_ParseVersionFile">
 
     <Error Condition="'$(VersionFileFullPath)' == ''"
-           Code="BVE1700"
+           Code="BVE1600"
            Text="Version file '$(VersionFileName)' not found." />
     <Error Condition="$(BV_VersionFileFullPathAutomatic) And !$(VersionFileFullPath.StartsWith('$(HomeDirectory)'))"
-           Code="BVE1701"
+           Code="BVE1601"
            Text="Version file '$(VersionFileName)' found outside repository." />
     <Error Condition="!$([System.IO.File]::Exists('$(VersionFileFullPath)'))"
-           Code="BVE1702"
+           Code="BVE1602"
            Text="Version file '$(VersionFileFullPath)' not found." />
 
     <Buildvana.Sdk.Tasks.ParseVersionFile VersionFileFullPath="$(VersionFileFullPath)">

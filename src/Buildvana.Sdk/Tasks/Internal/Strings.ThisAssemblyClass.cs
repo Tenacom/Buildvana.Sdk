@@ -13,9 +13,9 @@ namespace Buildvana.Sdk.Tasks.Internal
     {
         public static class ThisAssemblyClass
         {
-            public const string MissingConstantMetadataFmt = "BVE2000: Constant '{0}' has no '{1}' metadata.";
-            public const string UnsupportedConstantTypeFmt = "BVE2001: Constant '{0}' has unknown or unsupported type '{1}'.";
-            public const string InvalidConstantValueFmt = "BVE2002: Constant '{0}' has invalid value '{1}'.";
+            public const string MissingConstantMetadataFmt = "BVE1900: Constant '{0}' has no '{1}' metadata.";
+            public const string UnsupportedConstantTypeFmt = "BVE1901: Constant '{0}' has unknown or unsupported type '{1}'.";
+            public const string InvalidConstantValueFmt = "BVE1902: Constant '{0}' has invalid value '{1}'.";
         }
     }
 }

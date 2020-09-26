@@ -59,7 +59,7 @@ namespace Buildvana.Sdk.Tasks
                 }
                 catch (FormatException fex)
                 {
-                    throw new BuildErrorException("BVE1703: " + fex.Message);
+                    throw new BuildErrorException("BVE1603: " + fex.Message);
                 }
 
                 Version = semVersion.ToString();

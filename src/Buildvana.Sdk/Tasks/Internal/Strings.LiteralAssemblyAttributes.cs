@@ -13,10 +13,10 @@ namespace Buildvana.Sdk.Tasks.Internal
     {
         public static class LiteralAssemblyAttributes
         {
-            public const string InvalidParameterNameFmt = "BVE1500: The parameter '{0}' has an invalid name.";
-            public const string InvalidParameterIndexFmt = "BVE1501: The parameter '{0}' has an invalid parameter index.";
-            public const string SkippedNumberedParameterFmt = "BVE1502: The parameter '{0}' was supplied, but not all previously numbered parameters.";
-            public const string EmptyParameterFmt = "BVE1503: The parameter '{0}' is empty.";
+            public const string InvalidParameterNameFmt = "BVE1400: The parameter '{0}' has an invalid name.";
+            public const string InvalidParameterIndexFmt = "BVE1401: The parameter '{0}' has an invalid parameter index.";
+            public const string SkippedNumberedParameterFmt = "BVE1402: The parameter '{0}' was supplied, but not all previously numbered parameters.";
+            public const string EmptyParameterFmt = "BVE1403: The parameter '{0}' is empty.";
         }
     }
 }
