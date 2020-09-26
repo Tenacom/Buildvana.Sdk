@@ -8,6 +8,13 @@
     <ThisAssemblyClassName Condition="'$(ThisAssemblyClassName)' == ''">ThisAssembly</ThisAssemblyClassName>
   </PropertyGroup>
 
+  <!-- Coalesce EnableDefaultThisAssemblyConstants to a boolean value, defaulting to true. -->
+  <PropertyGroup>
+    <EnableDefaultThisAssemblyConstants Condition="'$(EnableDefaultThisAssemblyConstants)' == ''">true</EnableDefaultThisAssemblyConstants>
+    <EnableDefaultThisAssemblyConstants Condition="'$(EnableDefaultThisAssemblyConstants)' != 'true'">false</EnableDefaultThisAssemblyConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition="$(EnableDefaultThisAssemblyConstants)">
     <ThisAssemblyConstant Remove="Version" />
     <ThisAssemblyConstant Remove="FileVersion" />
     <ThisAssemblyConstant Remove="InformationalVersion" />
