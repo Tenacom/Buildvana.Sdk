@@ -80,7 +80,8 @@
     Name="BV_GenerateThisAssemblyClassCore"
     DependsOnTargets="BV_CreateThisAssemblyClassCache"
     Inputs="$(BV_ThisAssemblyClassCacheFile)"
-    Outputs="$(BV_ThisAssemblyClassFile)">
+    Outputs="$(BV_ThisAssemblyClassFile)"
+    Condition="@(ThisAssemblyConstant->Count()) > 0">
 
     <Buildvana.Sdk.Tasks.WriteThisAssemblyClass
       Language="$(Language)"
