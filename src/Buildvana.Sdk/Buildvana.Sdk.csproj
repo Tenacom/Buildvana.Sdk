@@ -37,19 +37,23 @@
     <None Include="Sdk\**\*" Pack="true" PackagePath="%(Identity)" />
   </ItemGroup>
 
-  <!-- Aliased package content - a workaround for project items not allowing duplicates, even with different Link metadata -->
+  <!-- Additional package content - a workaround for project items not allowing duplicates, even with different Link metadata -->
 
   <ItemGroup>
     <None Include="Aliased\**\*" Pack="false" />
   </ItemGroup>
 
+  <!-- __AdditionalPackageContent works the opposite way with respect to Content, None, and other similar items:
+       you "Include" the _target_ path (always relative to the package "root") and set the Source metadata to the path
+       of the source file. This lets you add the same file to a package multiple times, as the item identities
+       will be different. -->
   <ItemGroup>
-    <__AliasedFile Include="Sdk\Import.BeforeCommon.props.proj" Alias="Aliased\ImportFiles.proj" />
-    <__AliasedFile Include="Sdk\Import.Common.props.proj" Alias="Aliased\ImportFiles.proj" />
-    <__AliasedFile Include="Sdk\Import.AfterCommon.props.proj" Alias="Aliased\ImportFiles.proj" />
-    <__AliasedFile Include="Sdk\Import.BeforeCommon.targets.proj" Alias="Aliased\ImportFiles.proj" />
-    <__AliasedFile Include="Sdk\Import.Common.targets.proj" Alias="Aliased\ImportFiles.proj" />
-    <__AliasedFile Include="Sdk\Import.AfterCommon.targets.proj" Alias="Aliased\ImportFiles.proj" />
+    <__AdditionalPackageContent Include="Sdk\Import.BeforeCommon.props.proj" Source="Aliased\ImportFiles.proj" />
+    <__AdditionalPackageContent Include="Sdk\Import.Common.props.proj" Source="Aliased\ImportFiles.proj" />
+    <__AdditionalPackageContent Include="Sdk\Import.AfterCommon.props.proj" Source="Aliased\ImportFiles.proj" />
+    <__AdditionalPackageContent Include="Sdk\Import.BeforeCommon.targets.proj" Source="Aliased\ImportFiles.proj" />
+    <__AdditionalPackageContent Include="Sdk\Import.Common.targets.proj" Source="Aliased\ImportFiles.proj" />
+    <__AdditionalPackageContent Include="Sdk\Import.AfterCommon.targets.proj" Source="Aliased\ImportFiles.proj" />
   </ItemGroup>
 
   <!-- References -->
@@ -80,33 +84,71 @@
     <PackageReference Update="@(PackageReference)" ExcludeAssets="Runtime" PrivateAssets="All" />
   </ItemGroup>
 
-  <!-- Create a folder with aliased content. Folder layout will mimic package layout -->
+  <!-- Create an intermediate folder with additional package content. Folder layout must mimic package layout. -->
 
-  <Target Name="__RealizeAliases" AfterTargets="Build" Condition="'$(IsInnerBuild)' != 'true'">
+  <Target Name="__ComputeAdditionalPackageContentPaths">
 
-    <!-- IntermediateOutputPath is unknown here at evaluation time -->
+    <!-- IntermediateOutputPath is unknown to us at evaluation time, because it is set in a Microsoft SDK .targets file.
+         Therefore we can only use it in a task. -->
     <PropertyGroup>
-      <__AliasedPath>$(IntermediateOutputPath)Aliased\</__AliasedPath>
+      <__IntermediateAdditionalPackageContentDir>$(IntermediateOutputPath)AdditionalPackageContent\</__IntermediateAdditionalPackageContentDir>
     </PropertyGroup>
 
-    <RemoveDir Directories="$(__AliasedPath)" />
-    <MakeDir Directories="$(__AliasedPath)" />
+    <!-- Now is the right time to actually evaluate sources for additional content package.
+         All targets that depend on this target are executed after Build. -->
+    <ItemGroup>
+      <__AdditionalPackageContentSourceProvisional Include="%(__AdditionalPackageContent.Source)" />
+      <__AdditionalPackageContentSource Include="@(__AdditionalPackageContentSourceProvisional->Distinct())" />
+      <__AdditionalPackageContentSourceProvisional Remove="@(__AdditionalPackageContentSourceProvisional)" /> <!-- Free up some memory -->
+    </ItemGroup>
 
-    <Copy SourceFiles="%(__AliasedFile.Alias)" DestinationFiles="$(__AliasedPath)%(__AliasedFile.Identity)" />
+    <ItemGroup>
+      <__AdditionalPackageContentDestination Include="$([System.IO.Path]::Combine('$(__IntermediateAdditionalPackageContentDir)', '%(__AdditionalPackageContent.Identity)'))" />
+    </ItemGroup>
 
   </Target>
 
-  <!-- Include aliased content in package -->
+  <!-- Create an intermediate folder with additional package content. Folder layout must mimic package layout. -->
 
-  <Target Name="__IncludeAliasedFiles" BeforeTargets="Pack">
+  <Target
+    Name="__CopyAdditionalPackageContentToIntermediateDirectory"
+    AfterTargets="Build"
+    DependsOnTargets="__ComputeAdditionalPackageContentPaths"
+    Inputs="@(__AdditionalPackageContentSource)"
+    Outputs="@(__AdditionalPackageContentDestination)">
 
-    <!-- IntermediateOutputPath is unknown here at evaluation time -->
-    <PropertyGroup>
-      <__AliasedPath>$(IntermediateOutputPath)Aliased\</__AliasedPath>
-    </PropertyGroup>
+    <MakeDir Directories="$(__IntermediateAdditionalPackageContentDir)" />
+
+    <Copy
+      SourceFiles="%(__AdditionalPackageContent.Source)"
+      DestinationFiles="$([System.IO.Path]::Combine('$(__IntermediateAdditionalPackageContentDir)', '%(__AdditionalPackageContent.Identity)'))" />
+
+  </Target>
+
+  <!-- Clean additional package content intermediate driectory -->
+
+  <Target Name="__CleanAdditionalPackageContentIntermediateDirectory" AfterTargets="BeforeClean" DependsOnTargets="__ComputeAdditionalPackageContentPaths">
+
+    <RemoveDir Directories="$(__IntermediateAdditionalPackageContentDir)" />
+
+  </Target>
+
+  <!-- Include additional content in package -->
+
+  <!-- We need to execute __IncludeAdditionalContentInPackage before GenerateNuspec.
+       Declaring BeforeTargets="Pack" in our target is not sufficient, because Pack depends on GenerateNuspec,
+       and dependency targets are executed before "before" targets.
+       We cannot set PackDependsOn either, because NuGet.Build.Tasks.Pack.targets would later prepend GenerateNuspec to it.
+       The only correct way is to add our target to BeforePack. -->
+  <PropertyGroup>
+    <BeforePack>$(BeforePack);__IncludeAdditionalContentInPackage</BeforePack>
+  </PropertyGroup>
+
+  <Target Name="__IncludeAdditionalContentInPackage" DependsOnTargets="__ComputeAdditionalPackageContentPaths">
 
     <ItemGroup>
-      <None Include="$(__AliasedPath)**\*" Visible="false" Pack="true" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
+      <BV_CopiedAdditionalPackageContent Include="$(__IntermediateAdditionalPackageContentDir)**\*" />
+      <None Include="@(BV_CopiedAdditionalPackageContent)" Visible="false" Pack="true" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
 
   </Target>
