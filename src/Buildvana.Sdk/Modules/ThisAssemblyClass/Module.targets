@@ -1,14 +1,28 @@
 <Project>
 
+  <!-- Save the value of EnableThisAssemblyClass for later determination
+       of whether to issue a warning. -->
+  <PropertyGroup>
+    <BV_EnableThisAssemblyClass>$(EnableThisAssemblyClass)</BV_EnableThisAssemblyClass>
+  </PropertyGroup>
+
   <!-- Coalesce EnableThisAssemblyClass to a boolean value;
        force to false for projects in unsupported languages. -->
   <PropertyGroup>
-		<EnableThisAssemblyClass Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'">false</EnableThisAssemblyClass>
-		<EnableThisAssemblyClass Condition="'$(BV_ThisAssemblyClassFile)' == ''">false</EnableThisAssemblyClass>
+    <EnableThisAssemblyClass Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'">false</EnableThisAssemblyClass>
     <EnableThisAssemblyClass Condition="'$(EnableThisAssemblyClass)' == ''">true</EnableThisAssemblyClass>
   </PropertyGroup>
-  
+
+  <!-- Issue a warning if EnableThisAssemblyClass was set to true
+       for a project in an unsupported language. -->
+  <ItemGroup >
+    <EvaluationWarning
+      Condition="'$(BV_EnableThisAssemblyClass)' == 'true' And !$(EnableThisAssemblyClass)"
+      Include="BVW2000"
+      Text="Language '$(Language)' is not supported by ThisAssemblyClass." />
+  </ItemGroup>
+
   <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
           Condition="$(EnableThisAssemblyClass)" />
-    
+
 </Project>
