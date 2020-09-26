@@ -29,55 +29,30 @@ namespace Buildvana.Sdk.Tasks
                     { "VB", task => new VisualBasicThisAssemblyClassCompiler(task) },
                 };
 
-        private string _language = string.Empty;
-        private string _outputPath = string.Empty;
-        private string _className = string.Empty;
-        private string _namespace = string.Empty;
-        private ITaskItem[] _constants = Array.Empty<ITaskItem>();
+        [PublicAPI]
+        [Required]
+        public string? Language { get; set; }
 
         [PublicAPI]
         [Required]
-        public string Language
-        {
-            get => _language;
-            set => _language = value ?? string.Empty;
-        }
+        public string? OutputPath { get; set; }
 
         [PublicAPI]
-        [Required]
-        public string OutputPath
-        {
-            get => _outputPath;
-            set => _outputPath = value ?? string.Empty;
-        }
+        public string? ClassName { get; set; }
 
         [PublicAPI]
-        public string ClassName
-        {
-            get => _className;
-            set => _className = value ?? string.Empty;
-        }
-
-        [PublicAPI]
-        public string Namespace
-        {
-            get => _namespace;
-            set => _namespace = value ?? string.Empty;
-        }
+        public string? Namespace { get; set; }
 
 #pragma warning disable CA1819 // Properties should not return arrays - Required by MSBuild API
         [PublicAPI]
-        public ITaskItem[] Constants
-        {
-            get => _constants;
-            set => _constants = value ?? Array.Empty<ITaskItem>();
-        }
+        public ITaskItem[]? Constants { get; set; }
 #pragma warning restore CA1819
 
         public override bool Execute()
         {
             try
             {
+                Language ??= string.Empty;
                 if (!ThisAssemblyClassCompilers.TryGetValue(Language, out var createCompiler))
                 {
                     throw new BuildErrorException(Strings.Common.UnsupportedLanguageFmt, Language);
