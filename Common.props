@@ -29,6 +29,8 @@
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <CLSCompliant>true</CLSCompliant>
+    <ComVisible>false</ComVisible>
   </PropertyGroup>
 
   <!-- Package Central Version Management -->

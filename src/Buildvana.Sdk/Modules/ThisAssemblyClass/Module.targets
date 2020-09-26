@@ -19,7 +19,7 @@
   <ItemGroup >
     <EvaluationWarning
       Condition="'$(BV_EnableThisAssemblyClass)' == 'true' And !$(EnableThisAssemblyClass)"
-      Include="BVW2000"
+      Include="BVW1900"
       Text="Language '$(Language)' is not supported by ThisAssemblyClass." />
   </ItemGroup>
 

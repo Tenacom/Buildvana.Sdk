@@ -41,7 +41,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="!Exists('$(PackageLicensePath)')"
-          Include="BVE1600"
+          Include="BVE1500"
           Text="Specified license file '$(PackageLicensePath)' does not exist." />
       </ItemGroup>
     </When>
@@ -52,7 +52,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="'$(PackageLicensePath)' == ''"
-          Include="BVE1601"
+          Include="BVE1501"
           Text="Specified license file '$(PackageLicenseFile)' was not found." />
       </ItemGroup>
     </When>
@@ -113,7 +113,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="'$(PackageLicensePath)' == ''"
-          Include="BVE1602"
+          Include="BVE1502"
           Text="No license file found." />
       </ItemGroup>
     </Otherwise>
@@ -161,7 +161,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="!Exists('$(PackageThirdPartyNoticePath)')"
-          Include="BVE1603"
+          Include="BVE1503"
           Text="Specified third-party notice file '$(PackageThirdPartyNoticePath)' does not exist." />
       </ItemGroup>
     </When>
@@ -172,7 +172,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="'$(PackageThirdPartyNoticePath)' == ''"
-          Include="BVE1604"
+          Include="BVE1504"
           Text="Specified third-party notice file '$(PackageThirdPartyNoticeFile)' was not found." />
       </ItemGroup>
     </When>
@@ -233,7 +233,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="'$(PackageThirdPartyNoticePath)' == ''"
-          Include="BVE1605"
+          Include="BVE1505"
           Text="No third-party notice file found." />
       </ItemGroup>
     </Otherwise>
@@ -275,7 +275,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="!Exists('$(PackageIconPath)')"
-          Include="BVE1606"
+          Include="BVE1506"
           Text="Specified package icon file '$(PackageIconPath)' does not exist." />
       </ItemGroup>
     </When>
@@ -286,7 +286,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="'$(PackageIconPath)' == ''"
-          Include="BVE1607"
+          Include="BVE1507"
           Text="Specified package icon file '$(PackageIcon)' was not found." />
       </ItemGroup>
     </When>
@@ -381,7 +381,7 @@
       <ItemGroup>
         <EvaluationError
           Condition="'$(PackageIconPath)' == ''"
-          Include="BVE1608"
+          Include="BVE1508"
           Text="No package icon file found." />
       </ItemGroup>
     </Otherwise>
