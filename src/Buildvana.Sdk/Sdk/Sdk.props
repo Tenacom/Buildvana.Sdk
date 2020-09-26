@@ -58,7 +58,7 @@
 
   <!-- Select compiled tasks assembly -->
   <PropertyGroup>
-    <BV_SdkTasksAssembly>$(MSBuildThisFileDirectory)$(BV_SdkTasksTfm)\Buildvana.Sdk.Tasks.dll</BV_SdkTasksAssembly>
+    <BV_SdkTasksAssembly>$(MSBuildThisFileDirectory)$(BV_SdkTasksTfm)\Buildvana.Sdk.dll</BV_SdkTasksAssembly>
   </PropertyGroup>
 
   <!-- Declare compiled tasks -->
