@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <BV_ThisAssemblyClassFile>$(IntermediateOutputPath)Buildvana_ThisAssembly.g$(DefaultLanguageSourceExtension)</BV_ThisAssemblyClassFile>
+    <BV_ThisAssemblyClassFile>$(IntermediateOutputPath)$(MSBuildProjectName).ThisAssembly.g$(DefaultLanguageSourceExtension)</BV_ThisAssemblyClassFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -54,32 +54,32 @@
        create a hash of all assembly attributes so that the cache file will change with the calculated
        assembly attribute values and msbuild will then execute BV_GenerateThisAssemblyClassCore
        to generate a new file. -->
-  <Target Name="BV_CreateThisAssemblyClassCache">
+  <Target Name="BV_CreateGeneratedThisAssemblyClassInputsCacheFile">
 
     <PropertyGroup>
-      <BV_ThisAssemblyClassCacheFile>$(IntermediateOutputPath)BV_ThisAssembly.cache</BV_ThisAssemblyClassCacheFile>
+      <BV_GeneratedThisAssemblyClassInputsCacheFile>$(IntermediateOutputPath)$(MSBuildProjectName).ThisAssemblyClassInputs.cache</BV_GeneratedThisAssemblyClassInputsCacheFile>
     </PropertyGroup>
 
     <Hash ItemsToHash="@(ThisAssemblyConstant->'%(Identity)%(Type)%(Value)')">
-      <Output TaskParameter="HashResult" PropertyName="BV_ThisAssemblyClassHash" />
+      <Output TaskParameter="HashResult" PropertyName="BV_ThisAssemblyConstantsHash" />
     </Hash>
 
     <WriteLinesToFile
-      Lines="$(BV_ThisAssemblyClassHash)"
-      File="$(BV_ThisAssemblyClassCacheFile)"
+      Lines="$(BV_ThisAssemblyConstantsHash)"
+      File="$(BV_GeneratedThisAssemblyClassInputsCacheFile)"
       Overwrite="True"
       WriteOnlyWhenDifferent="True" />
 
     <ItemGroup>
-      <FileWrites Include="$(BV_ThisAssemblyClassCacheFile)" />
+      <FileWrites Include="$(BV_GeneratedThisAssemblyClassInputsCacheFile)" />
     </ItemGroup>
 
   </Target>
 
   <Target
     Name="BV_GenerateThisAssemblyClassCore"
-    DependsOnTargets="BV_CreateThisAssemblyClassCache"
-    Inputs="$(BV_ThisAssemblyClassCacheFile)"
+    DependsOnTargets="BV_CreateGeneratedThisAssemblyClassInputsCacheFile"
+    Inputs="$(BV_GeneratedThisAssemblyClassInputsCacheFile)"
     Outputs="$(BV_ThisAssemblyClassFile)"
     Condition="@(ThisAssemblyConstant->Count()) > 0">
 
