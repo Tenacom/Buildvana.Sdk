@@ -22,7 +22,8 @@
       Text="Language '$(Language)' is not supported by ThisAssemblyClass." />
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
-          Condition="$(EnableThisAssemblyClass)" />
+  <Import
+    Project="$(MSBuildThisFileDirectory)Module.Core.targets"
+    Condition="$(EnableThisAssemblyClass)" />
 
 </Project>
