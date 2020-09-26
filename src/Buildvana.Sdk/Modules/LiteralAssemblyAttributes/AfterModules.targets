@@ -1,66 +1,31 @@
 <Project>
 
+  <!-- Save the value of GenerateLiteralAssemblyInfo for later determination
+       of whether to issue a warning. -->
   <PropertyGroup>
-    <GeneratedLiteralAssemblyInfoFile Condition="'$(GeneratedLiteralAssemblyInfoFile)' ==''">$(IntermediateOutputPath)$(MSBuildProjectName).LiteralAssemblyInfo.g$(DefaultLanguageSourceExtension)</GeneratedLiteralAssemblyInfoFile>
-    <GenerateLiteralAssemblyInfo Condition="'$(GenerateLiteralAssemblyInfo)' == ''">$(GenerateAssemblyInfo)</GenerateLiteralAssemblyInfo>
-    <GenerateLiteralAssemblyInfo Condition="'$(GenerateLiteralAssemblyInfo)' == ''">true</GenerateLiteralAssemblyInfo>
+    <BV_GenerateLiteralAssemblyInfo>$(GenerateLiteralAssemblyInfo)</BV_GenerateLiteralAssemblyInfo>
   </PropertyGroup>
 
-  <!-- This must run before every invocation of CoreCompile to ensure that all compiler runs
-       see the generated assembly info. There is at least one scenario involving Xaml
-       where CoreCompile is invoked without other potential hooks such as Compile or CoreBuild,
-       etc., so we hook directly on to CoreCompile. Furthermore, we  must run *after*
-       PrepareForBuild to ensure that the intermediate directory has been created.
-       
+  <!-- Coalesce GenerateLiteralAssemblyInfo to a boolean value;
+        force to false for projects in unsupported languages. -->
+  <PropertyGroup>
+    <GenerateLiteralAssemblyInfo Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'">false</GenerateLiteralAssemblyInfo>
+    <GenerateLiteralAssemblyInfo Condition="'$(GenerateLiteralAssemblyInfo)' == ''">$(GenerateAssemblyInfo)</GenerateLiteralAssemblyInfo>
+    <GenerateLiteralAssemblyInfo Condition="'$(GenerateLiteralAssemblyInfo)' == ''">true</GenerateLiteralAssemblyInfo>
+    <GenerateLiteralAssemblyInfo Condition="'$(GenerateLiteralAssemblyInfo)' != 'true'">false</GenerateLiteralAssemblyInfo>
+  </PropertyGroup>
 
-      Targets that generate Compile items are also expected to run before
-      BeforeCompile targets (common targets convention). -->
-  <Target Name="BV_GenerateLiteralAssemblyInfo"
-          BeforeTargets="BeforeCompile;CoreCompile"
-          DependsOnTargets="PrepareForBuild;BV_GenerateLiteralAssemblyInfoCore"
-          Condition="'$(GenerateLiteralAssemblyInfo)' == 'true'" />
+  <!-- Issue a warning if GenerateLiteralAssemblyInfo was set to true
+        for a project in an unsupported language. -->
+  <ItemGroup >
+    <EvaluationWarning
+      Condition="'$(BV_GenerateLiteralAssemblyInfo)' == 'true' And !$(GenerateLiteralAssemblyInfo)"
+      Include="BVW1500"
+      Text="Language '$(Language)' is not supported by LiteralAssemblyInfo." />
+  </ItemGroup>
 
-  <!-- To allow version changes to be respected on incremental builds (e.g. through CLI parameters),
-       create a hash of all assembly attributes so that the cache file will change with the calculated
-       assembly attribute values and msbuild will then execute BV_GenerateLiteralAssemblyInfoCore
-       to generate a new file. -->
-  <Target Name="BV_CreateGeneratedLiteralAssemblyInfoInputsCacheFile">
-
-    <PropertyGroup>
-      <BV_GeneratedLiteralAssemblyInfoInputsCacheFile>$(IntermediateOutputPath)$(MSBuildProjectName).LiteralAssemblyInfoInputs.cache</BV_GeneratedLiteralAssemblyInfoInputsCacheFile>
-    </PropertyGroup>
-
-    <!-- We only use up to _Parameter1 for most attributes, but other targets may add additional assembly attributes with multiple parameters. -->
-    <Hash ItemsToHash="@(LiteralAssemblyAttribute->'%(Identity)%(_Parameter1)%(_Parameter2)%(_Parameter3)%(_Parameter4)%(_Parameter5)%(_Parameter6)%(_Parameter7)%(_Parameter8)%(_Parameter9)%(_Parameter10)')">
-      <Output TaskParameter="HashResult" PropertyName="BV_LiteralAssemblyAttributesHash" />
-    </Hash>
-
-    <WriteLinesToFile Lines="$(BV_LiteralAssemblyAttributesHash)" File="$(BV_GeneratedLiteralAssemblyInfoInputsCacheFile)" Overwrite="True" WriteOnlyWhenDifferent="True" />
-
-    <ItemGroup>
-      <FileWrites Include="$(BV_GeneratedLiteralAssemblyInfoInputsCacheFile)" />
-    </ItemGroup>
-
-  </Target>
-
-  <Target Name="BV_GenerateLiteralAssemblyInfoCore"
-          Condition="'$(Language)'=='VB' or '$(Language)'=='C#'"
-          DependsOnTargets="BV_CreateGeneratedLiteralAssemblyInfoInputsCacheFile"
-          Inputs="$(BV_GeneratedLiteralAssemblyInfoInputsCacheFile)"
-          Outputs="$(GeneratedLiteralAssemblyInfoFile)">
-
-    <Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes
-      LiteralAssemblyAttributes="@(LiteralAssemblyAttribute)"
-      Language="$(Language)"
-      OutputPath="$(GeneratedLiteralAssemblyInfoFile)" />
-
-    <ItemGroup>
-      <Compile Remove="$(GeneratedLiteralAssemblyInfoFile)" />
-      <Compile Include="$(GeneratedLiteralAssemblyInfoFile)" />
-      <FileWrites Remove="$(GeneratedLiteralAssemblyInfoFile)" />
-      <FileWrites Include="$(GeneratedLiteralAssemblyInfoFile)" />
-    </ItemGroup>
-
-  </Target>
+  <Import
+    Project="$(MSBuildThisFileDirectory)AfterModules.Core.targets"
+    Condition="$(GenerateLiteralAssemblyInfo)" />
 
 </Project>
