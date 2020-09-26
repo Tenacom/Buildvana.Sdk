@@ -69,7 +69,7 @@ namespace Buildvana.Sdk.Tasks.Internal
             }).ToList();
         }
 
-        protected string Namespace { get; }
+        protected string? Namespace { get; }
 
         protected string ClassName { get; }
 
