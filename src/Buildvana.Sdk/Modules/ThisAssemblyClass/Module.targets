@@ -11,6 +11,7 @@
   <PropertyGroup>
     <EnableThisAssemblyClass Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'">false</EnableThisAssemblyClass>
     <EnableThisAssemblyClass Condition="'$(EnableThisAssemblyClass)' == ''">true</EnableThisAssemblyClass>
+    <EnableThisAssemblyClass Condition="'$(EnableThisAssemblyClass)' != 'true'">false</EnableThisAssemblyClass>
   </PropertyGroup>
 
   <!-- Issue a warning if EnableThisAssemblyClass was set to true
