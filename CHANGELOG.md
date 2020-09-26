@@ -19,11 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
-- [#35](https://github.com/Buildvana/Buildvana.Sdk/issues/35) - A package reference to `Microsoft.NETFramework.ReferenceAssemblies` is automatically added to projects targeting .NET Framework so they can be built on non-Windows systems, or without a .NET Targeting  Pack installed.
+- https://github.com/Buildvana/Buildvana.Sdk/issues/35 - A package reference to `Microsoft.NETFramework.ReferenceAssemblies` is automatically added to projects targeting .NET Framework so they can be built on non-Windows systems, or without a .NET Targeting  Pack installed.
 
 ### Bugs fixed in this release
 
-- [#36](https://github.com/Buildvana/Buildvana.Sdk/issues/36) - Building projects with [centrally-managed package versions](https://stu.dev/managing-package-versions-centrally) now works.
+- https://github.com/Buildvana/Buildvana.Sdk/issues/36 - Building projects with [centrally-managed package versions](https://stu.dev/managing-package-versions-centrally) now works.
 
 ## [1.0.0-alpha.5](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.5) (2020-09-17)
 
@@ -35,13 +35,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
-- [#30](https://github.com/Buildvana/Buildvana.Sdk/issues/30) - The LiteralAssemblyAttributes module now works as expected.
+- https://github.com/Buildvana/Buildvana.Sdk/issues/30 - The LiteralAssemblyAttributes module now works as expected.
 
 ## [1.0.0-alpha.3](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.3) (2020-09-14)
 
 ### New features
 
-- **[potentially breaking]** #26 A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.
+- **[potentially breaking]** https://github.com/Buildvana/Buildvana.Sdk/issues/26 - A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.
   To opt out of this convention, explicitly set `IsTestProject` to `true` or `false`.
 
 ### Changes to existing features
@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
-- #22 Warning CA1707 (Identifiers should not contain underscores) is now suppressed by default in test projects. You can control this feature via the `AllowUnderscoresInMemberNames` property.
+- https://github.com/Buildvana/Buildvana.Sdk/issues/22 - Warning CA1707 (Identifiers should not contain underscores) is now suppressed by default in test projects. You can control this feature via the `AllowUnderscoresInMemberNames` property.
 
 ## [1.0.0-alpha.1](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.1) (2020-09-12)
 
