@@ -110,24 +110,24 @@
 
   <!-- Create an intermediate folder with additional package content. Folder layout must mimic package layout. -->
 
-  <Target
-    Name="__CopyAdditionalPackageContentToIntermediateDirectory"
-    AfterTargets="Build"
-    DependsOnTargets="__ComputeAdditionalPackageContentPaths"
-    Inputs="@(__AdditionalPackageContentSource)"
-    Outputs="@(__AdditionalPackageContentDestination)">
+  <Target Name="__CopyAdditionalPackageContentToIntermediateDirectory"
+          AfterTargets="Build"
+          DependsOnTargets="__ComputeAdditionalPackageContentPaths"
+          Inputs="@(__AdditionalPackageContentSource)"
+          Outputs="@(__AdditionalPackageContentDestination)">
 
     <MakeDir Directories="$(__IntermediateAdditionalPackageContentDir)" />
 
-    <Copy
-      SourceFiles="%(__AdditionalPackageContent.Source)"
-      DestinationFiles="$([System.IO.Path]::Combine('$(__IntermediateAdditionalPackageContentDir)', '%(__AdditionalPackageContent.Identity)'))" />
+    <Copy SourceFiles="%(__AdditionalPackageContent.Source)"
+          DestinationFiles="$([System.IO.Path]::Combine('$(__IntermediateAdditionalPackageContentDir)', '%(__AdditionalPackageContent.Identity)'))" />
 
   </Target>
 
   <!-- Clean additional package content intermediate driectory -->
 
-  <Target Name="__CleanAdditionalPackageContentIntermediateDirectory" AfterTargets="BeforeClean" DependsOnTargets="__ComputeAdditionalPackageContentPaths">
+  <Target Name="__CleanAdditionalPackageContentIntermediateDirectory"
+          AfterTargets="BeforeClean"
+          DependsOnTargets="__ComputeAdditionalPackageContentPaths">
 
     <RemoveDir Directories="$(__IntermediateAdditionalPackageContentDir)" />
 

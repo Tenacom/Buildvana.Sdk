@@ -10,7 +10,7 @@
 using System;
 using System.Globalization;
 
-namespace Buildvana.Sdk.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
 #pragma warning disable CA1032 // Implement standard exception constructors - Not needed since this class is internal
 #pragma warning disable CA1064 // Exceptions should be public - This does not need to be public

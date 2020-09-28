@@ -7,17 +7,12 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-
-namespace Buildvana.Sdk.Internal
+namespace Buildvana.Sdk.Tasks.Resources
 {
-    internal class StringUtility
+    internal static partial class Strings
     {
-        // Like string.IsNullOrEmpty, but nullability-annotated for all platforms
-        // https://github.com/dotnet/roslyn/issues/37995
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrEmpty([NotNullWhen(false)] string? str)
-            => string.IsNullOrEmpty(str);
+        public const string MissingParameterFmt = "BVE1100: Parameter '{0}' is missing or empty.";
+        public const string UnsupportedLanguageFmt = "BVE1101: Language '{0}' is not supported.";
+        public const string CouldNotWriteFileFmt = "BVE1102: The file '{0}' could not be created. {1}";
     }
 }

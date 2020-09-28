@@ -46,7 +46,7 @@
           Inputs="$(BV_GeneratedLiteralAssemblyInfoInputsCacheFile)"
           Outputs="$(BV_GeneratedLiteralAssemblyInfoFile)">
 
-    <Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes
+    <WriteLiteralAssemblyAttributes
       LiteralAssemblyAttributes="@(LiteralAssemblyAttribute)"
       Language="$(Language)"
       OutputPath="$(BV_GeneratedLiteralAssemblyInfoFile)" />

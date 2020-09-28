@@ -7,7 +7,7 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-namespace Buildvana.Sdk.Tasks.Internal
+namespace Buildvana.Sdk.Tasks.Resources
 {
     internal partial class Strings
     {

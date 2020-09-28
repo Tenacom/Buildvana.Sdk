@@ -7,13 +7,12 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-namespace Buildvana.Sdk.Tasks.Internal
+using System.Collections.Generic;
+
+namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.Internal
 {
-    internal partial class Strings
+    internal interface ILiteralAssemblyAttributesGenerator
     {
-        public static class AssemblySigning
-        {
-            public const string CannotExtractKeyFmt = "BVE1200: Cannot extract key from '{0}'.";
-        }
+        string GenerateCode(IEnumerable<(string Type, IReadOnlyCollection<string> OrderedParameters, IReadOnlyDictionary<string, string> NamedParameters)> attributes);
     }
 }

@@ -16,7 +16,7 @@ using System.Security;
 using System.Threading;
 using JetBrains.Annotations;
 
-namespace Buildvana.Sdk.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
     /// <summary>
     /// Provides extension methods for <see cref="Exception"/> and derived classes.
