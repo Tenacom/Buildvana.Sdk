@@ -7,15 +7,17 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-using System.Text;
-using Microsoft.Build.Framework;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal interface IAttributeCompiler
+    internal class StringUtility
     {
-        string Extension { get; }
-
-        void AppendAttribute(StringBuilder sb, ITaskItem attributeItem);
+        // Like string.IsNullOrEmpty, but nullability-annotated for all platforms
+        // https://github.com/dotnet/roslyn/issues/37995
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullOrEmpty([NotNullWhen(false)] string? str)
+            => string.IsNullOrEmpty(str);
     }
 }

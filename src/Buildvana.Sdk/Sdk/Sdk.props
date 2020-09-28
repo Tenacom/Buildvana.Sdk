@@ -62,10 +62,10 @@
   </PropertyGroup>
 
   <!-- Declare compiled tasks -->
-  <UsingTask TaskName="Buildvana.Sdk.Tasks.ConvertPfxToSnk" AssemblyFile="$(BV_SdkTasksAssembly)" />
-  <UsingTask TaskName="Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes" AssemblyFile="$(BV_SdkTasksAssembly)" />
-  <UsingTask TaskName="Buildvana.Sdk.Tasks.ParseVersionFile" AssemblyFile="$(BV_SdkTasksAssembly)" />
-  <UsingTask TaskName="Buildvana.Sdk.Tasks.WriteThisAssemblyClass" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="ConvertPfxToSnk" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="WriteLiteralAssemblyAttributes" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="ParseVersionFile" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="WriteThisAssemblyClass" AssemblyFile="$(BV_SdkTasksAssembly)" />
 
   <!-- Import modules -->
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\BeforeModules.props" />

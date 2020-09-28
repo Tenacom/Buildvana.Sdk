@@ -7,9 +7,12 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-namespace Buildvana.Sdk.Tasks.Internal
+using System.Collections.Generic;
+
+namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
 {
-    internal static partial class Strings
+    internal interface IThisAssemblyClassGenerator
     {
+        string GenerateCode(string className, string classNamespace, IEnumerable<(string Name, object Value)> constants);
     }
 }

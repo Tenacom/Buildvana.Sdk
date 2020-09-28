@@ -83,7 +83,7 @@
     Outputs="$(BV_ThisAssemblyClassFile)"
     Condition="@(ThisAssemblyConstant->Count()) > 0">
 
-    <Buildvana.Sdk.Tasks.WriteThisAssemblyClass
+    <WriteThisAssemblyClass
       Language="$(Language)"
       OutputPath="$(BV_ThisAssemblyClassFile)"
       ClassName="$(ThisAssemblyClassName)"

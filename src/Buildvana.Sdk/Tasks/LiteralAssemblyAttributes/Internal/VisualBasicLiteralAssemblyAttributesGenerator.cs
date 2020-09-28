@@ -8,21 +8,20 @@
 // -----------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.Text;
+using Buildvana.Sdk.Tasks.Internal;
 
-namespace Buildvana.Sdk.Tasks.Internal
+namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.Internal
 {
-    internal sealed class CSharpAttributeCompiler : AttributeCompilerBase
+    internal sealed class VisualBasicLiteralAssemblyAttributesGenerator : LiteralAssemblyAttributesGeneratorBase<VisualBasicCodeBuilder>
     {
-        public override string Extension => ".cs";
-
-        protected override void AppendAttributeCore(StringBuilder sb, string attributeType, IReadOnlyList<string> orderedParameters, IReadOnlyDictionary<string, string> namedParameters)
+        protected override void GenerateAttribute(string type, IReadOnlyCollection<string> orderedParameters, IReadOnlyDictionary<string, string> namedParameters)
         {
-            _ = sb.Append("[assembly:").Append(attributeType);
+            Text("<Assembly: ");
+            Text(type);
 
             if (orderedParameters.Count > 0 || namedParameters.Count > 0)
             {
-                _ = sb.Append('(');
+                Text('(');
                 var first = true;
 
                 foreach (var parameter in orderedParameters)
@@ -33,10 +32,10 @@ namespace Buildvana.Sdk.Tasks.Internal
                     }
                     else
                     {
-                        _ = sb.Append(", ");
+                        Text(", ");
                     }
 
-                    _ = sb.Append(parameter);
+                    Text(parameter);
                 }
 
                 foreach (var pair in namedParameters)
@@ -47,23 +46,25 @@ namespace Buildvana.Sdk.Tasks.Internal
                     }
                     else
                     {
-                        _ = sb.Append(", ");
+                        Text(", ");
                     }
 
-                    _ = sb.Append(pair.Key).Append('=').Append(pair.Value);
+                    Text(pair.Key);
+                    Text(":=");
+                    Text(pair.Value);
                 }
 
-                _ = sb.Append(')');
+                Text(')');
             }
 
-            _ = sb.Append(']').AppendLine();
+            Text('>');
         }
 
         protected override string TransformParameterValue(string value)
             => value.ToUpperInvariant() switch {
-                "TRUE" => "true",
-                "FALSE" => "false",
-                "NULL" => "null",
+                "TRUE" => "True",
+                "FALSE" => "False",
+                "NULL" => "Nothing",
                 _ => value,
             };
     }

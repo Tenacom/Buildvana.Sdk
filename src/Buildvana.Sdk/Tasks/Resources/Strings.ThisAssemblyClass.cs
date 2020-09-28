@@ -7,12 +7,15 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-using System.Text;
-
-namespace Buildvana.Sdk.Tasks.Internal
+namespace Buildvana.Sdk.Tasks.Resources
 {
-    internal interface IThisAssemblyClassCompiler
+    internal partial class Strings
     {
-        void CompileThisClass(StringBuilder sb);
+        public static class ThisAssemblyClass
+        {
+            public const string MissingConstantMetadataFmt = "BVE1900: Constant '{0}' has no '{1}' metadata.";
+            public const string UnsupportedConstantTypeFmt = "BVE1901: Constant '{0}' has unknown or unsupported type '{1}'.";
+            public const string InvalidConstantValueFmt = "BVE1902: Constant '{0}' has invalid value '{1}'.";
+        }
     }
 }

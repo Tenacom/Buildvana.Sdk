@@ -1,43 +1,56 @@
 #nullable enable
-Buildvana.Sdk.Tasks.ConvertPfxToSnk
-Buildvana.Sdk.Tasks.ConvertPfxToSnk.ConvertPfxToSnk() -> void
-Buildvana.Sdk.Tasks.ConvertPfxToSnk.OutputPath.get -> string?
-Buildvana.Sdk.Tasks.ConvertPfxToSnk.OutputPath.set -> void
-Buildvana.Sdk.Tasks.ConvertPfxToSnk.PfxPassword.get -> string?
-Buildvana.Sdk.Tasks.ConvertPfxToSnk.PfxPassword.set -> void
-Buildvana.Sdk.Tasks.ConvertPfxToSnk.PfxPath.get -> string?
-Buildvana.Sdk.Tasks.ConvertPfxToSnk.PfxPath.set -> void
-Buildvana.Sdk.Tasks.ParseVersionFile
-Buildvana.Sdk.Tasks.ParseVersionFile.AssemblyFileVersion.get -> string?
-Buildvana.Sdk.Tasks.ParseVersionFile.AssemblyInformationalVersion.get -> string?
-Buildvana.Sdk.Tasks.ParseVersionFile.AssemblyVersion.get -> string?
-Buildvana.Sdk.Tasks.ParseVersionFile.ParseVersionFile() -> void
-Buildvana.Sdk.Tasks.ParseVersionFile.Version.get -> string?
-Buildvana.Sdk.Tasks.ParseVersionFile.VersionFileFullPath.get -> string?
-Buildvana.Sdk.Tasks.ParseVersionFile.VersionFileFullPath.set -> void
-Buildvana.Sdk.Tasks.ParseVersionFile.VersionPrefix.get -> string?
-Buildvana.Sdk.Tasks.ParseVersionFile.VersionSuffix.get -> string?
-Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes
-Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes.Language.get -> string?
-Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes.Language.set -> void
-Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes.LiteralAssemblyAttributes.get -> Microsoft.Build.Framework.ITaskItem![]?
-Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes.LiteralAssemblyAttributes.set -> void
-Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes.OutputPath.get -> string?
-Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes.OutputPath.set -> void
-Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes.WriteLiteralAssemblyAttributes() -> void
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.ClassName.get -> string!
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.ClassName.set -> void
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.Constants.get -> Microsoft.Build.Framework.ITaskItem![]!
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.Constants.set -> void
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.Language.get -> string!
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.Language.set -> void
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.Namespace.get -> string!
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.Namespace.set -> void
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.OutputPath.get -> string!
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.OutputPath.set -> void
-Buildvana.Sdk.Tasks.WriteThisAssemblyClass.WriteThisAssemblyClass() -> void
-override Buildvana.Sdk.Tasks.ConvertPfxToSnk.Execute() -> bool
-override Buildvana.Sdk.Tasks.ParseVersionFile.Execute() -> bool
-override Buildvana.Sdk.Tasks.WriteLiteralAssemblyAttributes.Execute() -> bool
-override Buildvana.Sdk.Tasks.WriteThisAssemblyClass.Execute() -> bool
+Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk
+Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.ConvertPfxToSnk() -> void
+Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.OutputPath.get -> string?
+Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.OutputPath.set -> void
+Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.PfxPassword.get -> string?
+Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.PfxPassword.set -> void
+Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.PfxPath.get -> string?
+Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.PfxPath.set -> void
+Buildvana.Sdk.Tasks.BuildvanaSdkTask
+Buildvana.Sdk.Tasks.BuildvanaSdkTask.BuildvanaSdkTask() -> void
+Buildvana.Sdk.Tasks.Internal.CodeBuilder
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.AtStartOfLine.get -> bool
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.CodeBuilder() -> void
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.GetGeneratedCode() -> string!
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.LineComment(string! comment) -> void
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.NewLine() -> void
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.NewLine(string! code) -> void
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.Text(char ch) -> void
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.Text(string! code) -> void
+Buildvana.Sdk.Tasks.Internal.CodeBuilder.Text(string! code, int startIndex, int count) -> void
+Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes
+Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.Language.get -> string?
+Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.Language.set -> void
+Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.LiteralAssemblyAttributes.get -> Microsoft.Build.Framework.ITaskItem![]?
+Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.LiteralAssemblyAttributes.set -> void
+Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.OutputPath.get -> string?
+Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.OutputPath.set -> void
+Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.WriteLiteralAssemblyAttributes() -> void
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.ClassName.get -> string?
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.ClassName.set -> void
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.Constants.get -> Microsoft.Build.Framework.ITaskItem![]?
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.Constants.set -> void
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.Language.get -> string?
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.Language.set -> void
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.Namespace.get -> string?
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.Namespace.set -> void
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.OutputPath.get -> string?
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.OutputPath.set -> void
+Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.WriteThisAssemblyClass() -> void
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.AssemblyFileVersion.get -> string?
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.AssemblyInformationalVersion.get -> string?
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.AssemblyVersion.get -> string?
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.ParseVersionFile() -> void
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.Version.get -> string?
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.VersionFileFullPath.get -> string?
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.VersionFileFullPath.set -> void
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.VersionPrefix.get -> string?
+Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.VersionSuffix.get -> string?
+abstract Buildvana.Sdk.Tasks.BuildvanaSdkTask.Run() -> void
+abstract Buildvana.Sdk.Tasks.Internal.CodeBuilder.LineCommentPrefix.get -> string!
+abstract Buildvana.Sdk.Tasks.Internal.CodeBuilder.QuotedText(string! str) -> void
+override Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.Run() -> void
+override sealed Buildvana.Sdk.Tasks.BuildvanaSdkTask.Execute() -> bool

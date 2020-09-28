@@ -23,7 +23,7 @@
           BeforeTargets="Build"
           Condition="$(BV_ConvertPfxToSnk)">
 
-    <Buildvana.Sdk.Tasks.ConvertPfxToSnk
+    <ConvertPfxToSnk
       PfxPath="$(AssemblyOriginatorKeyFile)"
       PfxPassword="$(PfxPassword)"
       OutputPath="$(BV_TempSnkPath)" />

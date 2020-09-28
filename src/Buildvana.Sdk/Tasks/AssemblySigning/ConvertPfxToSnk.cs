@@ -7,19 +7,17 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using Buildvana.Sdk.Internal;
 using Buildvana.Sdk.Tasks.Internal;
+using Buildvana.Sdk.Tasks.Resources;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 
-namespace Buildvana.Sdk.Tasks
+namespace Buildvana.Sdk.Tasks.AssemblySigning
 {
-    public sealed class ConvertPfxToSnk : Task
+    public sealed class ConvertPfxToSnk : BuildvanaSdkTask
     {
         [PublicAPI]
         [Required]
@@ -33,35 +31,22 @@ namespace Buildvana.Sdk.Tasks
         [Required]
         public string? OutputPath { get; set; }
 
-        public override bool Execute()
+        protected override void Run()
         {
-            try
+            if (string.IsNullOrEmpty(PfxPath))
             {
-                if (string.IsNullOrEmpty(PfxPath))
-                {
-                    throw new BuildErrorException(Strings.Common.MissingParameterFmt, nameof(PfxPath));
-                }
-
-                if (StringUtility.IsNullOrEmpty(OutputPath))
-                {
-                    throw new BuildErrorException(Strings.Common.MissingParameterFmt, nameof(OutputPath));
-                }
-
-                using var cert = LoadCertificate();
-                var privateKey = (RSACryptoServiceProvider)cert.PrivateKey;
-                var keyBytes = privateKey.ExportCspBlob(true);
-                File.WriteAllBytes(OutputPath, keyBytes);
-            }
-            catch (BuildErrorException ex)
-            {
-                Log.LogError(ex.Message);
-            }
-            catch (Exception e) when (!e.IsFatalException())
-            {
-                Log.LogErrorFromException(e, true, true, "ConvertPfxToSnk.cs");
+                throw new BuildErrorException(Strings.MissingParameterFmt, nameof(PfxPath));
             }
 
-            return !Log.HasLoggedErrors;
+            if (StringUtility.IsNullOrEmpty(OutputPath))
+            {
+                throw new BuildErrorException(Strings.MissingParameterFmt, nameof(OutputPath));
+            }
+
+            using var cert = LoadCertificate();
+            var privateKey = (RSACryptoServiceProvider)cert.PrivateKey;
+            var keyBytes = privateKey.ExportCspBlob(true);
+            File.WriteAllBytes(OutputPath, keyBytes);
         }
 
         private X509Certificate2 LoadCertificate()

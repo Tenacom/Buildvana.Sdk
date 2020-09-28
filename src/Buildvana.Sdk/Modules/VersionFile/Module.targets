@@ -12,14 +12,14 @@
            Code="BVE1602"
            Text="Version file '$(VersionFileFullPath)' not found." />
 
-    <Buildvana.Sdk.Tasks.ParseVersionFile VersionFileFullPath="$(VersionFileFullPath)">
+    <ParseVersionFile VersionFileFullPath="$(VersionFileFullPath)">
       <Output TaskParameter="Version" PropertyName="Version" />
       <Output TaskParameter="VersionPrefix" PropertyName="VersionPrefix" />
       <Output TaskParameter="VersionSuffix" PropertyName="VersionSuffix" />
       <Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />
       <Output TaskParameter="AssemblyFileVersion" PropertyName="AssemblyFileVersion" />
       <Output TaskParameter="AssemblyInformationalVersion" PropertyName="AssemblyInformationalVersion" />
-    </Buildvana.Sdk.Tasks.ParseVersionFile>
+    </ParseVersionFile>
 
     <PropertyGroup>
       <PackageVersion>$(Version)</PackageVersion>
