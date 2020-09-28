@@ -1,9 +1,11 @@
 <Project>
 
-  <!-- We don't have control over the GenerateDocumentationFile property:
-       it is set in Microsoft.NET.Sdk.BeforeCommon.targets, before we can determine the project type.
-       Instead, Buildvana SDK uses the XmlDocs property.
-       The default value for XmlDocs is true for libraries (except test projects), false for other projects. -->
+  <!--
+    We don't have control over the GenerateDocumentationFile property:
+    it is set in Microsoft.NET.Sdk.BeforeCommon.targets, before we can determine the project type.
+    Instead, Buildvana SDK uses the XmlDocs property.
+    The default value for XmlDocs is true for libraries (except test projects), false for other projects.
+  -->
   <PropertyGroup Condition="'$(XmlDocs)' == ''">
     <XmlDocs Condition="'$(BV_IsLibraryProject)' == 'true'">true</XmlDocs>
   </PropertyGroup>

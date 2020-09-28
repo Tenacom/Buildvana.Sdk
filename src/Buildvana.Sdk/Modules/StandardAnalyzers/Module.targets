@@ -3,15 +3,13 @@
   <!-- Include standard analyzers. -->
   <ItemGroup Condition="$(UseStandardAnalyzers)">
     <!-- Configured via auto-discovered .editorconfig -->
-    <BV_PackageReference
-      Include="Microsoft.CodeAnalysis.FxCopAnalyzers"
-      PrivateAssets="All"
-      IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+    <BV_PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers"
+                         PrivateAssets="All"
+                         IncludeAssets="runtime; build; native; contentfiles; analyzers" />
     <!-- Configured via stylecop.json (or .stylecop.json) to include in AdditionalFiles -->
-    <BV_PackageReference
-      Include="StyleCop.Analyzers"
-      PrivateAssets="All"
-      IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+    <BV_PackageReference Include="StyleCop.Analyzers"
+                         PrivateAssets="All"
+                         IncludeAssets="runtime; build; native; contentfiles; analyzers" />
   </ItemGroup>
 
   <!-- Find a stylecop.json or .stylecop.json file to configure StyleCop.Analyzers. -->
@@ -38,10 +36,9 @@
 
   <!-- Include public API analyzers. -->
   <ItemGroup Condition="$(UsePublicApiAnalyzers)">
-    <BV_PackageReference
-      Include="Microsoft.CodeAnalysis.PublicApiAnalyzers"
-      PrivateAssets="All"
-      IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+    <BV_PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers"
+                         PrivateAssets="All"
+                         IncludeAssets="runtime; build; native; contentfiles; analyzers" />
     <None Remove="$(MSBuildProjectDirectory)\PublicAPI.Shipped.txt" />
     <None Remove="$(MSBuildProjectDirectory)\PublicAPI.Unshipped.txt" />
     <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI.Shipped.txt" />

@@ -1,12 +1,13 @@
 <Project>
 
-  <!-- If XML documentation generation is disabled:
-         * set GenerateDocumentationFile to false (it was set to true in BeforeModules.props)
-         * set DocumentationFile to the empty string
-         * suppress documentation-related compiler warnings, as suggested in https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA0001.md
-         * also suppress documentation-related StyleCop warnings because of https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3097
-         * suppress warning SA0001 (see also https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3092 for a reason why)
-         * disable publishing of the documentation file, because it's not supposed to be there to start with
+  <!--
+    If XML documentation generation is disabled:
+      * set GenerateDocumentationFile to false (it was set to true in BeforeModules.props)
+      * set DocumentationFile to the empty string
+      * suppress documentation-related compiler warnings, as suggested in https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA0001.md
+      * also suppress documentation-related StyleCop warnings because of https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3097
+      * suppress warning SA0001 (see also https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3092 for a reason why)
+      * disable publishing of the documentation file, because it's not supposed to be there to start with
   -->
   <PropertyGroup Condition="!$(XmlDocs)">
     <GenerateDocumentationFile>false</GenerateDocumentationFile>

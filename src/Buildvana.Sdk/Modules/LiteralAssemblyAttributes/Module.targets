@@ -1,26 +1,22 @@
 <Project>
 
-  <!-- Save the value of GenerateLiteralAssemblyInfo for later determination
-       of whether to issue a warning. -->
+  <!-- Save the value of GenerateLiteralAssemblyInfo for later determination of whether to issue a warning. -->
   <PropertyGroup>
     <BV_GenerateLiteralAssemblyInfo>$(GenerateLiteralAssemblyInfo)</BV_GenerateLiteralAssemblyInfo>
   </PropertyGroup>
 
-  <!-- Coalesce GenerateLiteralAssemblyInfo to a boolean value;
-       force to false for projects in unsupported languages. -->
+  <!-- Coalesce GenerateLiteralAssemblyInfo to a boolean value; force to false for projects in unsupported languages. -->
   <PropertyGroup>
     <GenerateLiteralAssemblyInfo Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'">false</GenerateLiteralAssemblyInfo>
     <GenerateLiteralAssemblyInfo Condition="'$(GenerateLiteralAssemblyInfo)' == ''">true</GenerateLiteralAssemblyInfo>
     <GenerateLiteralAssemblyInfo Condition="'$(GenerateLiteralAssemblyInfo)' != 'true'">false</GenerateLiteralAssemblyInfo>
   </PropertyGroup>
 
-  <!-- Issue a warning if GenerateLiteralAssemblyInfo was set to true
-       for a project in an unsupported language. -->
+  <!-- Issue a warning if GenerateLiteralAssemblyInfo was set to true for a project in an unsupported language. -->
   <ItemGroup>
-    <EvaluationWarning
-      Condition="'$(BV_GenerateLiteralAssemblyInfo)' == 'true' And !$(GenerateLiteralAssemblyInfo)"
-      Include="BVW1400"
-      Text="Language '$(Language)' is not supported by LiteralAssemblyInfo." />
+    <EvaluationWarning Condition="'$(BV_GenerateLiteralAssemblyInfo)' == 'true' And !$(GenerateLiteralAssemblyInfo)"
+                       Include="BVW1400"
+                       Text="Language '$(Language)' is not supported by LiteralAssemblyInfo." />
   </ItemGroup>
 
   <!-- Coalesce GenerateAssemblyCLSCompliantAttribute to a boolean value, defaulting to true. -->
@@ -56,8 +52,7 @@
     </LiteralAssemblyAttribute>
   </ItemGroup>
 
-  <Import
-    Project="$(MSBuildThisFileDirectory)Module.Core.targets"
-    Condition="$(GenerateLiteralAssemblyInfo)" />
+  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
+          Condition="$(GenerateLiteralAssemblyInfo)" />
 
 </Project>
