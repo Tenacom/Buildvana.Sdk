@@ -5,20 +5,23 @@
     <BV_SdkTargetsHasBeenImported>true</BV_SdkTargetsHasBeenImported>
   </PropertyGroup>
 
-  <!-- If Sdk.props has not been imported, BV_IsConfigured will be empty.
-       Set it to false to skip importing modules and common targets. -->
+  <!--
+    If Sdk.props has not been imported, BV_IsConfigured will be empty.
+    Set it to false to skip importing modules and common targets.
+  -->
   <PropertyGroup>
     <BV_IsConfigured Condition="'$(BV_IsConfigured)' != 'true'">false</BV_IsConfigured>
   </PropertyGroup>
 
-  <!-- Check that Sdk.props and Sdk.targets are from the same directory.
-       Otherwise it probably means they've been imported from different SDK versions
-       and may be incompatible with each other. -->
+  <!--
+    Check that Sdk.props and Sdk.targets are from the same directory.
+    Otherwise it probably means they've been imported from different SDK versions
+    and may be incompatible with each other.
+  -->
   <ItemGroup>
-    <EvaluationError
-      Condition="'$(BuildvanaSdkDirectory)' != '' And '$(BuildvanaSdkDirectory)' != '$(MSBuildThisFileDirectory)'"
-      Include="BVE1002"
-      Text="Sdk.props and Sdk.targets are in different directories." />
+    <EvaluationError Condition="'$(BuildvanaSdkDirectory)' != '' And '$(BuildvanaSdkDirectory)' != '$(MSBuildThisFileDirectory)'"
+                     Include="BVE1002"
+                     Text="Sdk.props and Sdk.targets are in different directories." />
   </ItemGroup>
 
   <!-- Determine the kind of project. -->
@@ -75,13 +78,14 @@
     <!-- Use BV_PackageVersion items to define Version metadata for BV_PackageReference items -->
     <BV_PackageReference Update="@(BV_PackageVersion)" Version="%(BV_PackageVersion.Version)" />
 
-    <!-- Transform BV_PackageReference items into PackageReference items.
-         No need for PackageVersion items because our packages are defined implicitly.
-         The NoWarn metadata prevents a yellow triangle to appear on each of our packages in the project tree in VS2019 (tested on v16.7.3). -->
-    <PackageReference
-      Include="@(BV_PackageReference)"
-      IsImplicitlyDefined="true"
-      NoWarn="NU1604" />
+    <!--
+      Transform BV_PackageReference items into PackageReference items.
+      No need for PackageVersion items because our packages are defined implicitly.
+      The NoWarn metadata prevents a yellow triangle to appear on each of our packages in the project tree in VS2019 (tested on v16.7.3).
+    -->
+    <PackageReference Include="@(BV_PackageReference)"
+                      IsImplicitlyDefined="true"
+                      NoWarn="NU1604" />
 
   </ItemGroup>
 
@@ -90,11 +94,10 @@
        because the logic that handles it is in Sdk.props. -->
   <Target Name="BV_CheckSdkPropsImport">
 
-    <Error
-      Condition="'$(BV_SdkPropsHasBeenImported)' != 'true'"
-      Code="BVE1000"
-      Text="Sdk.props not imported."
-      File="$(MSBuildProjectFullPath)" />
+    <Error Condition="'$(BV_SdkPropsHasBeenImported)' != 'true'"
+           Code="BVE1000"
+           Text="Sdk.props not imported."
+           File="$(MSBuildProjectFullPath)" />
 
   </Target>
 

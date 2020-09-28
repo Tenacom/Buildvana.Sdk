@@ -14,17 +14,19 @@
     <EnableDefaultThisAssemblyConstants Condition="'$(EnableDefaultThisAssemblyConstants)' != 'true'">false</EnableDefaultThisAssemblyConstants>
   </PropertyGroup>
 
-  <!-- This must run before every invocation of CoreCompile to ensure that all compiler runs
-       see the generated assembly info. There is at least one scenario involving Xaml
-       where CoreCompile is invoked without other potential hooks such as Compile or CoreBuild,
-       etc., so we hook directly on to CoreCompile. Furthermore, we  must run *after*
-       PrepareForBuild to ensure that the intermediate directory has been created. -->
-  <Target
-    Name="BV_GenerateThisAssemblyClass"
-    BeforeTargets="CoreCompile"
-    DependsOnTargets="PrepareForBuild;BV_DefineDefaultThisAssemblyConstants;BV_GenerateThisAssemblyClassCore" />
+  <!--
+    This must run before every invocation of CoreCompile to ensure that all compiler runs
+    see the generated assembly info. There is at least one scenario involving Xaml
+    where CoreCompile is invoked without other potential hooks such as Compile or CoreBuild,
+    etc., so we hook directly on to CoreCompile. Furthermore, we  must run *after*
+    PrepareForBuild to ensure that the intermediate directory has been created.
+  -->
+  <Target Name="BV_GenerateThisAssemblyClass"
+          BeforeTargets="CoreCompile"
+          DependsOnTargets="PrepareForBuild;BV_DefineDefaultThisAssemblyConstants;BV_GenerateThisAssemblyClassCore" />
 
-  <Target Name="BV_DefineDefaultThisAssemblyConstants" Condition="$(EnableDefaultThisAssemblyConstants)">
+  <Target Name="BV_DefineDefaultThisAssemblyConstants"
+          Condition="$(EnableDefaultThisAssemblyConstants)">
 
     <ItemGroup>
       <ThisAssemblyConstant Remove="Version" />
@@ -50,10 +52,12 @@
 
   </Target>
 
-  <!-- To allow version changes to be respected on incremental builds (e.g. through CLI parameters),
-       create a hash of all assembly attributes so that the cache file will change with the calculated
-       assembly attribute values and msbuild will then execute BV_GenerateThisAssemblyClassCore
-       to generate a new file. -->
+  <!--
+    To allow version changes to be respected on incremental builds (e.g. through CLI parameters),
+    create a hash of all assembly attributes so that the cache file will change with the calculated
+    assembly attribute values and msbuild will then execute BV_GenerateThisAssemblyClassCore
+    to generate a new file.
+  -->
   <Target Name="BV_CreateGeneratedThisAssemblyClassInputsCacheFile">
 
     <PropertyGroup>
@@ -64,11 +68,10 @@
       <Output TaskParameter="HashResult" PropertyName="BV_ThisAssemblyConstantsHash" />
     </Hash>
 
-    <WriteLinesToFile
-      Lines="$(BV_ThisAssemblyConstantsHash)"
-      File="$(BV_GeneratedThisAssemblyClassInputsCacheFile)"
-      Overwrite="True"
-      WriteOnlyWhenDifferent="True" />
+    <WriteLinesToFile Lines="$(BV_ThisAssemblyConstantsHash)"
+                      File="$(BV_GeneratedThisAssemblyClassInputsCacheFile)"
+                      Overwrite="True"
+                      WriteOnlyWhenDifferent="True" />
 
     <ItemGroup>
       <FileWrites Include="$(BV_GeneratedThisAssemblyClassInputsCacheFile)" />
@@ -76,19 +79,17 @@
 
   </Target>
 
-  <Target
-    Name="BV_GenerateThisAssemblyClassCore"
-    DependsOnTargets="BV_CreateGeneratedThisAssemblyClassInputsCacheFile"
-    Inputs="$(BV_GeneratedThisAssemblyClassInputsCacheFile)"
-    Outputs="$(BV_ThisAssemblyClassFile)"
-    Condition="@(ThisAssemblyConstant->Count()) > 0">
+  <Target Name="BV_GenerateThisAssemblyClassCore"
+          DependsOnTargets="BV_CreateGeneratedThisAssemblyClassInputsCacheFile"
+          Inputs="$(BV_GeneratedThisAssemblyClassInputsCacheFile)"
+          Outputs="$(BV_ThisAssemblyClassFile)"
+          Condition="@(ThisAssemblyConstant->Count()) > 0">
 
-    <WriteThisAssemblyClass
-      Language="$(Language)"
-      OutputPath="$(BV_ThisAssemblyClassFile)"
-      ClassName="$(ThisAssemblyClassName)"
-      Namespace="$(ThisAssemblyClassNamespace)"
-      Constants="@(ThisAssemblyConstant)" />
+    <WriteThisAssemblyClass Language="$(Language)"
+                            OutputPath="$(BV_ThisAssemblyClassFile)"
+                            ClassName="$(ThisAssemblyClassName)"
+                            Namespace="$(ThisAssemblyClassNamespace)"
+                            Constants="@(ThisAssemblyConstant)" />
 
 		<ItemGroup>
 			<Compile Remove="$(BV_ThisAssemblyClassFile)" />

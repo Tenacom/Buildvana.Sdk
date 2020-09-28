@@ -1,6 +1,6 @@
 <Project>
 
-  <!-- Skip on cross-targeting "outer" builds -->
+  <!-- Skip on multi-targeting "outer" builds -->
   <PropertyGroup Condition="'$(TargetFramework)' == ''">
     <UseNETFrameworkReferenceAssemblies>false</UseNETFrameworkReferenceAssemblies>
   </PropertyGroup>
@@ -13,10 +13,9 @@
 
   <!-- Automagically add reference assemblies  - see https://github.com/dotnet/designs/pull/33 -->
   <ItemGroup Condition="'$(UseNETFrameworkReferenceAssemblies)' == 'true'">
-    <BV_PackageReference
-      Include="Microsoft.NETFramework.ReferenceAssemblies"
-      PrivateAssets="all"
-      IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+    <BV_PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies"
+                         PrivateAssets="all"
+                         IncludeAssets="runtime; build; native; contentfiles; analyzers" />
   </ItemGroup>
 
 </Project>

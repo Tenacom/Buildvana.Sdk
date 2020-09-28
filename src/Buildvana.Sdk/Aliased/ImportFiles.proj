@@ -11,24 +11,25 @@
           - MSBuild imports the same file at most once, thus ruling out tricks based on recursive imports.    
   -->
 
-  <!-- Initialize the name of the files to import.
-         * If the name of this file starts with "Import.", then:
-             - the remainder of the name of this file, excluding the ".proj" extension, is the name of the files to import;
-             - any files found will be imported by this file;
-             - the _Import_FullPaths property will be empty.
-         * If the name of this file starts with "PrepareImport.", then:
-             - the remainder of the name of this file, excluding the ".proj" extension, is the name of the files to import;
-             - any files found will not be imported by this file;
-             - the _Import_FullPaths property will contain a semicolon-separated list
-               of the full paths of the found files.
-         * If the name of this file doesn't start with either of the two above prefixes:
-             - no import will take place;
-             - the _Import_FullPaths property will be empty.
+  <!--
+    Initialize the name of the files to import.
+      * If the name of this file starts with "Import.", then:
+          - the remainder of the name of this file, excluding the ".proj" extension, is the name of the files to import;
+          - any files found will be imported by this file;
+          - the _Import_FullPaths property will be empty.
+      * If the name of this file starts with "PrepareImport.", then:
+          - the remainder of the name of this file, excluding the ".proj" extension, is the name of the files to import;
+          - any files found will not be imported by this file;
+          - the _Import_FullPaths property will contain a semicolon-separated list
+            of the full paths of the found files.
+      * If the name of this file doesn't start with either of the two above prefixes:
+          - no import will take place;
+          - the _Import_FullPaths property will be empty.
 
-       Note that this file must always have a ".proj" extension,
-       because of how NuGet interprets targets of included files.
-       https://docs.microsoft.com/en-us/nuget/reference/nuspec#including-content-files
-       Therefore, to import files called "MyFile.ext", this file shall be renamed "Import.MyFile.ext.proj".
+    Note that this file must always have a ".proj" extension,
+    because of how NuGet interprets targets of included files.
+    https://docs.microsoft.com/en-us/nuget/reference/nuspec#including-content-files
+    Therefore, to import files called "MyFile.ext", this file shall be renamed "Import.MyFile.ext.proj".
    -->
   <PropertyGroup>
     <_Import_Filename>$(MSBuildThisFile)</_Import_Filename>
@@ -54,15 +55,17 @@
     <_Import_FullPaths /> <!-- Full paths of files to import. -->
   </PropertyGroup>
 
-  <!-- Build the list of files to import,
-       starting at _Import_Directory and going up until _Import_TopmostDirectory.
-       Always prepend to the list so it is built in reverse order;
-       this way, files in inner directories can override properties
-       set in outer directories.
-       Also make sure that if _ImportDirectory is not contained in _Import_TopmostDirectory
-       the list remains empty and no error is raised.
+  <!--
+    Build the list of files to import,
+    starting at _Import_Directory and going up until _Import_TopmostDirectory.
+    Always prepend to the list so it is built in reverse order;
+    this way, files in inner directories can override properties
+    set in outer directories.
+    Also make sure that if _ImportDirectory is not contained in _Import_TopmostDirectory
+    the list remains empty and no error is raised.
 
-       NOTE: All "Find file #" blocks should be identical! -->
+    NOTE: All "Find file #" blocks should be identical!
+  -->
 
   <!-- Find file #1 -->  
   <PropertyGroup Condition="'$(_Import_Directory)' != ''">

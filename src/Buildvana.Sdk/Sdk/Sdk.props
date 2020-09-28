@@ -5,12 +5,14 @@
     <BV_SdkPropsHasBeenImported>true</BV_SdkPropsHasBeenImported>
   </PropertyGroup>
 
-  <!-- Rules for HomeDirectory:
-         * the Git submodule above the project's directory (look for a file named .git)
-         * the Git repository above the project's directory (look for a file named HEAD in a .git subdirectory)
-           NOTE: Check for ".git/HEAD", not ".git\HEAD", because the latter only works on Windows.
-                 MSBuild doesn't convert directory separators on the second argument to GetDirectoryNameOfFileAbove,
-                 probably due to https://github.com/microsoft/msbuild/issues/1024 -->
+  <!--
+    Rules for HomeDirectory:
+      * the Git submodule above the project's directory (look for a file named .git)
+      * the Git repository above the project's directory (look for a file named HEAD in a .git subdirectory)
+        NOTE: Check for ".git/HEAD", not ".git\HEAD", because the latter only works on Windows.
+              MSBuild doesn't convert directory separators on the second argument to GetDirectoryNameOfFileAbove,
+              probably due to https://github.com/microsoft/msbuild/issues/1024
+  -->
   <PropertyGroup>
     <HomeDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git'))</HomeDirectory>
     <HomeDirectory Condition="'$(HomeDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git/HEAD'))</HomeDirectory>
@@ -23,10 +25,9 @@
 
   <!-- Check that HomeDirectory has been configured. -->
   <ItemGroup>
-    <EvaluationError
-      Condition="'$(HomeDirectory)' == ''"
-      Include="BVE1003"
-      Text="Home directory not defined." />
+    <EvaluationError Condition="'$(HomeDirectory)' == ''"
+                     Include="BVE1003"
+                     Text="Home directory not defined." />
   </ItemGroup>
 
   <!-- BV_IsConfigured is true if HomeDirectory is configured. -->
@@ -81,10 +82,9 @@
   <Target Name="BV_CheckSdkTargetsImport">
 
     <ItemGroup>
-      <EvaluationError
-        Condition="'$(BV_SdkTargetsHasBeenImported)' != 'true'"
-        Include="BVE1001"
-        Text="Sdk.targets not imported." />
+      <EvaluationError Condition="'$(BV_SdkTargetsHasBeenImported)' != 'true'"
+                       Include="BVE1001"
+                       Text="Sdk.targets not imported." />
     </ItemGroup>
 
   </Target>
@@ -98,22 +98,19 @@
       <EvaluationMessageImportance Condition="'$(Configuration)' == 'Debug'">High</EvaluationMessageImportance>
     </PropertyGroup>
 
-    <Message
-      Condition="'@(EvaluationMessage)' != ''"
-      Text="%(Identity)"
-      Importance="$(EvaluationMessageImportance)" />
+    <Message Condition="'@(EvaluationMessage)' != ''"
+             Text="%(Identity)"
+             Importance="$(EvaluationMessageImportance)" />
 
-    <Warning
-      Condition="'@(EvaluationWarning)' != ''"
-      Code="%(Identity)"
-      Text="%(Text)"
-      File="$(MSBuildProjectFullPath)" />
+    <Warning Condition="'@(EvaluationWarning)' != ''"
+             Code="%(Identity)"
+             Text="%(Text)"
+             File="$(MSBuildProjectFullPath)" />
 
-    <Error
-      Condition="'@(EvaluationError)' != ''"
-      Code="%(Identity)"
-      Text="%(Text)"
-      File="$(MSBuildProjectFullPath)" />
+    <Error Condition="'@(EvaluationError)' != ''"
+           Code="%(Identity)"
+           Text="%(Text)"
+           File="$(MSBuildProjectFullPath)" />
 
   </Target>
 

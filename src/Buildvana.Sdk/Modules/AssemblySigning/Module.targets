@@ -23,10 +23,9 @@
           BeforeTargets="Build"
           Condition="$(BV_ConvertPfxToSnk)">
 
-    <ConvertPfxToSnk
-      PfxPath="$(AssemblyOriginatorKeyFile)"
-      PfxPassword="$(PfxPassword)"
-      OutputPath="$(BV_TempSnkPath)" />
+    <ConvertPfxToSnk PfxPath="$(AssemblyOriginatorKeyFile)"
+                     PfxPassword="$(PfxPassword)"
+                     OutputPath="$(BV_TempSnkPath)" />
 
     <PropertyGroup>
       <AssemblyOriginatorKeyFile>$(BV_TempSnkPath)</AssemblyOriginatorKeyFile>

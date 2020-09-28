@@ -20,13 +20,15 @@
     <LicenseFileInPackage Condition="'$(LicenseFileInPackage)' != 'true'">false</LicenseFileInPackage>
   </PropertyGroup>
 
-  <!-- Include a license file in package:
-       - if LicenseFileInPackage is false, just don't;
-       - if PackageLicensePath is specified, use it;
-       - otherwise, if PackageLicenseFile is specified, look for it in project directory and going up.
-         If a file is found, set PackageLicensePath to its full path;
-       - otherwise, look for a default license file. If a file is found,
-         set PackageLicensePath to its full path and PackageLicenseFile to its filename. -->
+  <!--
+    Include a license file in package:
+      - if LicenseFileInPackage is false, just don't;
+      - if PackageLicensePath is specified, use it;
+      - otherwise, if PackageLicenseFile is specified, look for it in project directory and going up.
+        If a file is found, set PackageLicensePath to its full path;
+      - otherwise, look for a default license file. If a file is found,
+        set PackageLicensePath to its full path and PackageLicenseFile to its filename.
+  -->
   <Choose>
     <When Condition="!$(LicenseFileInPackage)">
       <PropertyGroup>
@@ -39,10 +41,9 @@
         <PackageLicenseFile>$([System.IO.Path]::GetFileName('$(PackageLicensePath)'))</PackageLicenseFile>
       </PropertyGroup>
       <ItemGroup>
-        <EvaluationError
-          Condition="!Exists('$(PackageLicensePath)')"
-          Include="BVE1500"
-          Text="Specified license file '$(PackageLicensePath)' does not exist." />
+        <EvaluationError Condition="!Exists('$(PackageLicensePath)')"
+                         Include="BVE1500"
+                         Text="Specified license file '$(PackageLicensePath)' does not exist." />
       </ItemGroup>
     </When>
     <When Condition="'$(PackageLicenseFile)' != ''">
@@ -50,25 +51,26 @@
         <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('$(PackageLicenseFile)', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
       </PropertyGroup>
       <ItemGroup>
-        <EvaluationError
-          Condition="'$(PackageLicensePath)' == ''"
-          Include="BVE1501"
-          Text="Specified license file '$(PackageLicenseFile)' was not found." />
+        <EvaluationError Condition="'$(PackageLicensePath)' == ''"
+                         Include="BVE1501"
+                         Text="Specified license file '$(PackageLicenseFile)' was not found." />
       </ItemGroup>
     </When>
     <Otherwise>
-      <!-- Default license file can be one of (in order of discovery):
-             - LICENSE
-             - LICENSE.txt
-             - LICENSE.md
-             - License
-             - License.txt
-             - License.md
-             - license
-             - license.txt
-             - license.md
+      <!--
+        Default license file can be one of (in order of discovery):
+          - LICENSE
+          - LICENSE.txt
+          - LICENSE.md
+          - License
+          - License.txt
+          - License.md
+          - license
+          - license.txt
+          - license.md
 
-           Files found outside repository are ignored. -->
+        Files found outside repository are ignored.
+      -->
       <PropertyGroup>
         <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('LICENSE', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
         <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
@@ -111,10 +113,9 @@
       </PropertyGroup>
       <!-- Error if not found. -->
       <ItemGroup>
-        <EvaluationError
-          Condition="'$(PackageLicensePath)' == ''"
-          Include="BVE1502"
-          Text="No license file found." />
+        <EvaluationError Condition="'$(PackageLicensePath)' == ''"
+                         Include="BVE1502"
+                         Text="No license file found." />
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -140,13 +141,15 @@
     <ThirdPartyNoticeInPackage Condition="'$(ThirdPartyNoticeInPackage)' != 'true'">false</ThirdPartyNoticeInPackage>
   </PropertyGroup>
 
-  <!-- Include a third-party notice in package:
-       - if ThirdPartyNoticeInPackage is false, just don't;
-       - if PackageThirdPartyNoticePath is specified, use it;
-       - otherwise, if PackageThirdPartyNoticeFile is specified, look for it in project directory and going up.
-         If a file is found, set PackageThirdPartyNoticePath to its full path;
-       - otherwise, look for a default third-party notice file. If a file is found,
-         set PackageThirdPartyNoticePath to its full path and PackageThirdPartyNoticeFile to its filename. -->
+  <!--
+    Include a third-party notice in package:
+      - if ThirdPartyNoticeInPackage is false, just don't;
+      - if PackageThirdPartyNoticePath is specified, use it;
+      - otherwise, if PackageThirdPartyNoticeFile is specified, look for it in project directory and going up.
+        If a file is found, set PackageThirdPartyNoticePath to its full path;
+      - otherwise, look for a default third-party notice file. If a file is found,
+        set PackageThirdPartyNoticePath to its full path and PackageThirdPartyNoticeFile to its filename.
+  -->
   <Choose>
     <When Condition="!$(ThirdPartyNoticeInPackage)">
       <PropertyGroup>
@@ -159,10 +162,9 @@
         <PackageThirdPartyNoticeFile>$([System.IO.Path]::GetFileName('$(PackageThirdPartyNoticePath)'))</PackageThirdPartyNoticeFile>
       </PropertyGroup>
       <ItemGroup>
-        <EvaluationError
-          Condition="!Exists('$(PackageThirdPartyNoticePath)')"
-          Include="BVE1503"
-          Text="Specified third-party notice file '$(PackageThirdPartyNoticePath)' does not exist." />
+        <EvaluationError Condition="!Exists('$(PackageThirdPartyNoticePath)')"
+                         Include="BVE1503"
+                         Text="Specified third-party notice file '$(PackageThirdPartyNoticePath)' does not exist." />
       </ItemGroup>
     </When>
     <When Condition="'$(PackageThirdPartyNoticeFile)' != ''">
@@ -170,25 +172,26 @@
         <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('$(PackageThirdPartyNoticeFile)', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
       </PropertyGroup>
       <ItemGroup>
-        <EvaluationError
-          Condition="'$(PackageThirdPartyNoticePath)' == ''"
-          Include="BVE1504"
-          Text="Specified third-party notice file '$(PackageThirdPartyNoticeFile)' was not found." />
+        <EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
+                         Include="BVE1504"
+                         Text="Specified third-party notice file '$(PackageThirdPartyNoticeFile)' was not found." />
       </ItemGroup>
     </When>
     <Otherwise>
-      <!-- Default third-party notice file can be one of (in order of discovery):
-             - THIRD-PARTY-NOTICES
-             - THIRD-PARTY-NOTICES.txt
-             - THIRD-PARTY-NOTICES.md
-             - third-party-notices
-             - third-party-notices.txt
-             - third-party-notices.md
-             - ThirdPartyNotices
-             - ThirdPartyNotices.txt
-             - ThirdPartyNotices.md
+      <!--
+        Default third-party notice file can be one of (in order of discovery):
+          - THIRD-PARTY-NOTICES
+          - THIRD-PARTY-NOTICES.txt
+          - THIRD-PARTY-NOTICES.md
+          - third-party-notices
+          - third-party-notices.txt
+          - third-party-notices.md
+          - ThirdPartyNotices
+          - ThirdPartyNotices.txt
+          - ThirdPartyNotices.md
 
-           Files found outside repository are ignored. -->
+        Files found outside repository are ignored.
+      -->
       <PropertyGroup>
         <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICES', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
         <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
@@ -231,10 +234,9 @@
       </PropertyGroup>
       <!-- Error if not found. -->
       <ItemGroup>
-        <EvaluationError
-          Condition="'$(PackageThirdPartyNoticePath)' == ''"
-          Include="BVE1505"
-          Text="No third-party notice file found." />
+        <EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
+                         Include="BVE1505"
+                         Text="No third-party notice file found." />
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -254,13 +256,15 @@
     <IconInPackage Condition="'$(IconInPackage)' != 'true'">false</IconInPackage>
   </PropertyGroup>
 
-  <!-- Use a package icon:
-       - if IconInPackage is false, just don't;
-       - if PackageIconPath is specified, use it;
-       - otherwise, if PackageIcon is specified, look for it in project directory and going up.
-         If a file is found, set PackageIconPath to its full path;
-       - otherwise, look for a default icon file. If a file is found,
-        set PackageIconPath to its full path and PackageIcon to its filename. -->
+  <!--
+    Use a package icon:
+      - if IconInPackage is false, just don't;
+      - if PackageIconPath is specified, use it;
+      - otherwise, if PackageIcon is specified, look for it in project directory and going up.
+        If a file is found, set PackageIconPath to its full path;
+      - otherwise, look for a default icon file. If a file is found,
+       set PackageIconPath to its full path and PackageIcon to its filename.
+  -->
   <Choose>
     <When Condition="!$(IconInPackage)">
       <PropertyGroup>
@@ -273,10 +277,9 @@
         <PackageIcon>$([System.IO.Path]::GetFileName('$(PackageIconPath)'))</PackageIcon>
       </PropertyGroup>
       <ItemGroup>
-        <EvaluationError
-          Condition="!Exists('$(PackageIconPath)')"
-          Include="BVE1506"
-          Text="Specified package icon file '$(PackageIconPath)' does not exist." />
+        <EvaluationError Condition="!Exists('$(PackageIconPath)')"
+                         Include="BVE1506"
+                         Text="Specified package icon file '$(PackageIconPath)' does not exist." />
       </ItemGroup>
     </When>
     <When Condition="'$(PackageIcon)' != ''">
@@ -284,31 +287,32 @@
         <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('$(PackageIcon)', '$(MSBuildProjectDirectory)'))</PackageIconPath>
       </PropertyGroup>
       <ItemGroup>
-        <EvaluationError
-          Condition="'$(PackageIconPath)' == ''"
-          Include="BVE1507"
-          Text="Specified package icon file '$(PackageIcon)' was not found." />
+        <EvaluationError Condition="'$(PackageIconPath)' == ''"
+                         Include="BVE1507"
+                         Text="Specified package icon file '$(PackageIcon)' was not found." />
       </ItemGroup>
     </When>
     <Otherwise>
-      <!-- Default icon file can be one of (in order of discovery):
-             - <project_name>.package.png
-             - <project_name>.package.png in a "graphics" subfolder
-             - <project_name>.package.png in a "branding" subfolder
-             - <product_name>.package.png
-             - <product_name>.package.png in a "graphics" subfolder
-             - <product_name>.package.png in a "branding" subfolder
-             - PackageIcon.png
-             - PackageIcon.png in a "graphics" subfolder
-             - PackageIcon.png in a "branding" subfolder
-             - icon.png
-             - icon.png in a "graphics" subfolder
-             - icon.png in a "branding" subfolder
+      <!--
+        Default icon file can be one of (in order of discovery):
+          - <project_name>.package.png
+          - <project_name>.package.png in a "graphics" subfolder
+          - <project_name>.package.png in a "branding" subfolder
+          - <product_name>.package.png
+          - <product_name>.package.png in a "graphics" subfolder
+          - <product_name>.package.png in a "branding" subfolder
+          - PackageIcon.png
+          - PackageIcon.png in a "graphics" subfolder
+          - PackageIcon.png in a "branding" subfolder
+          - icon.png
+          - icon.png in a "graphics" subfolder
+          - icon.png in a "branding" subfolder
 
-           Files found outside repository are ignored.
+        Files found outside repository are ignored.
 
-           To look for a file in a specific subfolder, since GetPathOfFileAbove only accepts filenames,
-           use GetDirectoryNameOfFileAbove and combine it with the searched-for subpath later if found. -->
+        To look for a file in a specific subfolder, since GetPathOfFileAbove only accepts filenames,
+        use GetDirectoryNameOfFileAbove and combine it with the searched-for subpath later if found.
+      -->
       <PropertyGroup>
         <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('$(MSBuildProjectName).package.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
         <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
@@ -379,10 +383,9 @@
       </PropertyGroup>
       <!-- Error if not found. -->
       <ItemGroup>
-        <EvaluationError
-          Condition="'$(PackageIconPath)' == ''"
-          Include="BVE1508"
-          Text="No package icon file found." />
+        <EvaluationError Condition="'$(PackageIconPath)' == ''"
+                         Include="BVE1508"
+                         Text="No package icon file found." />
       </ItemGroup>
     </Otherwise>
   </Choose>
