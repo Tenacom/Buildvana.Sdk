@@ -16,7 +16,7 @@
 
   <!-- Issue a warning if GenerateLiteralAssemblyInfo was set to true
        for a project in an unsupported language. -->
-  <ItemGroup >
+  <ItemGroup>
     <EvaluationWarning
       Condition="'$(BV_GenerateLiteralAssemblyInfo)' == 'true' And !$(GenerateLiteralAssemblyInfo)"
       Include="BVW1400"
