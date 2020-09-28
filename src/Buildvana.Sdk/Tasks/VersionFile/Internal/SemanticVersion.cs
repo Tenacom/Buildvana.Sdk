@@ -34,9 +34,8 @@ namespace Buildvana.Sdk.Tasks.VersionFile.Internal
             Major = major;
             Minor = minor;
             Patch = patch;
-
-            Prerelease = prerelease ?? string.Empty;
-            Build = build ?? string.Empty;
+            Prerelease = prerelease;
+            Build = build;
         }
 
         [PublicAPI]
