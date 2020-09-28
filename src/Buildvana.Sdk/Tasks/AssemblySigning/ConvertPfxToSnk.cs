@@ -33,9 +33,14 @@ namespace Buildvana.Sdk.Tasks.AssemblySigning
 
         protected override void Run()
         {
-            if (string.IsNullOrEmpty(PfxPath))
+            if (StringUtility.IsNullOrEmpty(PfxPath))
             {
                 throw new BuildErrorException(Strings.MissingParameterFmt, nameof(PfxPath));
+            }
+
+            if (StringUtility.IsNullOrEmpty(PfxPassword))
+            {
+                throw new BuildErrorException(Strings.MissingParameterFmt, nameof(PfxPassword));
             }
 
             if (StringUtility.IsNullOrEmpty(OutputPath))
@@ -43,21 +48,21 @@ namespace Buildvana.Sdk.Tasks.AssemblySigning
                 throw new BuildErrorException(Strings.MissingParameterFmt, nameof(OutputPath));
             }
 
-            using var cert = LoadCertificate();
+            using var cert = LoadCertificate(PfxPath, PfxPassword);
             var privateKey = (RSACryptoServiceProvider)cert.PrivateKey;
             var keyBytes = privateKey.ExportCspBlob(true);
             File.WriteAllBytes(OutputPath, keyBytes);
         }
 
-        private X509Certificate2 LoadCertificate()
+        private static X509Certificate2 LoadCertificate(string path, string password)
         {
             try
             {
-                return new X509Certificate2(PfxPath, PfxPassword, X509KeyStorageFlags.Exportable);
+                return new X509Certificate2(path, password, X509KeyStorageFlags.Exportable);
             }
             catch (CryptographicException)
             {
-                throw new BuildErrorException(Strings.AssemblySigning.CannotExtractKeyFmt, PfxPath ?? "<null>");
+                throw new BuildErrorException(Strings.AssemblySigning.CannotExtractKeyFmt, path);
             }
         }
     }
