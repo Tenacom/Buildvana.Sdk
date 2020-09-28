@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - https://github.com/Buildvana/Buildvana.Sdk/issues/41 - Buildvana SDK now uses compiled tasks instead of inline tasks, thus improving build performance.
 - https://github.com/Buildvana/Buildvana.Sdk/issues/43 - Setting the `EnableDefaultThisAssemblyConstants` property to `false` suppresses creation of default constants in the `ThisAssembly` class.
+- Warning [BVW1400] is now issued if literal assembly attribute generation is enabled for a project in a language that is neither C# nor Visual Basic. Previous versions silently skipped the code generation phase.
+- Warning [BVW1900] is now issued if `ThisAssembly` class generation is enabled for a project in a language that is neither C# nor Visual Basic. Previous versions silently skipped the code generation phase.
 
 ### Changes to existing features
 
