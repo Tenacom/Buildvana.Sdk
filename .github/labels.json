@@ -2,16 +2,15 @@
     { "name": "v1.x", "color": "9c3", "description": "[issue/PR] affects version 1." },
 
     { "name": "area-core", "color": "ccc", "description": "[issue/PR] affects SDK core files." },
-    { "name": "area-assembly_info", "color": "ccc", "description": "[issue/PR] affects the AssemblyInfo module." },
     { "name": "area-assembly_signing", "color": "ccc", "description": "[issue/PR] affects the AssemblySigning module." },
     { "name": "area-jetbrains_annotations", "color": "ccc", "description": "[issue/PR] affects the JetBrainsAnnotations module." },
     { "name": "area-literal_assembly_attributes", "color": "ccc", "description": "[issue/PR] affects the LiteralAssemblyAttributes module." },
     { "name": "area-nuget_pack", "color": "ccc", "description": "[issue/PR] affects the NuGetPack module." },
-    { "name": "area-parse_version_file", "color": "ccc", "description": "[issue/PR] affects the ParseVersionFile module." },
     { "name": "area-standard_analyzers", "color": "ccc", "description": "[issue/PR] affects the StandardAnalyzers module." },
     { "name": "area-thisassembly_class", "color": "ccc", "description": "[issue/PR] affects the ThisAssemblyClass module." },
+    { "name": "area-version_file", "color": "ccc", "description": "[issue/PR] affects the ParseVersionFile module." },
     { "name": "area-xml_documentation", "color": "ccc", "description": "[issue/PR] affects the XmlDocumentation module." },
-    
+
     { "name": "area-build", "color": "ccc", "description": "[issue/PR] affects project files and/or build settings." },
     { "name": "area-repo", "color": "ccc", "description": "[issue/PR] affects repository settings, e.g. issue templates." },
     { "name": "area-deps", "color": "ccc", "description": "[issue/PR] adds, updates, or removes dependencies." },
