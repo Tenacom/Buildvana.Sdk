@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+### Changes to existing features
+
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.0-alpha.7](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.7) (2020-09-28)
+
+### New features
+
 - https://github.com/Buildvana/Buildvana.Sdk/issues/41 - Buildvana SDK now uses compiled tasks instead of inline tasks, thus improving build performance.
 - https://github.com/Buildvana/Buildvana.Sdk/issues/43 - Setting the `EnableDefaultThisAssemblyConstants` property to `false` suppresses creation of default constants in the `ThisAssembly` class.
 - Warning [BVW1400] is now issued if literal assembly attribute generation is enabled for a project in a language that is neither C# nor Visual Basic. Previous versions silently skipped the code generation phase.
