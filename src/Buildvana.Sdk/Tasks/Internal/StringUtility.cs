@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 
 namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal class StringUtility
+    internal static class StringUtility
     {
         // Like string.IsNullOrEmpty, but nullability-annotated for all platforms
         // https://github.com/dotnet/roslyn/issues/37995
