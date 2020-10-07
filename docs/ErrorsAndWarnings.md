@@ -27,6 +27,7 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 | BVE1001 | Sdk.targets not imported. | `Sdk.props` was imported, but `Sdk.targets` was not. |
 | BVE1002 | Sdk.props and Sdk.targets are in different directories. | The `Version` attributes in the `<Import>` directives for `Sdk.props` and `Sdk.targets` do not match. |
 | BVE1003 | Home directory not defined. | No suitable value for the `HomeDirectory` property has been found. |
+| BVE1004 | Could not determine a suitable target framework for compiled tasks. | This may be an internal error of Buildvana.Sdk. Please [open an issue](https://github.com/Buildvana/Buildvana.Sdk/issues/new/choose) stating which build tool you are using (Visual Studio, `dotnet build`, `dotnet msbuild`...), its version, and any other information you may deem useful. |
 
 | Warning code | Message | Description |
 | ------------ | ------- | ----------- |

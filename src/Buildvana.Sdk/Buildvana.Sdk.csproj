@@ -3,7 +3,7 @@
   <!-- Common properties -->
 
   <PropertyGroup>
-    <TargetFrameworks>net472;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net46;net472;netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
     <Title>Buildvana SDK</Title>
     <Summary>An opinionated, best-practices-based, CI-friendly, VS-friendly, MSBuild-powered build system for .NET projects.</Summary>
     <Description>This assembly contains compiled tasks used by Buildvana SDK. Documentation for the SDK is available here: https://github.com/Buildvana/Buildvana.Sdk/blob/master/README.md</Description>
