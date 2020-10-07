@@ -7,12 +7,12 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
 namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
 {
-    internal interface IThisAssemblyClassGenerator
+    internal struct ConstantDefinition
     {
-        string GenerateCode(string className, string classNamespace, IEnumerable<ConstantDefinition> constants);
+        public string Name;
+
+        public object Value;
     }
 }

@@ -34,7 +34,7 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
             NewLine("End Sub");
         }
 
-        protected override void EndInternalStaticClass(string name) => NewLine("End Class");
+        protected override void EndInternalStaticClass() => NewLine("End Class");
 
         protected override void PublicConstant(string name, object value)
         {
@@ -57,7 +57,7 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
                     Text('L');
                     break;
                 default:
-                    Text(value.ToString());
+                    Text(value.ToString() ?? string.Empty);
                     break;
             }
 

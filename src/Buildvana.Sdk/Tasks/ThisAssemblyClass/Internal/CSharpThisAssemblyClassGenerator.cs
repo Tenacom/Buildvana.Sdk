@@ -39,7 +39,7 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
             NewLine("{");
         }
 
-        protected override void EndInternalStaticClass(string name) => NewLine("}");
+        protected override void EndInternalStaticClass() => NewLine("}");
 
         protected override void PublicConstant(string name, object value)
         {
@@ -62,7 +62,7 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
                     Text('L');
                     break;
                 default:
-                    Text(value.ToString());
+                    Text(value.ToString() ?? string.Empty);
                     break;
             }
 

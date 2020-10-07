@@ -15,16 +15,16 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
     internal abstract class ThisAssemblyClassGeneratorBase<TBuilder> : CodeGenerator<TBuilder>, IThisAssemblyClassGenerator
         where TBuilder : CodeBuilder, new()
     {
-        public string GenerateCode(string classNamespace, string className, IEnumerable<(string Name, object Value)> constants)
+        public string GenerateCode(string classNamespace, string className, IEnumerable<ConstantDefinition> constants)
         {
             BeginNamespace(classNamespace);
             BeginInternalStaticClass(className);
-            foreach (var (name, value) in constants)
+            foreach (var constant in constants)
             {
-                PublicConstant(name, value);
+                PublicConstant(constant.Name, constant.Value);
             }
 
-            EndInternalStaticClass(className);
+            EndInternalStaticClass();
             EndNamespace(classNamespace);
             return GetGeneratedCode();
         }
@@ -35,7 +35,7 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
 
         protected abstract void BeginInternalStaticClass(string name);
 
-        protected abstract void EndInternalStaticClass(string name);
+        protected abstract void EndInternalStaticClass();
 
         protected abstract void PublicConstant(string name, object value);
     }

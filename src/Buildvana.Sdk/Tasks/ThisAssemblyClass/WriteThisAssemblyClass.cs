@@ -105,7 +105,7 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass
             return type != null;
         }
 
-        private (string Name, object Value) ExtractConstantDefinitionFromItem(ITaskItem item)
+        private static ConstantDefinition ExtractConstantDefinitionFromItem(ITaskItem item)
         {
             var name = item.ItemSpec.Trim();
             var typeStr = item.GetMetadata("Type").Trim();
@@ -130,7 +130,7 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass
                 throw new BuildErrorException(Strings.ThisAssemblyClass.InvalidConstantValueFmt, name, valueStr);
             }
 
-            return (name, value);
+            return new ConstantDefinition { Name = name, Value = value };
         }
     }
 }
