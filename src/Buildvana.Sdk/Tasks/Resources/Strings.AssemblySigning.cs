@@ -14,6 +14,7 @@ namespace Buildvana.Sdk.Tasks.Resources
         public static class AssemblySigning
         {
             public const string CannotExtractKeyFmt = "BVE1200: Cannot extract key from '{0}'.";
+            public const string MissingRsaPrivateKey = "BVE1201: '{0}' does not contain a RSA private key.";
         }
     }
 }
