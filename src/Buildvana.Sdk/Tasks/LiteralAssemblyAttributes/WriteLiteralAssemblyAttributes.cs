@@ -63,25 +63,30 @@ namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes
             }
         }
 
-        private IEnumerable<(string Type, IReadOnlyCollection<string> OrderedParameters, IReadOnlyDictionary<string, string> NamedParameters)> ExtractAttributesFromItems(IEnumerable<ITaskItem> items)
+        private static IEnumerable<AttributeDefinition> ExtractAttributesFromItems(IEnumerable<ITaskItem> items)
             => items.Select(ExtractAttributeFromItem);
 
-        private (string Type, IReadOnlyCollection<string> OrderedParameters, IReadOnlyDictionary<string, string> NamedParameters) ExtractAttributeFromItem(ITaskItem item)
+        private static AttributeDefinition ExtractAttributeFromItem(ITaskItem item)
         {
             var type = item.ItemSpec;
 
             // Some attributes only allow positional constructor arguments, or the user may just prefer them.
             // To set those, use metadata names like "_Parameter1", "_Parameter2" etc.
             // If a parameter index is skipped, it's an error.
-            var customMetadata = item.CloneCustomMetadata();
+            var customMetadata = item.CloneCustomMetadata() ?? new Dictionary<string, string>();
 
             var orderedParameters = new List<string>(customMetadata.Count + 1 /* max possible slots needed */);
             var namedParameters = new Dictionary<string, string>();
 
-            foreach (DictionaryEntry entry in customMetadata)
+            foreach (var customMetadataEntry in customMetadata)
             {
+                if (!(customMetadataEntry is DictionaryEntry entry))
+                {
+                    continue;
+                }
+
                 var name = (string)entry.Key;
-                var value = (string)entry.Value;
+                var value = (string?)entry.Value ?? string.Empty;
 
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -134,7 +139,12 @@ namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes
                 }
             }
 
-            return (type, orderedParameters, namedParameters);
+            return new AttributeDefinition
+            {
+                Type = type,
+                OrderedParameters = orderedParameters,
+                NamedParameters = namedParameters,
+            };
         }
     }
 }

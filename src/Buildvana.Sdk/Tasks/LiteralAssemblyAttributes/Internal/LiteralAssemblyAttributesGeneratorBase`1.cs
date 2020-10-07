@@ -16,16 +16,16 @@ namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.Internal
     internal abstract class LiteralAssemblyAttributesGeneratorBase<TBuilder> : CodeGenerator<TBuilder>, ILiteralAssemblyAttributesGenerator
         where TBuilder : CodeBuilder, new()
     {
-        public string GenerateCode(IEnumerable<(string Type, IReadOnlyCollection<string> OrderedParameters, IReadOnlyDictionary<string, string> NamedParameters)> attributes)
+        public string GenerateCode(IEnumerable<AttributeDefinition> attributes)
         {
-            foreach (var (type, rawOrderedParameters, rawNamedParameters) in attributes)
+            foreach (var attribute in attributes)
             {
-                var orderedParameters = rawOrderedParameters.Select(TransformParameterValue).ToArray();
-                var namedParameters = rawNamedParameters.ToDictionary(
+                var orderedParameters = attribute.OrderedParameters.Select(TransformParameterValue).ToArray();
+                var namedParameters = attribute.NamedParameters.ToDictionary(
                     pair => pair.Key,
                     pair => TransformParameterValue(pair.Value));
 
-                GenerateAttribute(type, orderedParameters, namedParameters);
+                GenerateAttribute(attribute.Type, orderedParameters, namedParameters);
             }
 
             return GetGeneratedCode();
