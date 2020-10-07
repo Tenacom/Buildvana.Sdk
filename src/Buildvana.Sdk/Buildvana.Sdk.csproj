@@ -15,7 +15,7 @@
 
   <PropertyGroup>
     <PackageType>MSBuildSdk</PackageType>
-    <PackageTags>build;msbuild;sdk;dotnet</PackageTags>
+    <PackageTags>build msbuild sdk dotnet</PackageTags>
     <DevelopmentDependency>true</DevelopmentDependency>
     <Serviceable>true</Serviceable>
     <BuildOutputTargetFolder>Sdk</BuildOutputTargetFolder> <!-- Pack build output in Sdk\$(TargetFramework)\ instead of lib\$(TargetFramework)\ -->
