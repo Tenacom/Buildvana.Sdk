@@ -52,10 +52,22 @@
   </PropertyGroup>
 
   <!-- Seelct TFM for compiled tasks -->
-  <PropertyGroup>
-    <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' != 'Core'">net472</BV_SdkTasksTfm>
-    <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' == 'Core'">netcoreapp2.1</BV_SdkTasksTfm>
+  <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Full'">
+    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &lt; '16.0'">net46</BV_SdkTasksTfm>
+    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &gt;= '16.0'">net472</BV_SdkTasksTfm>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
+    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &lt; '16.7'">netcoreapp2.1</BV_SdkTasksTfm>
+    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &gt;= '16.7' And '$(MSBuildVersion)' &lt; '16.8'">netcoreapp3.1</BV_SdkTasksTfm>
+    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &gt;= '16.8'">net5.0</BV_SdkTasksTfm>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Mono'">
+    <BV_SdkTasksTfm>net472</BV_SdkTasksTfm>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(BV_SdkTasksTfm)' == ''">
+    <EvaluationError Include="BVE1004"
+                     Text="Could not determine a suitable target framework for compiled tasks." />
+  </ItemGroup>
 
   <!-- Select compiled tasks assembly -->
   <PropertyGroup>
