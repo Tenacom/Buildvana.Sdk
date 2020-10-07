@@ -7,6 +7,7 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -49,9 +50,8 @@ namespace Buildvana.Sdk.Tasks.AssemblySigning
             }
 
             using var cert = LoadCertificate(PfxPath, PfxPassword);
-            var privateKey = (RSACryptoServiceProvider)cert.PrivateKey;
-            var keyBytes = privateKey.ExportCspBlob(true);
-            File.WriteAllBytes(OutputPath, keyBytes);
+            var keyBytes = ExtractPrivateKey(cert, PfxPath);
+            SaveBytes(OutputPath, keyBytes);
         }
 
         private static X509Certificate2 LoadCertificate(string path, string password)
@@ -63,6 +63,29 @@ namespace Buildvana.Sdk.Tasks.AssemblySigning
             catch (CryptographicException)
             {
                 throw new BuildErrorException(Strings.AssemblySigning.CannotExtractKeyFmt, path);
+            }
+        }
+
+        private static byte[] ExtractPrivateKey(X509Certificate2 certificate, string certificatePath)
+        {
+            if (!(certificate.PrivateKey is RSACryptoServiceProvider privateKey))
+            {
+                throw new BuildErrorException(Strings.AssemblySigning.MissingRsaPrivateKey, certificatePath);
+            }
+
+            return privateKey.ExportCspBlob(true);
+        }
+
+        private static void SaveBytes(string outputPath, byte[] bytes)
+        {
+            try
+            {
+                // Overwrites file if it already exists (and can be overwritten)
+                File.WriteAllBytes(outputPath, bytes);
+            }
+            catch (Exception e) when (e.IsIORelatedException())
+            {
+                throw new BuildErrorException(Strings.CouldNotWriteFileFmt, outputPath, e.Message);
             }
         }
     }

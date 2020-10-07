@@ -49,6 +49,7 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
 | BVE1200 | Cannot extract key from '...'. | Either the specified `.pfx` file is missing, ot the wrong password (or no password) was given. |
+| BVE1201 | '...' does not contain a RSA private key. | The specified `.pfx` file does not contain a RSA private key to export. |
 
 | Warning code | Message | Description |
 | ------------ | ------- | ----------- |
