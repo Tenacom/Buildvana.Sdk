@@ -14,7 +14,6 @@
   <!-- NuGet package configuration -->
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageType>MSBuildSdk</PackageType>
     <PackageTags>build;msbuild;sdk;dotnet</PackageTags>
     <DevelopmentDependency>true</DevelopmentDependency>
