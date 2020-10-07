@@ -1,9 +1,27 @@
 <Project>
 
-  <!-- Add ReSharper-related package references where appropriate, except for no-targets projects. -->
-  <ItemGroup Condition="$(UseJetBrainsAnnotations) And !$(BV_IsNoTargetsProject)">
-    <BV_PackageReference Include="JetBrains.Annotations" PrivateAssets="All" />
+  <!-- Coalesce UseJetBrainsAnnotations to a boolean value; force to false for unsupported and no-targets projects. -->
+  <PropertyGroup>
+    <UseJetBrainsAnnotations Condition="'$(MSBuildProjectExtension)' != '.csproj' And '$(MSBuildProjectExtension)' != '.vbproj'">false</UseJetBrainsAnnotations>
+    <UseJetBrainsAnnotations Condition="$(BV_IsNoTargetsProject)">false</UseJetBrainsAnnotations>
+    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' == ''">true</UseJetBrainsAnnotations>
+    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' != 'true'">false</UseJetBrainsAnnotations>
+  </PropertyGroup>
+
+  <!-- Add annotations-related package references where appropriate. -->
+  <ItemGroup Condition="$(UseJetBrainsAnnotations)">
+    <BV_PackageReference Include="JetBrains.Annotations" IncludeAssets="Compile" PrivateAssets="All" />
     <BV_PackageReference Include="ReSharper.ExportAnnotations.Task" PrivateAssets="All" />
   </ItemGroup>
+
+  <!--
+    BV_PackageReference items are transformed into PackageReference items
+    AFTER the sanity check in ReSharper.ExportAnnotations.Task, so disable the check.
+    Same goes for updating JetBrains.Annotations' metadata: it would be redundant anyway.
+  -->
+  <PropertyGroup Condition="$(UseJetBrainsAnnotations)">
+    <CheckForJetBrainsAnnotationsPackageReference>false</CheckForJetBrainsAnnotationsPackageReference>
+    <UpdateJetBrainsAnnotationsPackageReferencee>false</UpdateJetBrainsAnnotationsPackageReferencee>
+  </PropertyGroup>
 
 </Project>

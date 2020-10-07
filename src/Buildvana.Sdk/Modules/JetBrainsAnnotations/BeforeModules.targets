@@ -1,9 +1,0 @@
-<Project>
-
-  <!-- Coalesce UseJetBrainsAnnotations to a boolean value, defaulting to true. -->
-  <PropertyGroup>
-    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' == ''">true</UseJetBrainsAnnotations>
-    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' != 'true'">false</UseJetBrainsAnnotations>
-  </PropertyGroup>
-
-</Project>
