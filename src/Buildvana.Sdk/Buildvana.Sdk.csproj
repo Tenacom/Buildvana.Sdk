@@ -18,7 +18,6 @@
     <PackageTags>build msbuild sdk dotnet</PackageTags>
     <DevelopmentDependency>true</DevelopmentDependency>
     <Serviceable>true</Serviceable>
-    <BuildOutputTargetFolder>Sdk</BuildOutputTargetFolder> <!-- Pack build output in Sdk\$(TargetFramework)\ instead of lib\$(TargetFramework)\ -->
     <MinClientVersion>4.3</MinClientVersion> <!-- Minimum NuGet client version supporting SemVer 2.0 -->
     <NoWarn>$(NoWarn);NU5100</NoWarn> <!-- The assembly '...' is not inside the 'lib' folder and hence it won't be added as a reference. -->
     <NoWarn>$(NoWarn);NU5128</NoWarn> <!-- Some target frameworks [...] do not have exact matches [in the lib folder]. -->
@@ -148,6 +147,35 @@
     <ItemGroup>
       <BV_CopiedAdditionalPackageContent Include="$(__IntermediateAdditionalPackageContentDir)**\*" />
       <None Include="@(BV_CopiedAdditionalPackageContent)" Visible="false" Pack="true" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+
+  </Target>
+
+  <!-- Include published binaries under Sdk folder in package. -->
+
+  <PropertyGroup>
+    <BeforePack>$(BeforePack);__PublishDll</BeforePack>
+  </PropertyGroup>
+  <Target Name="__PublishDll">
+
+    <PropertyGroup>
+      <__DllPublishPath>$(MSBuildThisFileDirectory)obj\$(Configuration)\PublishedDll\</__DllPublishPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <__DllTargetFramework Include="$(TargetFrameworks)" />
+    </ItemGroup>
+
+    <!-- Publish this project for each target framework. -->
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Publish" Properties="Configuration=$(Configuration);PublishDir=$(__DllPublishPath)%(__DllTargetFramework.Identity);PublishProtocol=FileSystem;TargetFramework=%(__DllTargetFramework.Identity);SelfContained=false" />
+
+    <ItemGroup>
+      <!-- Include published output as content, setting appropriate package paths. -->
+      <Content Include="$(__DllPublishPath)%(__DllTargetFramework.Identity)\*" PackagePath="Sdk\%(__DllTargetFramework.Identity)\" Visible="false" />
+      <!-- Don't include .deps.json files. -->
+      <Content Remove="$(__DllPublishPath)%(__DllTargetFramework.Identity)\*.deps.json" />
+      <!-- Don't include .pdb files in non-debug configurations (i.e. Release). -->
+      <Content Remove="$(__DllPublishPath)%(__DllTargetFramework.Identity)\*.pdb" Condition="'$(Configuration)' != 'Debug'" />
     </ItemGroup>
 
   </Target>
