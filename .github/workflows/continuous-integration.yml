@@ -12,8 +12,8 @@ env:
 
 jobs:
 
-  test:
-    name: Unit testing and code coverage reporting
+  build:
+    name: Build and pack on CI server
     strategy:
       fail-fast: false
       matrix:
