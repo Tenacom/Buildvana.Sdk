@@ -34,8 +34,8 @@
 </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Modules\**\*" Exclude="*.cs" Pack="true" PackagePath="%(Identity)" />
-    <None Include="Sdk\**\*" Pack="true" PackagePath="%(Identity)" />
+    <Content Include="Modules\**\*" Exclude="*.cs" PackagePath="%(Identity)" />
+    <Content Include="Sdk\**\*" PackagePath="%(Identity)" />
   </ItemGroup>
 
   <!-- Additional package content - a workaround for project items not allowing duplicates, even with different Link metadata -->
@@ -147,7 +147,7 @@
 
     <ItemGroup>
       <BV_CopiedAdditionalPackageContent Include="$(__IntermediateAdditionalPackageContentDir)**\*" />
-      <None Include="@(BV_CopiedAdditionalPackageContent)" Visible="false" Pack="true" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
+      <Content Include="@(BV_CopiedAdditionalPackageContent)" Visible="false" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
 
   </Target>
