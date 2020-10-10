@@ -1,0 +1,40 @@
+name: Continuous integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  ContinuousIntegrationBuild: "true"
+  DOTNET_NOLOGO: "true"
+
+jobs:
+
+  test:
+    name: Unit testing and code coverage reporting
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        net: [ 3.1.x, 5.0.100-rc.1.20452.10 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup .NET ${{ matrix.net }}
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.net }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build solution
+      run: dotnet build -c Release --no-restore /maxCpuCount:1
+
+    - name: Generate packages
+      run: dotnet pack -c Release --no-build
