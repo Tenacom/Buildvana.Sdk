@@ -107,8 +107,6 @@
 
   </Target>
 
-  <!-- Create an intermediate folder with additional package content. Folder layout must mimic package layout. -->
-
   <Target Name="__CopyAdditionalPackageContentToIntermediateDirectory"
           AfterTargets="Build"
           DependsOnTargets="__ComputeAdditionalPackageContentPaths"
@@ -122,7 +120,7 @@
 
   </Target>
 
-  <!-- Clean additional package content intermediate driectory -->
+  <!-- Clean additional package content intermediate directory -->
 
   <Target Name="__CleanAdditionalPackageContentIntermediateDirectory"
           AfterTargets="BeforeClean"
