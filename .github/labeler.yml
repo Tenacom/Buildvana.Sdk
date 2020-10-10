@@ -1,11 +1,58 @@
+area-core:
+  - "src/Buildvana.Sdk/Sdk/**/*"
+
+area-assembly_signing:
+  - "src/Buildvana.Sdk/Modules/AssemblySigning/**/*"
+  - "src/Buildvana.Sdk/Tasks/AssemblySigning/**/*"
+
+area-jetbrains_annotations:
+  - "src/Buildvana.Sdk/Modules/JetBrainsAnnotations/**/*"
+  - "src/Buildvana.Sdk/Tasks/JetBrainsAnnotations/**/*"
+
+area-literal_assembly_attributes:
+  - "src/Buildvana.Sdk/Modules/LiteralAssemblyAttributes/**/*"
+  - "src/Buildvana.Sdk/Tasks/LiteralAssemblyAttributes/**/*"
+
+area-nuget_pack:
+  - "src/Buildvana.Sdk/Modules/NuGetPack/**/*"
+  - "src/Buildvana.Sdk/Tasks/NuGetPack/**/*"
+
+area-standard_analyzers:
+  - "src/Buildvana.Sdk/Modules/StandardAnalyzers/**/*"
+  - "src/Buildvana.Sdk/Tasks/StandardAnalyzers/**/*"
+
+area-thisassembly_class:
+  - "src/Buildvana.Sdk/Modules/ThisAssemblyClass/**/*"
+  - "src/Buildvana.Sdk/Tasks/ThisAssemblyClass/**/*"
+
+area-version_file:
+  - "src/Buildvana.Sdk/Modules/VersionFile/**/*"
+  - "src/Buildvana.Sdk/Tasks/VersionFile/**/*"
+
+area-xml_documentation:
+  - "src/Buildvana.Sdk/Modules/XmlDocumentation/**/*"
+  - "src/Buildvana.Sdk/Tasks/XmlDocumentation/**/*"
+
+area-build:
+  - "**/*.csproj"
+  - "**/Common.props"
+  - "**/Common.targets"
+
 area-ci:
-  - any: ['.github/workflows/**/*']
+  - ".github/workflows/**/*"
 
 area-deps:
-  - "**/PackageVersions.props"
+  - "**/Directory.Packages.props"
+  - Directory.Build.props
+  - Directory.Build.targets
+  - "src/Buildvana.Sdk/Sdk/PackageVersions.props"
 
 area-docs:
-  - any: ['.github/**/*', '**/LICENSE', '**/README.md', '**/THIRD-PARTY-NOTICES']
+  - "docs/**/*"
+  - "**/README.md"
+  - "**/LICENSE"
+  - "**/THIRD-PARTY-NOTICES"
 
 area-repo:
-  - any: ['.github/*.yml', '.github/**/*.md']
+  - ".github/*.yml"
+  - ".github/**/*.md"
