@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes to existing features
 
 - https://github.com/Buildvana/Buildvana.Sdk/pull/47 - The automatically-added package reference to `ReSharper.ExportAnnotations.Task` has been updated to version 1.3.0.
+- https://github.com/Buildvana/Buildvana.Sdk/pull/49 - Compiled tasks are built for more target frameworks, to cover a larger number of build environments and MSBuild / .NET (Core) / Visual Studio versions.
 
 ### Bugs fixed in this release
 
