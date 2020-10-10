@@ -8,7 +8,7 @@
     { "name": "area-nuget_pack", "color": "ccc", "description": "[issue/PR] affects the NuGetPack module." },
     { "name": "area-standard_analyzers", "color": "ccc", "description": "[issue/PR] affects the StandardAnalyzers module." },
     { "name": "area-thisassembly_class", "color": "ccc", "description": "[issue/PR] affects the ThisAssemblyClass module." },
-    { "name": "area-version_file", "color": "ccc", "description": "[issue/PR] affects the ParseVersionFile module." },
+    { "name": "area-version_file", "color": "ccc", "description": "[issue/PR] affects the VersionFile module." },
     { "name": "area-xml_documentation", "color": "ccc", "description": "[issue/PR] affects the XmlDocumentation module." },
 
     { "name": "area-build", "color": "ccc", "description": "[issue/PR] affects project files and/or build settings." },
