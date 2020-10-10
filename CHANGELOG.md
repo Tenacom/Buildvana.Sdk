@@ -11,14 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.0-alpha.8](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.8) (2020-10-10)
+
+### Changes to existing features
+
 - https://github.com/Buildvana/Buildvana.Sdk/pull/47 - The automatically-added package reference to `ReSharper.ExportAnnotations.Task` has been updated to version 1.3.0.
 - https://github.com/Buildvana/Buildvana.Sdk/pull/49 - Compiled tasks are built for more target frameworks, to cover a larger number of build environments and MSBuild / .NET (Core) / Visual Studio versions.
 
 ### Bugs fixed in this release
 
 - Thanks to the `ReSharper.ExportAnnotations.Task` update, building a project with `dotnet build` using .NET Core SDK v3.1 or .NET SDK 5-rc1 does not require.NET Core 2.1 to be installed any longer. See https://github.com/tenacom/ReSharper.ExportAnnotations/issues/20 for details.
-
-### Known problems introduced by this release
 
 ## [1.0.0-alpha.7](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.7) (2020-09-28)
 
