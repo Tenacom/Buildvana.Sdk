@@ -140,7 +140,7 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 
 | Warning code | Message | Description |
 | ------------ | ------- | ----------- |
-| BVW1900 | Language '...' is not supported by ThisAssemblyClass. | Property `EnableThisAssemblyClass` was set to `true` in a project in a language that is neither C#, nor Visual Basic. The `ThisAssembly` class (or whatever name set via the `ThisAssemblyClassName` property) will not be created, possibly causing compilation errors. |
+| BVW1900 | Language '...' is not supported by ThisAssemblyClass. | Property `GenerateThisAssemblyClass` was set to `true` in a project in a language that is neither C#, nor Visual Basic. The `ThisAssembly` class (or whatever name set via the `ThisAssemblyClassName` property) will not be created, possibly causing compilation errors. |
 
 ## XmlDocumentation module (2000-2099)
 
