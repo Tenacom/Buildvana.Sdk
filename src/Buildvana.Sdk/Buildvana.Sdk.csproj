@@ -21,6 +21,7 @@
     <MinClientVersion>4.3</MinClientVersion> <!-- Minimum NuGet client version supporting SemVer 2.0 -->
     <NoWarn>$(NoWarn);NU5100</NoWarn> <!-- The assembly '...' is not inside the 'lib' folder and hence it won't be added as a reference. -->
     <NoWarn>$(NoWarn);NU5128</NoWarn> <!-- Some target frameworks [...] do not have exact matches [in the lib folder]. -->
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <!-- Package contents (besides build output) -->
