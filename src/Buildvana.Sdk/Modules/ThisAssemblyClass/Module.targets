@@ -1,21 +1,15 @@
 <Project>
 
-  <!-- Save the value of GenerateThisAssemblyClass for later determination of whether to issue a warning. -->
-  <PropertyGroup>
-    <BV_SaveGenerateThisAssemblyClass>$(GenerateThisAssemblyClass)</BV_SaveGenerateThisAssemblyClass>
-  </PropertyGroup>
-
   <!-- Coalesce GenerateThisAssemblyClass to a boolean value; force to false for projects in unsupported languages. -->
   <PropertyGroup>
-    <GenerateThisAssemblyClass Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'">false</GenerateThisAssemblyClass>
     <GenerateThisAssemblyClass Condition="'$(GenerateThisAssemblyClass)' != 'true'">false</GenerateThisAssemblyClass>
   </PropertyGroup>
 
-  <!-- Issue a warning if GenerateThisAssemblyClass was set to true for a project in an unsupported language. -->
-  <ItemGroup >
-    <EvaluationWarning Condition="'$(BV_SaveGenerateThisAssemblyClass)' == 'true' And !$(GenerateThisAssemblyClass)"
+  <!-- Issue a warning if GenerateThisAssemblyClass is set to true for a project in an unsupported language. -->
+  <ItemGroup Condition="'$(GenerateThisAssemblyClass)' == 'true'">
+    <EvaluationWarning Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'"
                        Include="BVW1900"
-                       Text="Language '$(Language)' is not supported by ThisAssemblyClass." />
+                       Text="ThisAssembly class generation is only supported in C# and Visual Basic projects." />
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
