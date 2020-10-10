@@ -11,14 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.0-alpha.9](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.9) (2020-10-10)
+
+### Changes to existing features
+
 - https://github.com/Buildvana/Buildvana.Sdk/pull/51 - The automatically-added package reference to `ReSharper.ExportAnnotations.Task` has been updated to version 1.3.1.
 - **potentially breaking** https://github.com/Buildvana/Buildvana.Sdk/pull/51 - The `EnableThisAssemblyClass` property has been renamed to `GenerateThisAssemblyClass` and its default value is now `false`.
 
 ### Bugs fixed in this release
 
 - Thanks to the `ReSharper.ExportAnnotations.Task` update, building a project on a non-Windows system will no longer fail. See https://github.com/tenacom/ReSharper.ExportAnnotations/issues/23 for details.
-
-### Known problems introduced by this release
 
 ## [1.0.0-alpha.8](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.8) (2020-10-10)
 
