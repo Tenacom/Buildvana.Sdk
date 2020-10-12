@@ -10,7 +10,9 @@ Please do not remove or reorder items.
 - [ ] Enhancement (new and/or improved behavior)
 - [ ] Refactoring (no functional changes)
 - [ ] Code style update (no functional changes)
+- [ ] Dependencies added, updated, or removed
 - [ ] Build related changes
+- [ ] Repository infrastructure changes (e.g. changes to issue / PR templates)
 - [ ] CI related changes
 - [ ] Documentation update
 - [ ] Other (please describe below)
@@ -18,17 +20,17 @@ Please do not remove or reorder items.
 ## Proposed changes / fixed issues
 
 <!--
-Bugfixes and enhancement PRs MUST refer to existing issues.
+Bugfix and enhancement PRs MUST refer to existing issues.
 Example:
 
-Fixes: #nnnn #nnnn
-Partially fixes: #nnnn (brief explanation, or "see below")
+Closes #nnnn #nnnn
+Partial fix for #nnnn (followed by a brief explanation, or "see below")
 
 For other PR types, delete the two lines below and add a clear and concise description of your changes.
 -->
 
-Fixes:
-Partially fixes:
+Closes #
+Partial fix for #
 
 ## Checklist
 
@@ -37,9 +39,8 @@ Put an `x` in the boxes that apply. You can also fill these out after creating t
 If you're unsure about any of the following items, don't hesitate to ask. We're here to help!
 -->
 
-- [ ] I have read and understood the [CONTRIBUTING](https://github.com/Buildvana/Buildvana/blob/master/CONTRIBUTING.md) document
-- [ ] The commit messages follow the [guidelines](https://github.com/Buildvana/Buildvana/blob/master/CONTRIBUTING.md#commit)
-- [ ] My contribution is either my original work, or comes from projects with an MIT-compatible license, in which case I have updated the THIRD-PARTY-NOTICES file accordingly
+- [ ] My contribution is my original work
+- [ ] My contribution, or part of it, comes from projects with an MIT-compatible license AND I have updated the THIRD-PARTY-NOTICES file accordingly
 - [ ] I have added and/or updated related documentation (if applicable)
 - [ ] I have updated the "Unreleased changes" section in [CHANGELOG.md](https://github.com/Buildvana/Buildvana.Sdk/blob/master/CHANGELOG.md) according to the modifications I made
 
