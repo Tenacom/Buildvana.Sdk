@@ -34,12 +34,14 @@ area-xml_documentation:
   - "src/Buildvana.Sdk/Tasks/XmlDocumentation/**/*"
 
 area-build:
+  - "**/*.sln"
   - "**/*.csproj"
   - "**/Common.props"
   - "**/Common.targets"
 
 area-ci:
   - ".github/workflows/**/*"
+  - "lgtm.yml"
 
 area-deps:
   - "**/Directory.Packages.props"
@@ -49,8 +51,8 @@ area-deps:
 
 area-docs:
   - "docs/**/*"
-  - "**/README.md"
   - "**/LICENSE"
+  - "**/README.md"
   - "**/THIRD-PARTY-NOTICES"
 
 area-repo:
