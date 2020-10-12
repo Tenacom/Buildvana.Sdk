@@ -6,6 +6,8 @@ labels: 'enhancement'
 assignees: ''
 ---
 
+## Current version: <!-- The version on which you are proposing an improvement -->
+
 ## Background and motivation
 
 <!--
@@ -64,7 +66,8 @@ Please provide example code and/or project snippets that highlight how the propo
 Please mention any risks that to your knowledge the proposed enhancement might entail:
   * breaking changes
   * performance regressions
+  * security issues
   * possible incompatibilities
-  * added dependencies
+  * added or changed dependencies
   * etc.
 -->

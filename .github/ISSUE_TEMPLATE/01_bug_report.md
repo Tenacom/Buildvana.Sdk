@@ -8,6 +8,8 @@ assignees: ''
 
 <!-- This is just a template - feel free to delete any and all of it and replace as appropriate. -->
 
+## Current version: <!-- The version on which you are experiencing the bug -->
+
 ## Description
 
 <!--
@@ -52,7 +54,7 @@ Here's the complete list: https://github.com/github/linguist/blob/master/lib/lin
 ## Other information
 
 <!--
-* Please include any relevant error messages. Please prefer pasted text over images (so it shows up in searches).
+* Please include any relevant information you have. Please prefer pasted text over images (so it shows up in searches).
 * If you have an idea where the problem might lie, let us know that here. Please include any pointers to code, relevant changes, or related issues you know of.
 * Do you know of any workarounds?
   -->
