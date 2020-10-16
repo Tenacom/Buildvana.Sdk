@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- https://github.com/Buildvana/Buildvana.Sdk/pull/57 - Generated `ThisAssembly` classes now have [CompilerGenerated](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.compilergeneratedattribute) and [ExcludeFromCodeCoverage](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.codeanalysis.excludefromcodecoverageattribute) attributes.
+- **breaking** https://github.com/Buildvana/Buildvana.Sdk/pull/57 - The default for the `UseJetBrainsAnnotations` property is now `false`. The reason is that it was counterintuitive to mention JetBrains annotations in projects _not_ using them.
+
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
