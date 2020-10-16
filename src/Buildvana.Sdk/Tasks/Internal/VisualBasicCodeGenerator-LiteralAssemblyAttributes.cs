@@ -7,12 +7,16 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
-namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal interface IThisAssemblyClassGenerator
+    internal partial class VisualBasicCodeGenerator
     {
-        string GenerateCode(string className, string classNamespace, IEnumerable<ConstantDefinition> constants);
+        protected override string TransformLiteralConstant(string value)
+            => value.ToUpperInvariant() switch {
+                "TRUE" => "True",
+                "FALSE" => "False",
+                "NULL" => "Nothing",
+                _ => value,
+            };
     }
 }

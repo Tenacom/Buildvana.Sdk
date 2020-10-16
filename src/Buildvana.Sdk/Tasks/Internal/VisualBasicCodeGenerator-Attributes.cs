@@ -8,15 +8,15 @@
 // -----------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using Buildvana.Sdk.Tasks.Internal;
 
-namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal sealed class VisualBasicLiteralAssemblyAttributesGenerator : LiteralAssemblyAttributesGeneratorBase<VisualBasicCodeBuilder>
+    internal partial class VisualBasicCodeGenerator
     {
-        protected override void GenerateAttribute(string type, IReadOnlyCollection<string> orderedParameters, IReadOnlyDictionary<string, string> namedParameters)
+        protected override void GenerateAttribute(AttributeModifier modifier, string type, IReadOnlyCollection<string> orderedParameters, IReadOnlyDictionary<string, string> namedParameters)
         {
-            Text("<Assembly: ");
+            Text('<');
+            Text(GetAttributeModifierPrefix(modifier));
             Text(type);
 
             if (orderedParameters.Count > 0 || namedParameters.Count > 0)
@@ -60,12 +60,11 @@ namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.Internal
             Text('>');
         }
 
-        protected override string TransformParameterValue(string value)
-            => value.ToUpperInvariant() switch {
-                "TRUE" => "True",
-                "FALSE" => "False",
-                "NULL" => "Nothing",
-                _ => value,
+        private static string GetAttributeModifierPrefix(AttributeModifier target)
+            => target switch {
+                AttributeModifier.Assembly => "Assembly:",
+                AttributeModifier.Module => "Module:",
+                _ => string.Empty,
             };
     }
 }

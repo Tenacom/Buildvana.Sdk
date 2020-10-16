@@ -7,16 +7,15 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
-namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal struct AttributeDefinition
+    // Attribute modifiers valid in both C# and Visual Basic
+    public enum AttributeModifier
     {
-        public string Type;
+        Default = 0,
 
-        public IReadOnlyCollection<string> OrderedParameters;
+        Assembly,
 
-        public IReadOnlyDictionary<string, string> NamedParameters;
+        Module,
     }
 }

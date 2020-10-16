@@ -8,14 +8,12 @@
 // -----------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using Buildvana.Sdk.Tasks.Internal;
 
-namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal abstract class ThisAssemblyClassGeneratorBase<TBuilder> : CodeGenerator<TBuilder>, IThisAssemblyClassGenerator
-        where TBuilder : CodeBuilder, new()
+    internal partial class CodeGenerator
     {
-        public string GenerateCode(string classNamespace, string className, IEnumerable<ConstantDefinition> constants)
+        public void GenerateThisAssemblyClass(string classNamespace, string className, IEnumerable<ConstantDefinition> constants)
         {
             BeginNamespace(classNamespace);
             BeginInternalStaticClass(className);
@@ -26,7 +24,6 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
 
             EndInternalStaticClass();
             EndNamespace(classNamespace);
-            return GetGeneratedCode();
         }
 
         protected abstract void BeginNamespace(string name);

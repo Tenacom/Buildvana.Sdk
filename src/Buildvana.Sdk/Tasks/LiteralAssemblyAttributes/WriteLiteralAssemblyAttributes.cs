@@ -14,7 +14,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Buildvana.Sdk.Tasks.Internal;
-using Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.Internal;
 using Buildvana.Sdk.Tasks.Resources;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
@@ -38,20 +37,13 @@ namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes
 
         protected override void Run()
         {
-            Language ??= string.Empty;
-            if (!LiteralAssemblyAttributesGenerator.TryCreate(Language, out var generator))
-            {
-                throw new BuildErrorException(Strings.UnsupportedLanguageFmt, Language);
-            }
-
             if (StringUtility.IsNullOrEmpty(OutputPath))
             {
                 throw new BuildErrorException(Strings.MissingParameterFmt, nameof(OutputPath));
             }
 
             var attributes = ExtractAttributesFromItems(LiteralAssemblyAttributes ?? Enumerable.Empty<ITaskItem>());
-            var code = generator.GenerateCode(attributes);
-
+            var code = GenerateCode(attributes);
             try
             {
                 // Overwrites file if it already exists (and can be overwritten)
@@ -145,6 +137,18 @@ namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes
                 OrderedParameters = orderedParameters,
                 NamedParameters = namedParameters,
             };
+        }
+
+        private string GenerateCode(IEnumerable<AttributeDefinition> attributes)
+        {
+            var language = Language ?? string.Empty;
+            if (!CodeGenerator.TryCreate(language, out var generator))
+            {
+                throw new BuildErrorException(Strings.UnsupportedLanguageFmt, language);
+            }
+
+            generator.GenerateLiteralAssemblyAttributes(attributes);
+            return generator.GetGeneratedCode();
         }
     }
 }

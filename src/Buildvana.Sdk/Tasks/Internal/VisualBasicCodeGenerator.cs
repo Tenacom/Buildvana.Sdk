@@ -9,13 +9,11 @@
 
 namespace Buildvana.Sdk.Tasks.Internal
 {
-#pragma warning disable CA1812 // Avoid uninstantiated internal classes - This class is used indirectly via generics
-    internal sealed class VisualBasicCodeBuilder : CodeBuilder
-#pragma warning restore CA1812
+    internal sealed partial class VisualBasicCodeGenerator : CodeGenerator
     {
         protected override string LineCommentPrefix => "// ";
 
-        public override void QuotedText(string str)
+        protected override void QuotedText(string str)
         {
             Text('"');
             var length = str.Length;
