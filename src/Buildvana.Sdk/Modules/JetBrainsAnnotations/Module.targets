@@ -4,7 +4,6 @@
   <PropertyGroup>
     <UseJetBrainsAnnotations Condition="'$(MSBuildProjectExtension)' != '.csproj' And '$(MSBuildProjectExtension)' != '.vbproj'">false</UseJetBrainsAnnotations>
     <UseJetBrainsAnnotations Condition="$(BV_IsNoTargetsProject)">false</UseJetBrainsAnnotations>
-    <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' == ''">true</UseJetBrainsAnnotations>
     <UseJetBrainsAnnotations Condition="'$(UseJetBrainsAnnotations)' != 'true'">false</UseJetBrainsAnnotations>
   </PropertyGroup>
 
