@@ -9,10 +9,14 @@
 
 using System.Collections.Generic;
 
-namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal interface ILiteralAssemblyAttributesGenerator
+    internal struct AttributeDefinition
     {
-        string GenerateCode(IEnumerable<AttributeDefinition> attributes);
+        public string Type;
+
+        public IReadOnlyCollection<string> OrderedParameters;
+
+        public IReadOnlyDictionary<string, string> NamedParameters;
     }
 }

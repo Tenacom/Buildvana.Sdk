@@ -9,16 +9,10 @@ Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.PfxPath.get -> string?
 Buildvana.Sdk.Tasks.AssemblySigning.ConvertPfxToSnk.PfxPath.set -> void
 Buildvana.Sdk.Tasks.BuildvanaSdkTask
 Buildvana.Sdk.Tasks.BuildvanaSdkTask.BuildvanaSdkTask() -> void
-Buildvana.Sdk.Tasks.Internal.CodeBuilder
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.AtStartOfLine.get -> bool
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.CodeBuilder() -> void
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.GetGeneratedCode() -> string!
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.LineComment(string! comment) -> void
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.NewLine() -> void
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.NewLine(string! code) -> void
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.Text(char ch) -> void
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.Text(string! code) -> void
-Buildvana.Sdk.Tasks.Internal.CodeBuilder.Text(string! code, int startIndex, int count) -> void
+Buildvana.Sdk.Tasks.Internal.AttributeModifier
+Buildvana.Sdk.Tasks.Internal.AttributeModifier.Assembly = 1 -> Buildvana.Sdk.Tasks.Internal.AttributeModifier
+Buildvana.Sdk.Tasks.Internal.AttributeModifier.Default = 0 -> Buildvana.Sdk.Tasks.Internal.AttributeModifier
+Buildvana.Sdk.Tasks.Internal.AttributeModifier.Module = 2 -> Buildvana.Sdk.Tasks.Internal.AttributeModifier
 Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes
 Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.Language.get -> string?
 Buildvana.Sdk.Tasks.LiteralAssemblyAttributes.WriteLiteralAssemblyAttributes.Language.set -> void
@@ -50,7 +44,5 @@ Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.VersionFileFullPath.set -> void
 Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.VersionPrefix.get -> string?
 Buildvana.Sdk.Tasks.VersionFile.ParseVersionFile.VersionSuffix.get -> string?
 abstract Buildvana.Sdk.Tasks.BuildvanaSdkTask.Run() -> void
-abstract Buildvana.Sdk.Tasks.Internal.CodeBuilder.LineCommentPrefix.get -> string!
-abstract Buildvana.Sdk.Tasks.Internal.CodeBuilder.QuotedText(string! str) -> void
 override Buildvana.Sdk.Tasks.ThisAssemblyClass.WriteThisAssemblyClass.Run() -> void
 override sealed Buildvana.Sdk.Tasks.BuildvanaSdkTask.Execute() -> bool

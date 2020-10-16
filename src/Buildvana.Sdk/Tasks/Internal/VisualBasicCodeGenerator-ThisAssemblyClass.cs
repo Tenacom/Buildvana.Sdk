@@ -8,46 +8,40 @@
 // -----------------------------------------------------------------------------------
 
 using System.Globalization;
-using Buildvana.Sdk.Tasks.Internal;
 
-namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal sealed class CSharpThisAssemblyClassGenerator : ThisAssemblyClassGeneratorBase<CSharpCodeBuilder>
+    internal partial class VisualBasicCodeGenerator
     {
         protected override void BeginNamespace(string name)
         {
+            NewLine("Namespace Global");
             if (!StringUtility.IsNullOrEmpty(name))
             {
-                NewLine("namespace ");
+                Text('.');
                 Text(name);
-                NewLine("{");
             }
         }
 
-        protected override void EndNamespace(string name)
-        {
-            if (!StringUtility.IsNullOrEmpty(name))
-            {
-                NewLine("}");
-            }
-        }
+        protected override void EndNamespace(string name) => NewLine("End Namespace");
 
         protected override void BeginInternalStaticClass(string name)
         {
-            NewLine("internal static class ");
+            NewLine("Friend NotInheritable Partial Class ");
             Text(name);
-            NewLine("{");
+            NewLine("Public Sub New()");
+            NewLine("End Sub");
         }
 
-        protected override void EndInternalStaticClass() => NewLine("}");
+        protected override void EndInternalStaticClass() => NewLine("End Class");
 
         protected override void PublicConstant(string name, object value)
         {
             var type = value.GetType();
-            NewLine("public const ");
-            Text(type.FullName!);
-            Text(' ');
+            NewLine("Public Const ");
             Text(name);
+            Text(" As ");
+            Text(type.FullName!);
             Text(" = ");
             switch (value)
             {
@@ -55,14 +49,17 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
                     QuotedText(stringValue);
                     break;
                 case bool boolValue:
-                    Text(boolValue ? "true" : "false");
+                    Text(boolValue ? "True" : "False");
                     break;
                 case long longValue:
                     Text(longValue.ToString(CultureInfo.InvariantCulture));
                     Text('L');
                     break;
                 default:
-                    Text(value.ToString() ?? string.Empty);
+#pragma warning disable CS8604 // Possible null reference argument (only on net46) - NET46 reference assemblies are not annotated for nullability
+
+                    Text(value.ToString());
+#pragma warning restore CS8604
                     break;
             }
 

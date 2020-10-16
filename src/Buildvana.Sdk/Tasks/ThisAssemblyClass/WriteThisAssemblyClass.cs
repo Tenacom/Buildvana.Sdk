@@ -16,7 +16,6 @@ using System.Linq;
 using System.Text;
 using Buildvana.Sdk.Tasks.Internal;
 using Buildvana.Sdk.Tasks.Resources;
-using Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
 
@@ -64,12 +63,6 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass
 
         protected override void Run()
         {
-            Language ??= string.Empty;
-            if (!ThisAssemblyClassGenerator.TryCreate(Language, out var generator))
-            {
-                throw new BuildErrorException(Strings.UnsupportedLanguageFmt, Language);
-            }
-
             if (StringUtility.IsNullOrEmpty(OutputPath))
             {
                 throw new BuildErrorException(Strings.MissingParameterFmt, nameof(OutputPath));
@@ -81,7 +74,7 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass
                 .Select(ExtractConstantDefinitionFromItem)
                 .ToArray();
 
-            var code = generator.GenerateCode(classNamespace, className, constants);
+            var code = GenerateCode(classNamespace, className, constants);
 
             try
             {
@@ -131,6 +124,18 @@ namespace Buildvana.Sdk.Tasks.ThisAssemblyClass
             }
 
             return new ConstantDefinition { Name = name, Value = value };
+        }
+
+        private string GenerateCode(string classNamespace, string className, IEnumerable<ConstantDefinition> constants)
+        {
+            var language = Language ?? string.Empty;
+            if (!CodeGenerator.TryCreate(language, out var generator))
+            {
+                throw new BuildErrorException(Strings.UnsupportedLanguageFmt, language);
+            }
+
+            generator.GenerateThisAssemblyClass(classNamespace, className, constants);
+            return generator.GetGeneratedCode();
         }
     }
 }

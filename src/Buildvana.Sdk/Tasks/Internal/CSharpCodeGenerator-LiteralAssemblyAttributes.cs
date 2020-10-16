@@ -7,12 +7,16 @@
 // See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // -----------------------------------------------------------------------------------
 
-namespace Buildvana.Sdk.Tasks.ThisAssemblyClass.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
-    internal struct ConstantDefinition
+    internal partial class CSharpCodeGenerator
     {
-        public string Name;
-
-        public object Value;
+        protected override string TransformLiteralConstant(string value)
+            => value.ToUpperInvariant() switch {
+                "TRUE" => "true",
+                "FALSE" => "false",
+                "NULL" => "null",
+                _ => value,
+            };
     }
 }
