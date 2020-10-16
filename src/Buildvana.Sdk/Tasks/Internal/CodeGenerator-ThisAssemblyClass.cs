@@ -16,6 +16,10 @@ namespace Buildvana.Sdk.Tasks.Internal
         public void GenerateThisAssemblyClass(string classNamespace, string className, IEnumerable<ConstantDefinition> constants)
         {
             BeginNamespace(classNamespace);
+            NewLine();
+            GenerateAttribute(AttributeModifier.Default, "System.Runtime.CompilerServices.CompilerGenerated");
+            NewLine();
+            GenerateAttribute(AttributeModifier.Default, "System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage");
             BeginInternalStaticClass(className);
             foreach (var constant in constants)
             {
