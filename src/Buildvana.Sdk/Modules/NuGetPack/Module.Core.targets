@@ -122,7 +122,6 @@
 
   <!-- Add license file to project items so the Pack target can find it.. -->
   <ItemGroup Condition="'$(PackageLicensePath)' != '' And '$(PackageLicenseFile)' != ''">
-    <EvaluationMessage Include="Using '$(PackageLicensePath)' as license file in $(MSBuildProjectName) package." />
     <Content Remove="$(PackageLicensePath)" />
     <Content Include="$(PackageLicensePath)" Link="$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
@@ -243,7 +242,6 @@
 
   <!-- Add third-party notice file to project items so the Pack target can find it.. -->
   <ItemGroup Condition="'$(PackageThirdPartyNoticePath)' != '' And '$(PackageThirdPartyNoticeFile)' != ''">
-    <EvaluationMessage Include="Using '$(PackageThirdPartyNoticePath)' as third-party copyright notices file in $(MSBuildProjectName) package." />
     <Content Remove="$(PackageThirdPartyNoticePath)" />
     <Content Include="$(PackageThirdPartyNoticePath)" Link="$(PackageThirdPartyNoticeFile)" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
@@ -392,10 +390,28 @@
 
   <!-- Add icon file to project items so the Pack target can find it. -->
   <ItemGroup Condition="'$(PackageIconPath)' != '' And '$(PackageIcon)' != ''">
-    <EvaluationMessage Include="Using '$(PackageIconPath)' as package icon in $(MSBuildProjectName) package." />
     <Content Remove="$(PackageIconPath)" />
     <Content Include="$(PackageIconPath)" Link="$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
+
+  <!-- ===================================================================================== -->
+
+  <Target Name="BV_ShowFilesUsedInPackage"
+          AfterTargets="BeforePack">
+
+          <Message Importance="High"
+                   Condition="'$(PackageLicensePath)' != '' And '$(PackageLicenseFile)' != ''"
+                   Text="Using '$(PackageLicensePath)' as license file in package '$(PackageId)'." />
+
+          <Message Importance="High"
+                   Condition="'$(PackageThirdPartyNoticePath)' != '' And '$(PackageThirdPartyNoticeFile)' != ''"
+                   Text="Using '$(PackageIconPath)' as package icon in $(MSBuildProjectName) package." />
+        
+          <Message Importance="High"
+                   Condition="'$(PackageIconPath)' != '' And '$(PackageIcon)' != ''"
+                   Text="Using '$(PackageLicensePath)' as license file in package '$(PackageId)'." />
+
+  </Target>
 
   <!-- ===================================================================================== -->
 
