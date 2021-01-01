@@ -1,15 +1,17 @@
 <Project>
 
-  <!-- Coalesce GenerateThisAssemblyClass to a boolean value; force to false for projects in unsupported languages. -->
+  <!-- Coalesce GenerateThisAssemblyClass to a boolean value, defaulting to false. -->
   <PropertyGroup>
     <GenerateThisAssemblyClass Condition="'$(GenerateThisAssemblyClass)' != 'true'">false</GenerateThisAssemblyClass>
   </PropertyGroup>
 
-  <!-- Issue a warning if GenerateThisAssemblyClass is set to true for a project in an unsupported language. -->
-  <ItemGroup Condition="'$(GenerateThisAssemblyClass)' == 'true'">
+  <!-- Issue a warning if GenerateThisAssemblyClass is set to true for a project in an unsupported language.
+       Only check when TargetFramework is set, i.e. either when TargetFramework is set in the project file, or during inner builds;
+       otherwise, Microsoft.{CSharp|VisualBasic}.CurrentVersion.targets has not been imported and Language is unset. -->
+  <ItemGroup Condition="$(GenerateThisAssemblyClass) And '$(TargetFramework)' != ''">
     <EvaluationWarning Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'"
                        Include="BVW1900"
-                       Text="ThisAssembly class generation is only supported in C# and Visual Basic projects." />
+                       Text="ThisAssembly class generation is only supported in C# and Visual Basic projects (Language='$(Language)')." />
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
