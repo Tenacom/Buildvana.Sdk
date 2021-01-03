@@ -16,19 +16,33 @@ namespace Buildvana.Sdk
     [Serializable]
     public sealed class BuildErrorException : Exception
     {
+        public BuildErrorException()
+        {
+            // ReSharper doesn't like empty constructors
+        }
+
         public BuildErrorException(string message)
             : base(message)
         {
+            // ReSharper doesn't like empty constructors
         }
 
         public BuildErrorException(string format, params object[] args)
             : base(string.Format(CultureInfo.InvariantCulture, format, args))
         {
+            // ReSharper doesn't like empty constructors
         }
 
-        private BuildErrorException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
+        public BuildErrorException(string message, Exception innerException)
+            : base(message, innerException)
         {
+            // ReSharper doesn't like empty constructors
+        }
+
+        private BuildErrorException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            // ReSharper doesn't like empty constructors
         }
     }
 }
