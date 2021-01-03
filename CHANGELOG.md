@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.0-alpha.10](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.10) (2021-01-03)
+
+### Changes to existing features
+
 - **POTENTIALLY BREAKING CHANGE:** The minimum supported MSBuild version is 16.7 (.NET SDK 3.1, Visual Studio 2019 v16.7).
 - **BREAKING CHANGE:** The syntax for parameters of literal assembly attributes, as well as constants in "ThisAssembly" classes, has changed. The new syntax is described in [this document](docs\ConstantsSyntax.md).
 - **BREAKING CHANGE:** The `Microsoft.CodeAnalysis.FxCopAnalyzers` package is not imported any more, due to its deprecation in favor of `Microsoft.CodeAnalysis.NetAnalyzers` (see [the relevant documentation](https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview) for more details).
@@ -26,8 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bugs fixed in this release
 
 - https://github.com/Buildvana/Buildvana.Sdk/pull/65 - Warning BVW1900 issued on every project with a `<TargetFrameworks>` property and ThisAssembly class generation enabled.
-
-### Known problems introduced by this release
 
 ## [1.0.0-alpha.9](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.9) (2020-10-10)
 
