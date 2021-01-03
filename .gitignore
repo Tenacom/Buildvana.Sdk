@@ -1,4 +1,5 @@
 artifacts/
+build.log
 
 # Visual Studio
 **/bin/
