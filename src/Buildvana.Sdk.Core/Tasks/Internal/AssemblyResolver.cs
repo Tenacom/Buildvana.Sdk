@@ -16,7 +16,9 @@ using Buildvana.Sdk.Utilities;
 
 namespace Buildvana.Sdk.Tasks.Internal
 {
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes - Instantiated via Install static method
     internal sealed class AssemblyResolver : MarshalByRefObject, IDisposable
+#pragma warning restore CA1812
     {
         public AssemblyResolver(string prefix, string directory)
         {
