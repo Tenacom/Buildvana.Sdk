@@ -29,7 +29,9 @@ namespace Buildvana.Sdk.Tasks
     // See THIRD-PARTY-NOTICES in the repository root for more information.
     public abstract partial class ContextIsolatedTask : AppDomainIsolatedTask // We need MarshalByRefObject -- we don't care for MSBuild's AppDomain though.
     {
+#pragma warning disable SA1000 // new should be followed by a space - StyleCop doesn't understand new C# 9 syntax
         private readonly ThreadLocal<bool> _resolvingAssembly = new();
+#pragma warning restore SA1000
 
         public sealed override bool Execute()
         {
