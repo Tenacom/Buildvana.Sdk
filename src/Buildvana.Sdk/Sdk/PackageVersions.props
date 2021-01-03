@@ -8,7 +8,6 @@
   -->
   <ItemGroup>
     <BV_PackageVersion Include="JetBrains.Annotations" Version="2020.3.0" />
-    <BV_PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.2" />
     <BV_PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.2" />
     <BV_PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" />
     <BV_PackageVersion Include="ReSharper.ExportAnnotations.Task" Version="1.3.1" />
