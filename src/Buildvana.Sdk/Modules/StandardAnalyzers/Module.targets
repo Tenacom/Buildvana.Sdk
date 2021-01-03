@@ -1,54 +1,39 @@
 <Project>
 
-  <!-- Include standard analyzers. -->
-  <ItemGroup Condition="$(UseStandardAnalyzers)">
-    <!-- Configured via auto-discovered .editorconfig -->
-    <BV_PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers"
-                         PrivateAssets="All"
-                         IncludeAssets="runtime; build; native; contentfiles; analyzers" />
-    <!-- Configured via stylecop.json (or .stylecop.json) to include in AdditionalFiles -->
-    <BV_PackageReference Include="StyleCop.Analyzers"
-                         PrivateAssets="All"
-                         IncludeAssets="runtime; build; native; contentfiles; analyzers" />
-  </ItemGroup>
-
-  <!-- Find a stylecop.json or .stylecop.json file to configure StyleCop.Analyzers. -->
-  <PropertyGroup Condition="$(UseStandardAnalyzers)">
-    <!-- Find stylecop.json -->
-    <StyleCopJsonPath>$([MSBuild]::GetPathOfFileAbove('stylecop.json', $(MSBuildProjectFullPath)))</StyleCopJsonPath>
-    <!-- Reject if not in repository -->
-    <StyleCopJsonPath Condition="'$(StyleCopJsonPath)' != '' And !$(StyleCopJsonPath.StartsWith('$(HomeDirectory)'))" />
+  <!-- UseStyleCopAnalyzers default = true, except for test projects and no-target projects. -->
+  <PropertyGroup Condition="'$(UseStyleCopAnalyzers)' == ''">
+    <UseStyleCopAnalyzers>true</UseStyleCopAnalyzers>
+    <UseStyleCopAnalyzers Condition="$(BV_IsNoTargetsProject)">false</UseStyleCopAnalyzers>
   </PropertyGroup>
-  <!-- Try alternate name accepted by StyleCop.Analyzers -->
-  <PropertyGroup Condition="'$(StyleCopJsonPath)' == ''">
-    <!-- Find .stylecop.json -->
-    <StyleCopJsonPath>$([MSBuild]::GetPathOfFileAbove('.stylecop.json', $(MSBuildProjectFullPath)))</StyleCopJsonPath>
-    <!-- Reject if not in repository -->
-    <StyleCopJsonPath Condition="'$(StyleCopJsonPath)' != '' And !$(StyleCopJsonPath.StartsWith('$(HomeDirectory)'))" />
+  <PropertyGroup Condition="'$(UseStyleCopAnalyzers)' != 'true'">
+    <UseStyleCopAnalyzers>false</UseStyleCopAnalyzers>
   </PropertyGroup>
 
-  <!-- Automatically and silently add stylecop.json or .stylecop.json file to the project if found. -->
-  <ItemGroup Condition="$(UseStandardAnalyzers) And '$(StyleCopJsonPath)' != ''">
-    <None Remove="$(StyleCopJsonPath)" />
-    <AdditionalFiles Remove="$(StyleCopJsonPath)" />
-    <AdditionalFiles Include="$(StyleCopJsonPath)" Link="stylecop.json" Visible="false" />
-  </ItemGroup>
+  <Import Project="$(MSBuildThisFileDirectory)Module.UseStyleCopAnalyzers.targets"
+          Condition="$(UseStyleCopAnalyzers)" />
 
-  <!-- Include public API analyzers. -->
-  <ItemGroup Condition="$(UsePublicApiAnalyzers)">
-    <BV_PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers"
-                         PrivateAssets="All"
-                         IncludeAssets="runtime; build; native; contentfiles; analyzers" />
-    <None Remove="$(MSBuildProjectDirectory)\PublicAPI.Shipped.txt" />
-    <None Remove="$(MSBuildProjectDirectory)\PublicAPI.Unshipped.txt" />
-    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI.Shipped.txt" />
-    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI.Unshipped.txt" />
-  </ItemGroup>
-
-  <!-- Suppress warning CA1707 if AllowUnderscoresInMemberNames is true. -->
-  <PropertyGroup Condition="'$(AllowUnderscoresInMemberNames)' == 'true'">
-    <NoWarn Condition="'$(NoWarn)' != ''">$(NoWarn);</NoWarn>
-    <NoWarn>$(NoWarn)CA1707</NoWarn>
+  <!-- UsePublicApiAnalyzers default = true only on library projects. -->
+  <PropertyGroup Condition="'$(UsePublicApiAnalyzers)' == ''">
+    <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
+    <UsePublicApiAnalyzers Condition="$(BV_IsLibraryProject)">true</UsePublicApiAnalyzers>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(UsePublicApiAnalyzers)' != 'true'">
+    <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)Module.UsePublicApiAnalyzers.targets"
+          Condition="$(UsePublicApiAnalyzers)" />
+
+  <!-- AllowUnderscoresInMemberNames default = true only on test projects. -->
+  <PropertyGroup Condition="'$(AllowUnderscoresInMemberNames)' == ''">
+    <AllowUnderscoresInMemberNames>false</AllowUnderscoresInMemberNames>
+    <AllowUnderscoresInMemberNames Condition="$(BV_IsTestProject)">true</AllowUnderscoresInMemberNames>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(AllowUnderscoresInMemberNames)' != 'true'">
+    <AllowUnderscoresInMemberNames>false</AllowUnderscoresInMemberNames>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)Module.AllowUnderscoresInMemberNames.targets"
+          Condition="$(AllowUnderscoresInMemberNames)" />
 
 </Project>

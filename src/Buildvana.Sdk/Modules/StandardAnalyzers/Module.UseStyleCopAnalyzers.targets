@@ -1,0 +1,33 @@
+<Project>
+
+  <!-- Include StyleCop analyzers. -->
+  <ItemGroup>
+    <!-- Configured via stylecop.json (or .stylecop.json) to include in AdditionalFiles -->
+    <BV_PackageReference Include="StyleCop.Analyzers"
+                         PrivateAssets="All"
+                         IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+  </ItemGroup>
+
+  <!-- Find a stylecop.json or .stylecop.json file to configure StyleCop.Analyzers. -->
+  <PropertyGroup>
+    <!-- Find stylecop.json -->
+    <StyleCopJsonPath>$([MSBuild]::GetPathOfFileAbove('stylecop.json', $(MSBuildProjectFullPath)))</StyleCopJsonPath>
+    <!-- Reject if not in repository -->
+    <StyleCopJsonPath Condition="'$(StyleCopJsonPath)' != '' And !$(StyleCopJsonPath.StartsWith('$(HomeDirectory)'))" />
+  </PropertyGroup>
+  <!-- Try alternate name accepted by StyleCop.Analyzers -->
+  <PropertyGroup Condition="'$(StyleCopJsonPath)' == ''">
+    <!-- Find .stylecop.json -->
+    <StyleCopJsonPath>$([MSBuild]::GetPathOfFileAbove('.stylecop.json', $(MSBuildProjectFullPath)))</StyleCopJsonPath>
+    <!-- Reject if not in repository -->
+    <StyleCopJsonPath Condition="'$(StyleCopJsonPath)' != '' And !$(StyleCopJsonPath.StartsWith('$(HomeDirectory)'))" />
+  </PropertyGroup>
+
+  <!-- Automatically and silently add stylecop.json or .stylecop.json file to the project if found. -->
+  <ItemGroup Condition="'$(StyleCopJsonPath)' != ''">
+    <None Remove="$(StyleCopJsonPath)" />
+    <AdditionalFiles Remove="$(StyleCopJsonPath)" />
+    <AdditionalFiles Include="$(StyleCopJsonPath)" Link="stylecop.json" Visible="false" />
+  </ItemGroup>
+
+</Project>

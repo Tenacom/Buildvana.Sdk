@@ -1,0 +1,9 @@
+<Project>
+
+  <!-- Suppress warning CA1707 (Identifiers should not contain underscores). -->
+  <PropertyGroup>
+    <NoWarn Condition="'$(NoWarn)' != ''">$(NoWarn);</NoWarn>
+    <NoWarn>$(NoWarn)CA1707</NoWarn>
+  </PropertyGroup>
+
+</Project>
