@@ -21,7 +21,9 @@ namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes
     public sealed class WriteLiteralAssemblyAttributes : BuildvanaSdkCodeGeneratorTask
     {
         [PublicAPI]
+#pragma warning disable CA1819 // Properties should not return arrays - Required by MSBuild APIs
         public ITaskItem[]? LiteralAssemblyAttributes { get; set; }
+#pragma warning restore CA1819
 
         protected override IEnumerable<CodeFragment> GetCodeFragments()
             => (LiteralAssemblyAttributes ?? Enumerable.Empty<ITaskItem>()).Select(ExtractAttributeFromItem);
