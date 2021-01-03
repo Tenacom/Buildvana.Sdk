@@ -1,6 +1,7 @@
 <Project>
 
   <!-- Branding, ownership, and licensing -->
+
   <PropertyGroup>
     <Product>Buildvana.Sdk</Product>
     <Authors>Riccardo De Agostini and Buildvana contributors</Authors>
@@ -10,20 +11,14 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
-  <!-- Repository and documentation -->
-  <PropertyGroup>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Buildvana/Buildvana.Sdk</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/Buildvana/Buildvana</PackageProjectUrl>
-    <PackageReleaseNotes>Release notes are available at https://github.com/Buildvana/Buildvana.Sdk/blob/master/CHANGELOG.md</PackageReleaseNotes>
-  </PropertyGroup>
-
   <!-- Common build options -->
+
   <PropertyGroup>
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>Default</AnalysisMode>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
@@ -33,7 +28,18 @@
     <ComVisible>false</ComVisible>
   </PropertyGroup>
 
+  <!-- Solution-wide build options -->
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;netcoreapp3.1;net5.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <XmlDocs>false</XmlDocs> <!--Do not generate XML documentation -->
+    <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
+  </PropertyGroup>
+
   <!-- Package Central Version Management -->
+
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>

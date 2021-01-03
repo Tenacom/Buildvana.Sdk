@@ -54,15 +54,26 @@
     </When>
   </Choose>
 
+  <!-- Determine whether compiled tasks are available, i.e. Buildvana.Sdk.Binaries has been imported.
+       Modules have to know this to avoid importing any file using compiled tasks. -->
+  <PropertyGroup>
+    <BV_CompiledTasksAvailable>false</BV_CompiledTasksAvailable>
+    <BV_CompiledTasksAvailable Condition="'$(BV_SdkTasksAssembly)' != ''">true</BV_CompiledTasksAvailable>
+  </PropertyGroup>
+
   <!-- Import BeforeCommon.targets, Common.targets, and AfterCommon.targets files  -->
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.targets.proj" />
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.Common.targets.proj" />
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.AfterCommon.targets.proj" />
+  <ImportGroup Condition="$(BV_IsConfigured)">
+    <Import Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.targets.proj" />
+    <Import Project="$(BuildvanaSdkDirectory)Import.Common.targets.proj" />
+    <Import Project="$(BuildvanaSdkDirectory)Import.AfterCommon.targets.proj" />
+  </ImportGroup>
 
   <!-- Import modules -->
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\BeforeModules.targets" />
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\Module.targets" />
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\AfterModules.targets" />
+  <ImportGroup Condition="$(BV_IsConfigured)">
+    <Import Project="$(BuildvanaModulesDirectory)**\BeforeModules.targets" />
+    <Import Project="$(BuildvanaModulesDirectory)**\Module.targets" />
+    <Import Project="$(BuildvanaModulesDirectory)**\AfterModules.targets" />
+  </ImportGroup>
 
   <!-- Import our package versions -->
   <Import Condition="$(BV_IsConfigured)" Project="$(MSBuildThisFileDirectory)PackageVersions.props" />

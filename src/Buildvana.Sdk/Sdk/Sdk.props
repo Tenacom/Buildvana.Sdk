@@ -5,6 +5,9 @@
     <BV_SdkPropsHasBeenImported>true</BV_SdkPropsHasBeenImported>
   </PropertyGroup>
 
+  <!-- Import the project file containing the SDK version. -->
+  <Import Project="$(MSBuildThisFileDirectory)SdkVersion.props" />
+
   <!--
     Rules for HomeDirectory:
       * the Git submodule above the project's directory (look for a file named .git)
@@ -30,10 +33,21 @@
                      Text="Home directory not defined." />
   </ItemGroup>
 
-  <!-- BV_IsConfigured is true if HomeDirectory is configured. -->
+  <!-- Check for a supported version of MSBuild. -->
+  <PropertyGroup>
+    <BV_MSBuildVersionSupported>false</BV_MSBuildVersionSupported>
+    <BV_MSBuildVersionSupported Condition="'$(MSBuildVersion)' &gt;= '16.7'">true</BV_MSBuildVersionSupported>
+  </PropertyGroup>
+  <ItemGroup Condition="!$(BV_MSBuildVersionSupported)">
+    <EvaluationError Include="BVE1004"
+                     Text="Buildvana SDK requires at least MSBuild v16.7." />
+  </ItemGroup>
+
+  <!-- BV_IsConfigured is true if HomeDirectory is configured and the MSBuild version is supported. -->
   <PropertyGroup>
     <BV_IsConfigured>true</BV_IsConfigured>
     <BV_IsConfigured Condition="'$(HomeDirectory)' == ''">false</BV_IsConfigured>
+    <BV_IsConfigured Condition="!$(BV_MSBuildVersionSupported)">false</BV_IsConfigured>
   </PropertyGroup>
 
   <!-- ArtifactsDirectory = 'artifacts' directory under HomeDirectory. -->
@@ -51,44 +65,36 @@
     <BuildvanaModulesDirectory>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..\Modules'))</BuildvanaModulesDirectory>
   </PropertyGroup>
 
-  <!-- Seelct TFM for compiled tasks -->
-  <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Full'">
-    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &lt; '16.0'">net46</BV_SdkTasksTfm>
-    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &gt;= '16.0'">net472</BV_SdkTasksTfm>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
-    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &lt; '16.7'">netcoreapp2.1</BV_SdkTasksTfm>
-    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &gt;= '16.7' And '$(MSBuildVersion)' &lt; '16.8'">netcoreapp3.1</BV_SdkTasksTfm>
-    <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &gt;= '16.8'">net5.0</BV_SdkTasksTfm>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Mono'">
-    <BV_SdkTasksTfm>net472</BV_SdkTasksTfm>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(BV_SdkTasksTfm)' == ''">
-    <EvaluationError Include="BVE1004"
-                     Text="Could not determine a suitable target framework for compiled tasks." />
-  </ItemGroup>
-
-  <!-- Select compiled tasks assembly -->
+  <!-- Select an appropriate assembly for compiled tasks. -->
+  <Choose>
+    <When Condition="'$(MSBuildRuntimeType)' == 'Core'">
+      <PropertyGroup>
+        <BV_SdkTasksTfm>netcoreapp3.1</BV_SdkTasksTfm>
+        <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &gt;= '16.8'">net5.0</BV_SdkTasksTfm>
+      </PropertyGroup>
+    </When>
+    <Otherwise> <!-- Building with .NET Framework or Mono -->
+      <PropertyGroup>
+        <BV_SdkTasksTfm>net472</BV_SdkTasksTfm>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
   <PropertyGroup>
-    <BV_SdkTasksAssembly>$(MSBuildThisFileDirectory)$(BV_SdkTasksTfm)\Buildvana.Sdk.dll</BV_SdkTasksAssembly>
+    <BV_BinariesDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..\bin\$(BV_SdkTasksTfm)'))</BV_BinariesDir>
+    <BV_SdkTasksAssembly>$(BV_BinariesDir)Buildvana.Sdk.Tasks.dll</BV_SdkTasksAssembly>
   </PropertyGroup>
 
-  <!-- Declare compiled tasks -->
   <UsingTask TaskName="ConvertPfxToSnk" AssemblyFile="$(BV_SdkTasksAssembly)" />
   <UsingTask TaskName="WriteLiteralAssemblyAttributes" AssemblyFile="$(BV_SdkTasksAssembly)" />
   <UsingTask TaskName="ParseVersionFile" AssemblyFile="$(BV_SdkTasksAssembly)" />
   <UsingTask TaskName="WriteThisAssemblyClass" AssemblyFile="$(BV_SdkTasksAssembly)" />
 
-  <!-- Import modules -->
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\BeforeModules.props" />
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\Module.props" />
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaModulesDirectory)**\AfterModules.props" />
-
   <!-- Import BeforeCommon.props, Common.props, and AfterCommon.props files  -->
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.props.proj" />
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.Common.props.proj" />
-  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)Import.AfterCommon.props.proj" />
+  <ImportGroup Condition="$(BV_IsConfigured)">
+    <Import Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.props.proj" />
+    <Import Project="$(BuildvanaSdkDirectory)Import.Common.props.proj" />
+    <Import Project="$(BuildvanaSdkDirectory)Import.AfterCommon.props.proj" />
+  </ImportGroup>
 
   <!-- Check whether Sdk.targets has been imported. -->
   <Target Name="BV_CheckSdkTargetsImport">

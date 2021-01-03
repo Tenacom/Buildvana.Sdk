@@ -11,9 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- **POTENTIALLY BREAKING CHANGE:** The minimum supported MSBuild version is 16.7 (.NET SDK 3.1, Visual Studio 2019 v16.7).
+- **BREAKING CHANGE:** The syntax for parameters of literal assembly attributes, as well as constants in "ThisAssembly" classes, has changed. The new syntax is described in [this document](docs\ConstantsSyntax.md).
+- **BREAKING CHANGE:** The `Microsoft.CodeAnalysis.FxCopAnalyzers` package is not imported any more, due to its deprecation in favor of `Microsoft.CodeAnalysis.NetAnalyzers` (see [the relevant documentation](https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview) for more details).
+- **BREAKING CHANGE:** The `UseStandardAnalyzers` property is not used any more. The new `UseStyleCopAnalyzers` property enables the use of the `StyleCop.Analyzers` package.
 - https://github.com/Buildvana/Buildvana.Sdk/pull/62 - Messages listing the icon, license file, and/or third-party copyright notice included in packages are now shown only when packing.
 - https://github.com/Buildvana/Buildvana.Sdk/pull/57 - Generated `ThisAssembly` classes now have [CompilerGenerated](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.compilergeneratedattribute) and [ExcludeFromCodeCoverage](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.codeanalysis.excludefromcodecoverageattribute) attributes.
-- **breaking** https://github.com/Buildvana/Buildvana.Sdk/pull/57 - The default for the `UseJetBrainsAnnotations` property is now `false`. The reason is that it was counterintuitive to mention JetBrains annotations in projects _not_ using them.
+- **BREAKING CHANGE:** https://github.com/Buildvana/Buildvana.Sdk/pull/57 - The default for the `UseJetBrainsAnnotations` property is now `false`. The reason is that it was counterintuitive to mention JetBrains annotations in projects _not_ using them.
+- Compiled tasks used to generate ThisAssembly classes and literal assembly attributes have been completely rewritten using Roslyn code generators.
+- The message for error `BVE1004` now reports the minimum required MSBuild version.
+- The message for warning `BVW1900` ("ThisAssembly class generation is only supported in C# and Visual Basic projects") now reports the `Language` MSBuild property value for the project.
+- **POTENTIALLY BREAKING CHANGE:** Errors `BVE1900` and `BVE1901` did not make sense with [the new constant syntax](docs\ConstantsSyntax.md). They have been removed, and the old error `BVE1902` is now `BVE1900`.
 
 ### Bugs fixed in this release
 
@@ -26,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes to existing features
 
 - https://github.com/Buildvana/Buildvana.Sdk/pull/51 - The automatically-added package reference to `ReSharper.ExportAnnotations.Task` has been updated to version 1.3.1.
-- **potentially breaking** https://github.com/Buildvana/Buildvana.Sdk/pull/51 - The `EnableThisAssemblyClass` property has been renamed to `GenerateThisAssemblyClass` and its default value is now `false`.
+- **POTENTIALLY BREAKING CHANGE:** https://github.com/Buildvana/Buildvana.Sdk/pull/51 - The `EnableThisAssemblyClass` property has been renamed to `GenerateThisAssemblyClass` and its default value is now `false`.
 
 ### Bugs fixed in this release
 
@@ -54,10 +62,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
-- **potentially breaking** https://github.com/Buildvana/Buildvana.Sdk/issues/44 - The `AssemblyInfo` module has been removed. Assembly attribute generation-related properties like e.g. `GenerateAssemblyInfo`, `GenerateAssemblyVersionAttribute`, etc. are not set to `true` any more at project and common files evaluation time; instead, they are left unset and defaulted to `true` later.
-- **potentially breaking** [Errors and warnings](docs/ErrorsAndWarnings.md) have been renumbered.
-- **breaking** https://github.com/Buildvana/Buildvana.Sdk/issues/44 - The `CLSCompliant` property is no longer set to `true` by default; it must be set explicitly in order to generate the respective assembly attribute. Projects that contain `CLSCompliant` attributes on types and members and do not set the `CLSCompliant` property will now issue warning CS3021: *'<type_or_member>' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute.*. To avoid the warning, set the `CLSCompliant` property to `true` (the previous default) in the project file or in a common file.
-- **breaking** https://github.com/Buildvana/Buildvana.Sdk/issues/44 - The `ComVisible` property is no longer set to `false` by default; it must be set explicitly in order to generate the respective assembly attribute. In projects that need to have all types and members of the compiled assembly hidden from COM, now you must set the `ComVisible` property to `false` (the previous default) in the project file or in a common file.
+- **POTENTIALLY BREAKING CHANGE:** https://github.com/Buildvana/Buildvana.Sdk/issues/44 - The `AssemblyInfo` module has been removed. Assembly attribute generation-related properties like e.g. `GenerateAssemblyInfo`, `GenerateAssemblyVersionAttribute`, etc. are not set to `true` any more at project and common files evaluation time; instead, they are left unset and defaulted to `true` later.
+- **POTENTIALLY BREAKING CHANGE:** [Errors and warnings](docs/ErrorsAndWarnings.md) have been renumbered.
+- **BREAKING CHANGE:** https://github.com/Buildvana/Buildvana.Sdk/issues/44 - The `CLSCompliant` property is no longer set to `true` by default; it must be set explicitly in order to generate the respective assembly attribute. Projects that contain `CLSCompliant` attributes on types and members and do not set the `CLSCompliant` property will now issue warning CS3021: *'<type_or_member>' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute.*. To avoid the warning, set the `CLSCompliant` property to `true` (the previous default) in the project file or in a common file.
+- **BREAKING CHANGE:** https://github.com/Buildvana/Buildvana.Sdk/issues/44 - The `ComVisible` property is no longer set to `false` by default; it must be set explicitly in order to generate the respective assembly attribute. In projects that need to have all types and members of the compiled assembly hidden from COM, now you must set the `ComVisible` property to `false` (the previous default) in the project file or in a common file.
 
 ### Bugs fixed in this release
 
@@ -91,7 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
-- **[potentially breaking]** https://github.com/Buildvana/Buildvana.Sdk/issues/26 - A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.
+- **POTENTIALLY BREAKING CHANGE:** https://github.com/Buildvana/Buildvana.Sdk/issues/26 - A unit test project is now recognized as such, by convention, if its name ends with `.Tests`.
   To opt out of this convention, explicitly set `IsTestProject` to `true` or `false`.
 
 ### Changes to existing features

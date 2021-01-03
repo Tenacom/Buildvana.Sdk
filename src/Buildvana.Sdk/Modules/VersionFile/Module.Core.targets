@@ -1,0 +1,38 @@
+<Project>
+
+  <Target Name="BV_CoreParseVersionFile"
+          Condition="!$(BV_ParsedVersionPropsHasBeenImported)">
+
+    <ParseVersionFile VersionFileFullPath="$(VersionFileFullPath)">
+      <Output TaskParameter="Version" PropertyName="Version" />
+      <Output TaskParameter="VersionPrefix" PropertyName="VersionPrefix" />
+      <Output TaskParameter="VersionSuffix" PropertyName="VersionSuffix" />
+      <Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />
+      <Output TaskParameter="AssemblyFileVersion" PropertyName="AssemblyFileVersion" />
+      <Output TaskParameter="AssemblyInformationalVersion" PropertyName="AssemblyInformationalVersion" />
+    </ParseVersionFile>
+
+    <PropertyGroup>
+      <BV_ParsedVersionPropsXml>
+          <Project>
+            <PropertyGroup>
+              <Version>$(Version)</Version>
+              <VersionPrefix>$(VersionPrefix)</VersionPrefix>
+              <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+              <AssemblyVersion>$(AssemblyVersion)</AssemblyVersion>
+              <AssemblyFileVersion>$(AssemblyFileVersion)</AssemblyFileVersion>
+              <AssemblyInformationalVersion>$(AssemblyInformationalVersion)</AssemblyInformationalVersion>
+              <BV_ParsedVersionPropsHasBeenImported>true</BV_ParsedVersionPropsHasBeenImported>
+            </PropertyGroup>
+          </Project>
+      </BV_ParsedVersionPropsXml>
+    </PropertyGroup>
+
+    <WriteLinesToFile File="$(BV_ParsedVersionPropsPath)"
+                      Lines="$(BV_ParsedVersionPropsXml)"
+                      Overwrite="true"
+                      WriteOnlyWhenDifferent="false" />
+
+  </Target>
+
+</Project>

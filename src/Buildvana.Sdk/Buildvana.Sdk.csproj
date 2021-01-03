@@ -1,154 +1,251 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <!-- Common properties -->
+<Project Sdk="Microsoft.Build.NoTargets/2.0.1">
 
   <PropertyGroup>
-    <TargetFrameworks>net46;net472;netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
+
+    <!-- Common properties -->
     <Title>Buildvana SDK</Title>
     <Summary>An opinionated, best-practices-based, CI- / CLI- / VS-friendly, MSBuild-powered build system for .NET projects.</Summary>
-    <Description>This assembly contains compiled tasks used by Buildvana SDK. Documentation for the SDK is available here: https://github.com/Buildvana/Buildvana.Sdk/blob/master/README.md</Description>
-    <XmlDocs>false</XmlDocs> <!--Do not generate XML documentation -->
-    <ExportJetBrainsAnnotations>false</ExportJetBrainsAnnotations> <!--Do not generate a .ExternalAnnotations.xml file -->
-  </PropertyGroup>
+    <Description>$(Summary)</Description>
 
-  <!-- NuGet package configuration -->
-
-  <PropertyGroup>
+    <!-- NuGet package configuration -->
+    <IsPackable>true</IsPackable>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking> <!-- Remove the <dependencies> tag from .nupkg, because it makes the package "depend" on our TargetPlatform. -->
     <PackageType>MSBuildSdk</PackageType>
-    <PackageDescription>$(Summary)</PackageDescription> <!-- The Description property is too specific to the compiled tasks assembly. -->
     <PackageTags>build msbuild sdk dotnet</PackageTags>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <DevelopmentDependency>true</DevelopmentDependency>
     <Serviceable>true</Serviceable>
     <MinClientVersion>4.3</MinClientVersion> <!-- Minimum NuGet client version supporting SemVer 2.0 -->
     <NoWarn>$(NoWarn);NU5100</NoWarn> <!-- The assembly '...' is not inside the 'lib' folder and hence it won't be added as a reference. -->
     <NoWarn>$(NoWarn);NU5128</NoWarn> <!-- Some target frameworks [...] do not have exact matches [in the lib folder]. -->
+
+    <!-- Remove the <dependencies> tag from .nupkg, because it makes the package "depend" on our TargetPlatform. -->
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+
+    <!-- Prevent the SDK from adding an actual ProjectReference item for binary packages.
+         Dependency on them is set in the solution file.
+         The project system won't let you ProjectReference a multi-targeting project.
+         See https://github.com/dotnet/msbuild/issues/4303 -->
+    <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
+
   </PropertyGroup>
 
-  <!-- Package contents (besides build output) -->
+  <!-- Repository and documentation -->
+
+  <PropertyGroup>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Buildvana/Buildvana.Sdk</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Buildvana/Buildvana</PackageProjectUrl>
+    <PackageReleaseNotes>Release notes are available at https://github.com/Buildvana/Buildvana.Sdk/blob/master/CHANGELOG.md</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <!-- Package contents -->
 
   <PropertyGroup>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
     <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
-    <IncludeBuildOutput>true</IncludeBuildOutput>
-    <BuildOutputTargetFolder>Sdk</BuildOutputTargetFolder>
-</PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Modules\**\*" Exclude="*.cs" PackagePath="%(Identity)" />
-    <Content Include="Sdk\**\*" PackagePath="%(Identity)" />
+    <None Include="Modules\**\*" Pack="true" PackagePath="%(Identity)" />
+    <None Include="Sdk\**\*" Pack="true" PackagePath="%(Identity)" />
   </ItemGroup>
 
-  <!-- Additional package content - a workaround for project items not allowing duplicates, even with different Link metadata -->
+  <!--
+    ================
+    SDK VERSION FILE
+    ================
+  -->
 
+  <PropertyGroup>
+    <BeforePack>_GenerateSdkVersionProps;$(BeforePack)</BeforePack>
+  </PropertyGroup>
+
+  <Target Name="_GenerateSdkVersionProps">
+
+    <PropertyGroup>
+      <_SdkVersionPropsPath>$(IntermediateOutputPath)SdkVersion.props</_SdkVersionPropsPath>
+      <_SdkVersionPropsXml>
+        <Project>
+          <PropertyGroup>
+            <BuildvanaSdkVersion>$(Version)</BuildvanaSdkVersion>
+          </PropertyGroup>
+        </Project>
+      </_SdkVersionPropsXml>
+    </PropertyGroup>
+
+    <WriteLinesToFile File="$(_SdkVersionPropsPath)"
+                      Lines="$(_SdkVersionPropsXml)"
+                      Overwrite="true"
+                      WriteOnlyWhenDifferent="true" />
+
+    <ItemGroup>
+      <Content Include="$(_SdkVersionPropsPath)" Visible="false" PackagePath="Sdk" />
+    </ItemGroup>
+
+  </Target>
+
+  <!--
+    =======================
+    ALIASED PACKAGE CONTENT
+    =======================
+  -->
+
+  <!-- Aliased content cannot be packaged directly. -->
   <ItemGroup>
     <None Include="Aliased\**\*" Pack="false" />
   </ItemGroup>
 
-  <!-- __AdditionalPackageContent works the opposite way with respect to Content, None, and other similar items:
-       you "Include" the _target_ path (always relative to the package "root") and set the Source metadata to the path
-       of the source file. This lets you add the same file to a package multiple times, as the item identities
-       will be different. -->
+  <!-- _AliasedContent items work backwards: each item's identity is its package target path,
+       while the Source metadata is the path to the actual file being included in the package.
+       This lets us add the same file to a package multiple times, as their identities will be different. -->
   <ItemGroup>
-    <__AdditionalPackageContent Include="Sdk\Import.BeforeCommon.props.proj" Source="Aliased\ImportFiles.proj" />
-    <__AdditionalPackageContent Include="Sdk\Import.Common.props.proj" Source="Aliased\ImportFiles.proj" />
-    <__AdditionalPackageContent Include="Sdk\Import.AfterCommon.props.proj" Source="Aliased\ImportFiles.proj" />
-    <__AdditionalPackageContent Include="Sdk\Import.BeforeCommon.targets.proj" Source="Aliased\ImportFiles.proj" />
-    <__AdditionalPackageContent Include="Sdk\Import.Common.targets.proj" Source="Aliased\ImportFiles.proj" />
-    <__AdditionalPackageContent Include="Sdk\Import.AfterCommon.targets.proj" Source="Aliased\ImportFiles.proj" />
+    <_AliasedContent Include="Sdk\Import.BeforeCommon.props.proj" Source="Aliased\ImportFiles.proj" />
+    <_AliasedContent Include="Sdk\Import.Common.props.proj" Source="Aliased\ImportFiles.proj" />
+    <_AliasedContent Include="Sdk\Import.AfterCommon.props.proj" Source="Aliased\ImportFiles.proj" />
+    <_AliasedContent Include="Sdk\Import.BeforeCommon.targets.proj" Source="Aliased\ImportFiles.proj" />
+    <_AliasedContent Include="Sdk\Import.Common.targets.proj" Source="Aliased\ImportFiles.proj" />
+    <_AliasedContent Include="Sdk\Import.AfterCommon.targets.proj" Source="Aliased\ImportFiles.proj" />
   </ItemGroup>
 
-  <!-- References -->
+  <!-- Compute the path for the aliased content intermediate directory.
+       IntermediateOutputPath is unknown to us at evaluation time, because it is set in a Microsoft SDK .targets file.
+       Therefore we can only use it in a task. -->
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" />
-    <PackageReference Include="Nullable" />
-  </ItemGroup>
+  <Target Name="_ComputeAliasedContentPaths">
 
-  <!-- SourceLink -->
-
-  <PropertyGroup>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" />
-  </ItemGroup>
-
-  <!-- Make all package references private -->
-
-  <ItemGroup>
-    <PackageReference Update="@(PackageReference)" ExcludeAssets="Runtime" PrivateAssets="All" />
-  </ItemGroup>
-
-  <!-- Create an intermediate folder with additional package content. Folder layout must mimic package layout. -->
-
-  <Target Name="__ComputeAdditionalPackageContentPaths">
-
-    <!-- IntermediateOutputPath is unknown to us at evaluation time, because it is set in a Microsoft SDK .targets file.
-         Therefore we can only use it in a task. -->
     <PropertyGroup>
-      <__IntermediateAdditionalPackageContentDir>$(IntermediateOutputPath)AdditionalPackageContent\</__IntermediateAdditionalPackageContentDir>
+      <_IntermediateAliasedContentDir>$(IntermediateOutputPath)AliasedContent\</_IntermediateAliasedContentDir>
     </PropertyGroup>
 
-    <!-- Now is the right time to actually evaluate sources for additional content package.
+    <!-- Now is the right time to actually evaluate sources for aliased content.
          All targets that depend on this target are executed after Build. -->
     <ItemGroup>
-      <__AdditionalPackageContentSourceProvisional Include="%(__AdditionalPackageContent.Source)" />
-      <__AdditionalPackageContentSource Include="@(__AdditionalPackageContentSourceProvisional->Distinct())" />
-      <__AdditionalPackageContentSourceProvisional Remove="@(__AdditionalPackageContentSourceProvisional)" /> <!-- Free up some memory -->
+      <_AliasedContentSource_NonDistinct Include="%(_AliasedContent.Source)" />
+      <_AliasedContentSource Include="@(_AliasedContentSource_NonDistinct-&gt;Distinct())" />
+      <_AliasedContentSource_NonDistinct Remove="@(_AliasedContentSource_NonDistinct)" /> <!-- Free up some memory -->
     </ItemGroup>
 
     <ItemGroup>
-      <__AdditionalPackageContentDestination Include="$([System.IO.Path]::Combine('$(__IntermediateAdditionalPackageContentDir)', '%(__AdditionalPackageContent.Identity)'))" />
+      <_AliasedContentDestination Include="$([System.IO.Path]::Combine('$(_IntermediateAliasedContentDir)', '%(_AliasedContent.Identity)'))" />
     </ItemGroup>
 
   </Target>
 
-  <Target Name="__CopyAdditionalPackageContentToIntermediateDirectory"
-          AfterTargets="Build"
-          DependsOnTargets="__ComputeAdditionalPackageContentPaths"
-          Inputs="@(__AdditionalPackageContentSource)"
-          Outputs="@(__AdditionalPackageContentDestination)">
+  <!-- Create an intermediate folder with aliased content. Folder layout must mimic package layout. -->
 
-    <MakeDir Directories="$(__IntermediateAdditionalPackageContentDir)" />
+  <Target Name="_CopyAliasedContentToIntermediateDirectory"
+          DependsOnTargets="_ComputeAliasedContentPaths"
+          Inputs="@(_AliasedContentSource)"
+          Outputs="@(_AliasedContentDestination)">
 
-    <Copy SourceFiles="%(__AdditionalPackageContent.Source)"
-          DestinationFiles="$([System.IO.Path]::Combine('$(__IntermediateAdditionalPackageContentDir)', '%(__AdditionalPackageContent.Identity)'))" />
+    <MakeDir Directories="$(_IntermediateAliasedContentDir)" />
+
+    <Copy SourceFiles="%(_AliasedContent.Source)"
+          DestinationFiles="$([System.IO.Path]::Combine('$(_IntermediateAliasedContentDir)', '%(_AliasedContent.Identity)'))" />
 
   </Target>
 
-  <!-- Clean additional package content intermediate directory -->
+  <!-- Clean aliased content intermediate directory on clean. -->
 
-  <Target Name="__CleanAdditionalPackageContentIntermediateDirectory"
+  <Target Name="_CleanAliasedContentIntermediateDirectory"
           AfterTargets="BeforeClean"
-          DependsOnTargets="__ComputeAdditionalPackageContentPaths">
+          DependsOnTargets="_CopyAliasedContentToIntermediateDirectory">
 
-    <RemoveDir Directories="$(__IntermediateAdditionalPackageContentDir)" />
+    <RemoveDir Directories="$(_IntermediateAliasedContentDir)" />
 
   </Target>
 
-  <!-- Include additional content in package -->
-
-  <!-- We need to execute __IncludeAdditionalContentInPackage before GenerateNuspec.
+  <!-- We need to execute _IncludeAliasedContentInPackage before GenerateNuspec.
        Declaring BeforeTargets="Pack" in our target is not sufficient, because Pack depends on GenerateNuspec,
        and dependency targets are executed before "before" targets.
        We cannot set PackDependsOn either, because NuGet.Build.Tasks.Pack.targets would later prepend GenerateNuspec to it.
        The only correct way is to add our target to BeforePack. -->
   <PropertyGroup>
-    <BeforePack>$(BeforePack);__IncludeAdditionalContentInPackage</BeforePack>
+    <BeforePack>$(BeforePack);_IncludeAliasedContentInPackage</BeforePack>
   </PropertyGroup>
 
-  <Target Name="__IncludeAdditionalContentInPackage" DependsOnTargets="__ComputeAdditionalPackageContentPaths">
+  <Target Name="_IncludeAliasedContentInPackage"
+          DependsOnTargets="_ComputeAliasedContentPaths;_CopyAliasedContentToIntermediateDirectory">
 
     <ItemGroup>
-      <BV_CopiedAdditionalPackageContent Include="$(__IntermediateAdditionalPackageContentDir)**\*" />
-      <Content Include="@(BV_CopiedAdditionalPackageContent)" Visible="false" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
+      <_CopiedAliasedContent Include="$(_IntermediateAliasedContentDir)**\*" />
+      <Content Include="@(_CopiedAliasedContent)" Visible="false" PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
+      <_CopiedAliasedContent Remove="@(_CopiedAliasedContent)" /> <!-- Free up some memory. -->
+    </ItemGroup>
+
+  </Target>
+
+  <!--
+    ================
+    PUBLISH BINARIES
+    ================
+  -->
+
+  <!-- NOTE @rdeago 2020-12-02
+       Do not include symbols in Release package.
+       Otherwise, .pdb files for published binaries will be in BOTH the .nupkg and .snupkg files.
+       This is maybe due to the fact that published binaries are packaged as content, not build output.
+       I've already wasted enough time investigating this. Help / suggestions welcome. -->
+
+  <PropertyGroup>
+    <IncludeSymbols Condition="'$(Configuration)' != 'Debug'">false</IncludeSymbols>
+  </PropertyGroup>
+
+  <!-- Define the list of projects to publish. -->
+
+  <ItemGroup>
+    <_BinaryProject Include="..\Buildvana.Sdk.Tasks\Buildvana.Sdk.Tasks.csproj" />
+  </ItemGroup>
+
+  <!-- During build, publish projects to this project's output directory. -->
+
+  <Target Name="PublishBinariesInOutputDirectory"
+          AfterTargets="CoreBuild">
+
+    <Message Importance="High" Text="*** Publishing binaries to $(OutputPath)" />
+
+    <!-- Publish binary projects.
+         Do not delete existing files, as some files are in common between projects and we don't want a second Publish to delete them. -->
+
+    <MSBuild Projects="%(_BinaryProject.Identity)"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);
+                         PublishProtocol=FileSystem;
+                         PublishDir=$(MSBuildProjectDirectory)\$(OutputPath);
+                         TargetFramework=$(TargetFramework);
+                         SelfContained=false;
+                         DeleteExistingFiles=false;
+                         ExcludeGeneratedDebugSymbols=false" />
+
+  </Target>
+
+  <!-- During pack, include published binaries as package content. -->
+
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>IncludePublishedBinariesInPackage</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <Target Name="IncludePublishedBinariesInPackage">
+
+    <ItemGroup>
+
+      <!-- Include published binaries. -->
+      <_PublishedBinaries Include="$(OutputPath)\**\*" />
+
+      <!-- Never include the automatically created .deps.json file. -->
+      <_PublishedBinaries Remove="$(OutputPath)\*.deps.json" />
+
+      <!-- Never include XML documentations and external annotations. -->
+      <_PublishedBinaries Remove="$(OutputPath)\**\*.xml" />
+
+      <!-- Don't include .pdb files in non-debug configurations (i.e. Release). -->
+      <_PublishedBinaries Remove="$(OutputPath)\**\*.pdb" Condition="'$(Configuration)' != 'Debug'" />
+
+      <TfmSpecificPackageFile Include="@(_PublishedBinaries)" PackagePath="bin\$(TargetFramework)\%(RecursiveDir)%(Filename)%(Extension)" />
+      <_PublishedBinaries Remove="@(_PublishedBinaries)" /> <!-- Free up some memory. -->
+
     </ItemGroup>
 
   </Target>

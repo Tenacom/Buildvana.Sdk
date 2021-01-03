@@ -15,6 +15,6 @@
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
-          Condition="$(GenerateThisAssemblyClass)" />
+          Condition="$(GenerateThisAssemblyClass) And $(BV_CompiledTasksAvailable)" />
 
 </Project>

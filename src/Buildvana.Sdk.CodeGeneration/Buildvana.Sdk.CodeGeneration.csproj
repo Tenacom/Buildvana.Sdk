@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Common properties -->
+
+  <PropertyGroup>
+    <Title>Buildvana SDK code generation classes</Title>
+    <Description>This assembly contains types used by Buildvana SDK. Documentation for the SDK is available here: https://github.com/Buildvana/Buildvana.Sdk/blob/master/README.md</Description>
+    <UseJetBrainsAnnotations>true</UseJetBrainsAnnotations>
+  </PropertyGroup>
+
+  <!-- References -->
+
+  <ItemGroup>
+    <PackageReference Include="IndexRange" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <PackageReference Include="Nullable" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Buildvana.Sdk.Core\Buildvana.Sdk.Core.csproj" />
+  </ItemGroup>
+
+</Project>
