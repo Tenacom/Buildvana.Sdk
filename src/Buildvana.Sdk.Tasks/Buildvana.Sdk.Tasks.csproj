@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Common properties -->
+
+  <PropertyGroup>
+    <Title>Buildvana SDK tasks</Title>
+    <Description>This assembly contains compiled tasks used by Buildvana SDK. Documentation for the SDK is available here: https://github.com/Buildvana/Buildvana.Sdk/blob/master/README.md</Description>
+    <UseJetBrainsAnnotations>true</UseJetBrainsAnnotations>
+  </PropertyGroup>
+
+  <!-- References -->
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" />
+    <PackageReference Include="Nullable" />
+  </ItemGroup>
+
+  <!-- Make all package references private -->
+
+  <ItemGroup>
+    <PackageReference Update="@(PackageReference)" ExcludeAssets="Runtime" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Buildvana.Sdk.CodeGeneration\Buildvana.Sdk.CodeGeneration.csproj" />
+    <ProjectReference Include="..\Buildvana.Sdk.Core\Buildvana.Sdk.Core.csproj" />
+  </ItemGroup>
+
+</Project>

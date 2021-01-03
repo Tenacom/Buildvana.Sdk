@@ -12,4 +12,8 @@
     <BV_VersionFileFullPathAutomatic>true</BV_VersionFileFullPathAutomatic>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(AutoPackageVersion)' != 'false'">
+    <AutoPackageVersion>true</AutoPackageVersion>
+  </PropertyGroup>
+
 </Project>

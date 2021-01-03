@@ -1,30 +1,62 @@
-<Project InitialTargets="BV_ParseVersionFile">
+<Project InitialTargets="BV_CheckForVersionFile;BV_ParseVersionFile">
 
-  <Target Name="BV_ParseVersionFile">
+  <PropertyGroup>
+    <BV_ParsedVersionPropsPath>$([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(BaseIntermediateOutputPath)ParsedVersion.props'))</BV_ParsedVersionPropsPath>
+    <BV_ParsedVersionPropsHasBeenImported>false</BV_ParsedVersionPropsHasBeenImported>
+  </PropertyGroup>
+
+  <!-- We have to decide whether to import ParsedVersion.props or parse the version file.
+       The trick here is that System.Io.File.GetLastWriteTime does not throw an exception
+       if the specified file does not exist: instead, it returns midnight, January 1, 1601 C.E. UTC,
+       which is certainly less than any existing file's last write time.
+       Hence for the Condition to be true ParsedVersion.props must exist and be newer than the version file.
+       File times are converted to ticks to make them comparable in a condition. -->
+  <Import Project="$(BV_ParsedVersionPropsPath)"
+          Condition="'$(VersionFileFullPath)' != '' And $([System.IO.File]::GetLastWriteTime('$(BV_ParsedVersionPropsPath)').Ticks) &gt; $([System.IO.File]::GetLastWriteTime('$(VersionFileFullPath)').Ticks)" />
+
+  <Target Name="BV_CheckForVersionFile">
 
     <Error Condition="'$(VersionFileFullPath)' == ''"
            Code="BVE1600"
            Text="Version file '$(VersionFileName)' not found." />
+
     <Error Condition="$(BV_VersionFileFullPathAutomatic) And !$(VersionFileFullPath.StartsWith('$(HomeDirectory)'))"
            Code="BVE1601"
            Text="Version file '$(VersionFileName)' found outside repository." />
+
     <Error Condition="!$([System.IO.File]::Exists('$(VersionFileFullPath)'))"
            Code="BVE1602"
            Text="Version file '$(VersionFileFullPath)' not found." />
 
-    <ParseVersionFile VersionFileFullPath="$(VersionFileFullPath)">
-      <Output TaskParameter="Version" PropertyName="Version" />
-      <Output TaskParameter="VersionPrefix" PropertyName="VersionPrefix" />
-      <Output TaskParameter="VersionSuffix" PropertyName="VersionSuffix" />
-      <Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />
-      <Output TaskParameter="AssemblyFileVersion" PropertyName="AssemblyFileVersion" />
-      <Output TaskParameter="AssemblyInformationalVersion" PropertyName="AssemblyInformationalVersion" />
-    </ParseVersionFile>
+  </Target>
 
+  <Target Name="BV_ParseVersionFile"
+          DependsOnTargets="BV_CoreParseVersionFile;BV_SetPropertiesDependentOnVersion;BV_AfterParseVersionFile" />
+
+  <!-- Dummy target for restore. -->
+  <Target Name="BV_CoreParseVersionFile" />
+
+  <!-- Import the "real" BV_CoreParseVersionFile target only when compiled tasks are available,
+       i.e. not during restore. -->
+  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
+          Condition="$(BV_CompiledTasksAvailable)" />
+
+  <Target Name="BV_SetPropertiesDependentOnVersion">
+
+    <!-- The AutoPackageVersion property can be set to false
+         to prevent PackageVersion being set to the value of Version. -->
     <PropertyGroup>
-      <PackageVersion>$(Version)</PackageVersion>
+      <PackageVersion Condition="'$(AutoPackageVersion)' != 'false'">$(Version)</PackageVersion>
     </PropertyGroup>
 
   </Target>
+
+  <!-- The AfterSetVersion property is a list of targets to call
+       as soon as the version file has been parsed.
+       A project may append one or more targets of its own,
+       e.g. to set some property that depends on Version. -->
+  <Target Name="BV_AfterParseVersionFile"
+          DependsOnTargets="$(AfterSetVersion)"
+          Condition="'$(AfterSetVersion)' != ''" />
 
 </Project>
