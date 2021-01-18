@@ -30,12 +30,15 @@
       <BV_GeneratedLiteralAssemblyInfoInputsCacheFile>$(IntermediateOutputPath)$(MSBuildProjectName).LiteralAssemblyInfoInputs.cache</BV_GeneratedLiteralAssemblyInfoInputsCacheFile>
     </PropertyGroup>
 
-    <!-- We only use up to _Parameter1 for most attributes, but other targets may add additional assembly attributes with multiple parameters. -->
-    <Hash ItemsToHash="@(LiteralAssemblyAttribute->'%(Identity)%(_Parameter1)%(_Parameter2)%(_Parameter3)%(_Parameter4)%(_Parameter5)%(_Parameter6)%(_Parameter7)%(_Parameter8)%(_Parameter9)%(_Parameter10)')">
-      <Output TaskParameter="HashResult" PropertyName="BV_LiteralAssemblyAttributesHash" />
-    </Hash>
+    <HashWithMetadata ItemsToHash="@(LiteralAssemblyAttribute)">
+      <Output TaskParameter="HashResult"
+              PropertyName="BV_LiteralAssemblyAttributesHash" />
+    </HashWithMetadata>
 
-    <WriteLinesToFile Lines="$(BV_LiteralAssemblyAttributesHash)" File="$(BV_GeneratedLiteralAssemblyInfoInputsCacheFile)" Overwrite="True" WriteOnlyWhenDifferent="True" />
+    <WriteLinesToFile Lines="$(BV_LiteralAssemblyAttributesHash)"
+                      File="$(BV_GeneratedLiteralAssemblyInfoInputsCacheFile)"
+                      Overwrite="True"
+                      WriteOnlyWhenDifferent="True" />
 
     <ItemGroup>
       <FileWrites Include="$(BV_GeneratedLiteralAssemblyInfoInputsCacheFile)" />
