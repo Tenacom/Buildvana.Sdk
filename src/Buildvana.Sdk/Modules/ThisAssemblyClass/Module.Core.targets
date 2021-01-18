@@ -64,9 +64,10 @@
       <BV_GeneratedThisAssemblyClassInputsCacheFile>$(IntermediateOutputPath)$(MSBuildProjectName).ThisAssemblyClassInputs.cache</BV_GeneratedThisAssemblyClassInputsCacheFile>
     </PropertyGroup>
 
-    <Hash ItemsToHash="@(ThisAssemblyConstant->'%(Identity)%(Type)%(Value)')">
-      <Output TaskParameter="HashResult" PropertyName="BV_ThisAssemblyConstantsHash" />
-    </Hash>
+    <HashWithMetadata ItemsToHash="@(ThisAssemblyConstant)">
+      <Output TaskParameter="HashResult"
+              PropertyName="BV_ThisAssemblyConstantsHash" />
+    </HashWithMetadata>
 
     <WriteLinesToFile Lines="$(BV_ThisAssemblyConstantsHash)"
                       File="$(BV_GeneratedThisAssemblyClassInputsCacheFile)"
