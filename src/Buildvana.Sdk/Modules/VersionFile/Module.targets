@@ -33,13 +33,40 @@
   <Target Name="BV_ParseVersionFile"
           DependsOnTargets="BV_CoreParseVersionFile;BV_SetPropertiesDependentOnVersion;BV_AfterParseVersionFile" />
 
-  <!-- Dummy target for restore. -->
-  <Target Name="BV_CoreParseVersionFile" />
+  <Target Name="BV_CoreParseVersionFile"
+          Condition="!$(BV_ParsedVersionPropsHasBeenImported)">
 
-  <!-- Import the "real" BV_CoreParseVersionFile target only when compiled tasks are available,
-       i.e. not during restore. -->
-  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
-          Condition="$(BV_CompiledTasksAvailable)" />
+    <ParseVersionFile VersionFileFullPath="$(VersionFileFullPath)">
+      <Output TaskParameter="Version" PropertyName="Version" />
+      <Output TaskParameter="VersionPrefix" PropertyName="VersionPrefix" />
+      <Output TaskParameter="VersionSuffix" PropertyName="VersionSuffix" />
+      <Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />
+      <Output TaskParameter="AssemblyFileVersion" PropertyName="AssemblyFileVersion" />
+      <Output TaskParameter="AssemblyInformationalVersion" PropertyName="AssemblyInformationalVersion" />
+    </ParseVersionFile>
+
+    <PropertyGroup>
+      <BV_ParsedVersionPropsXml>
+          <Project>
+            <PropertyGroup>
+              <Version>$(Version)</Version>
+              <VersionPrefix>$(VersionPrefix)</VersionPrefix>
+              <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+              <AssemblyVersion>$(AssemblyVersion)</AssemblyVersion>
+              <AssemblyFileVersion>$(AssemblyFileVersion)</AssemblyFileVersion>
+              <AssemblyInformationalVersion>$(AssemblyInformationalVersion)</AssemblyInformationalVersion>
+              <BV_ParsedVersionPropsHasBeenImported>true</BV_ParsedVersionPropsHasBeenImported>
+            </PropertyGroup>
+          </Project>
+      </BV_ParsedVersionPropsXml>
+    </PropertyGroup>
+
+    <WriteLinesToFile File="$(BV_ParsedVersionPropsPath)"
+                      Lines="$(BV_ParsedVersionPropsXml)"
+                      Overwrite="true"
+                      WriteOnlyWhenDifferent="false" />
+
+  </Target>
 
   <Target Name="BV_SetPropertiesDependentOnVersion">
 
