@@ -10,12 +10,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Buildvana.Sdk.CodeGeneration.Configuration;
+using Buildvana.Sdk.Tasks.Base;
 using Buildvana.Sdk.Tasks.Resources;
 using Buildvana.Sdk.Utilities;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
 
-namespace Buildvana.Sdk.Tasks.ThisAssemblyClass
+namespace Buildvana.Sdk.Tasks
 {
     public sealed class WriteThisAssemblyClass : BuildvanaSdkCodeGeneratorTask
     {

@@ -10,7 +10,7 @@
 using System;
 using Buildvana.Sdk.Utilities;
 
-namespace Buildvana.Sdk.Tasks
+namespace Buildvana.Sdk.Tasks.Base
 {
     public abstract class BuildvanaSdkIsolatedTask : ContextIsolatedTask
     {

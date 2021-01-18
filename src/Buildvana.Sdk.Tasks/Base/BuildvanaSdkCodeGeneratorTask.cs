@@ -17,7 +17,7 @@ using Buildvana.Sdk.Utilities;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
 
-namespace Buildvana.Sdk.Tasks
+namespace Buildvana.Sdk.Tasks.Base
 {
     public abstract class BuildvanaSdkCodeGeneratorTask : BuildvanaSdkIsolatedTask
     {

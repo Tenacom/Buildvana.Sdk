@@ -11,12 +11,13 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using Buildvana.Sdk.Tasks.Base;
 using Buildvana.Sdk.Tasks.Resources;
 using Buildvana.Sdk.Utilities;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
 
-namespace Buildvana.Sdk.Tasks.AssemblySigning
+namespace Buildvana.Sdk.Tasks
 {
     public sealed class ConvertPfxToSnk : BuildvanaSdkTask
     {
