@@ -85,8 +85,9 @@
   </PropertyGroup>
 
   <UsingTask TaskName="ConvertPfxToSnk" AssemblyFile="$(BV_SdkTasksAssembly)" />
-  <UsingTask TaskName="WriteLiteralAssemblyAttributes" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="HashWithMetadata" AssemblyFile="$(BV_SdkTasksAssembly)" />
   <UsingTask TaskName="ParseVersionFile" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="WriteLiteralAssemblyAttributes" AssemblyFile="$(BV_SdkTasksAssembly)" />
   <UsingTask TaskName="WriteThisAssemblyClass" AssemblyFile="$(BV_SdkTasksAssembly)" />
 
   <!-- Import BeforeCommon.props, Common.props, and AfterCommon.props files  -->
