@@ -19,7 +19,18 @@
 
   </Target>
 
-  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
-          Condition="$(BV_CompiledTasksAvailable)" />
+  <Target Name="BV_ConvertPfxToSnkBeforeBuild"
+          BeforeTargets="Build"
+          Condition="$(BV_ConvertPfxToSnk)">
+
+    <ConvertPfxToSnk PfxPath="$(AssemblyOriginatorKeyFile)"
+                     PfxPassword="$(PfxPassword)"
+                     OutputPath="$(BV_TempSnkPath)" />
+
+    <PropertyGroup>
+      <AssemblyOriginatorKeyFile>$(BV_TempSnkPath)</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
+
+  </Target>
 
 </Project>

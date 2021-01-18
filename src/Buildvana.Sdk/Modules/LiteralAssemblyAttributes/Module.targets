@@ -53,6 +53,6 @@
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
-          Condition="$(GenerateLiteralAssemblyInfo) And $(BV_CompiledTasksAvailable)" />
+          Condition="$(GenerateLiteralAssemblyInfo)" />
 
 </Project>

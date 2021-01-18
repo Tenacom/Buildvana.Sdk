@@ -54,13 +54,6 @@
     </When>
   </Choose>
 
-  <!-- Determine whether compiled tasks are available, i.e. Buildvana.Sdk.Binaries has been imported.
-       Modules have to know this to avoid importing any file using compiled tasks. -->
-  <PropertyGroup>
-    <BV_CompiledTasksAvailable>false</BV_CompiledTasksAvailable>
-    <BV_CompiledTasksAvailable Condition="'$(BV_SdkTasksAssembly)' != ''">true</BV_CompiledTasksAvailable>
-  </PropertyGroup>
-
   <!-- Import BeforeCommon.targets, Common.targets, and AfterCommon.targets files  -->
   <ImportGroup Condition="$(BV_IsConfigured)">
     <Import Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.targets.proj" />
