@@ -17,13 +17,9 @@ namespace Buildvana.Sdk.CodeGeneration.Configuration
     public static class GeneratedCodeExtensions
     {
         public static GeneratedCode WithCodeFragment(this GeneratedCode @this, CodeFragment fragment)
-#pragma warning disable SA1000 // new should be followed by a space - StyleCop doesn't understand new C# 9 syntax
             => new(@this.Language, @this.CodeFragments.Append(fragment));
-#pragma warning restore SA1000
 
         public static GeneratedCode WithCodeFragments(this GeneratedCode @this, IEnumerable<CodeFragment> fragments)
-#pragma warning disable SA1000 // new should be followed by a space - StyleCop doesn't understand new C# 9 syntax
             => new(@this.Language, @this.CodeFragments.Concat(fragments));
-#pragma warning restore SA1000
     }
 }

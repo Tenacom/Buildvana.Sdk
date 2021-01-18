@@ -21,9 +21,7 @@ namespace Buildvana.Sdk.Tasks.Internal
         // https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
         // https://regex101.com/r/Ly7O1x/3/
         // Adapted from PHP PCRE: ?P<group> -> ?<group>
-#pragma warning disable SA1000 // new should be followed by a space - StyleCop doesn't understand new C# 9 syntax
         private static readonly Regex SemVerRegex = new(
-#pragma warning restore SA1000
             @"^(?<major>0|[1-9]\d*)\." +
             @"(?<minor>0|[1-9]\d*)\." +
             @"(?<patch>0|[1-9]\d*)" +
