@@ -26,9 +26,7 @@ namespace Buildvana.Sdk.Tasks
     [PublicAPI]
     public abstract partial class ContextIsolatedTask : ICancelableTask
     {
-#pragma warning disable SA1000 // new should be followed by a space - StyleCop doesn't understand new C# 9 syntax
         private readonly CancellationTokenSource _cts = new();
-#pragma warning restore SA1000
 
         protected virtual string ManagedDllDirectory => Path.GetDirectoryName(new Uri(GetType().Assembly.Location).LocalPath)!;
 
