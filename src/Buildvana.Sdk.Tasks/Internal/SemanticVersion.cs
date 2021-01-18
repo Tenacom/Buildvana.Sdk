@@ -14,7 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
-namespace Buildvana.Sdk.Tasks.VersionFile.Internal
+namespace Buildvana.Sdk.Tasks.Internal
 {
     internal sealed class SemanticVersion
     {

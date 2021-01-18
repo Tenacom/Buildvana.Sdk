@@ -11,7 +11,7 @@ using System;
 using Buildvana.Sdk.Utilities;
 using Microsoft.Build.Utilities;
 
-namespace Buildvana.Sdk.Tasks
+namespace Buildvana.Sdk.Tasks.Base
 {
     public abstract class BuildvanaSdkTask : Task
     {

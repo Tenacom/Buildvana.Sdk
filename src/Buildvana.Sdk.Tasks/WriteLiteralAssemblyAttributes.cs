@@ -12,11 +12,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Buildvana.Sdk.CodeGeneration.Configuration;
+using Buildvana.Sdk.Tasks.Base;
 using Buildvana.Sdk.Tasks.Resources;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
 
-namespace Buildvana.Sdk.Tasks.LiteralAssemblyAttributes
+namespace Buildvana.Sdk.Tasks
 {
     public sealed class WriteLiteralAssemblyAttributes : BuildvanaSdkCodeGeneratorTask
     {

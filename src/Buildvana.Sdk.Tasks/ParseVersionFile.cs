@@ -9,11 +9,12 @@
 
 using System;
 using System.IO;
-using Buildvana.Sdk.Tasks.VersionFile.Internal;
+using Buildvana.Sdk.Tasks.Base;
+using Buildvana.Sdk.Tasks.Internal;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
 
-namespace Buildvana.Sdk.Tasks.VersionFile
+namespace Buildvana.Sdk.Tasks
 {
     public sealed class ParseVersionFile : BuildvanaSdkTask
     {
