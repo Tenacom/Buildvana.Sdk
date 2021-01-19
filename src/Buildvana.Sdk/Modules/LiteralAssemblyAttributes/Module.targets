@@ -1,8 +1,11 @@
 <Project>
 
-  <!-- Save the value of GenerateLiteralAssemblyInfo for later determination of whether to issue a warning. -->
+  <!-- Save the value of GenerateLiteralAssemblyInfo for later determination of whether to issue a warning.
+       Force to false if Language property is not set (happens with several auxiliary targets, e.g. _IsProjectRestoreSupported),
+       to avoid warning BVW1400 on projects in supported languages. -->
   <PropertyGroup>
     <BV_GenerateLiteralAssemblyInfo>$(GenerateLiteralAssemblyInfo)</BV_GenerateLiteralAssemblyInfo>
+    <BV_GenerateLiteralAssemblyInfo Condition="'$(Language)' == ''">false</BV_GenerateLiteralAssemblyInfo>
   </PropertyGroup>
 
   <!-- Coalesce GenerateLiteralAssemblyInfo to a boolean value; force to false for projects in unsupported languages. -->
