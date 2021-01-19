@@ -3,9 +3,14 @@
 set _VERBOSITY=detailed
 set _CONFIGURATION=Release
 
-set _MSBUILD_EXE="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
+set _VS_MSBUILD_EXE="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
 
 pushd "%~dp0"
+
+if /I "%1" equ "VS" (
+    set _VS=1
+    shift
+)
 
 set _TASK=%1
 if "%_TASK%"=="" set _TASK=All
@@ -54,19 +59,19 @@ exit /B %ERRORLEVEL%
 
 :T_Restore
 call :F_Label Restore dependencies
-if [%_MSBUILD_EXE%]==[] (
+if [%_VS%]==[] (
     call :F_Exec dotnet restore --verbosity %_VERBOSITY%
 ) else (
-    call :F_Exec %_MSBUILD_EXE% -t:restore -v:%_VERBOSITY%
+    call :F_Exec %_VS_MSBUILD_EXE% -t:restore -v:%_VERBOSITY%
 )
 exit /B %ERRORLEVEL%
 
 :T_Build
 call :F_Label Build solution
-if [%_MSBUILD_EXE%]==[] (
+if [%_VS%]==[] (
     call :F_Exec dotnet build --no-restore -MaxCpuCount:1 -c %_CONFIGURATION% --verbosity %_VERBOSITY%
 ) else (
-    call :F_Exec %_MSBUILD_EXE% -t:build -restore:False -MaxCpuCount:1 -p:Configuration=%_CONFIGURATION% -v:%_VERBOSITY%
+    call :F_Exec %_VS_MSBUILD_EXE% -t:build -restore:False -MaxCpuCount:1 -p:Configuration=%_CONFIGURATION% -v:%_VERBOSITY%
 )
 exit /B %ERRORLEVEL%
 
