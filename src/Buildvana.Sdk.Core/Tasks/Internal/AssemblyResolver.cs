@@ -10,7 +10,9 @@
 #if NETFRAMEWORK
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Buildvana.Sdk.Utilities;
 
@@ -20,49 +22,47 @@ namespace Buildvana.Sdk.Tasks.Internal
     internal sealed class AssemblyResolver : MarshalByRefObject, IDisposable
 #pragma warning restore CA1812
     {
-        public AssemblyResolver(string prefix, string directory)
+        private AssemblyResolver(string[] directories)
         {
-            Prefix = prefix;
-            Directory = directory;
+            Directories = directories;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
-        private string Prefix { get; }
+        private IEnumerable<string> Directories { get; }
 
-        private string Directory { get; }
-
-        public static IDisposable Install(AppDomain appDomain, string prefix, string directory)
+        public static AssemblyResolver Install(AppDomain appDomain, params string[] directories)
             => (AssemblyResolver)appDomain.CreateInstanceAndUnwrap(
                 Assembly.GetExecutingAssembly().FullName,
                 typeof(AssemblyResolver).FullName,
                 false,
-                BindingFlags.Default,
+                BindingFlags.Instance | BindingFlags.NonPublic,
                 null,
-                new object[] { prefix, directory },
+                new object[] { directories },
                 null,
                 null);
+
+        public static AssemblyResolver Install(AppDomain appDomain, IEnumerable<string> directories)
+            => Install(appDomain, directories.ToArray());
 
         public void Dispose() => AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
 
         private Assembly? CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            if (!args.Name.StartsWith(Prefix, StringComparison.OrdinalIgnoreCase))
+            var assemblyName = new AssemblyName(args.Name);
+            var simpleName = assemblyName.Name;
+            var dllPaths = Directories
+                .Select(directory => Path.Combine(directory, simpleName + ".dll"))
+                .Where(File.Exists);
+            foreach (var dllPath in dllPaths)
             {
-                return null;
-            }
-
-            try
-            {
-                var assemblyName = new AssemblyName(args.Name);
-                var simpleName = assemblyName.Name;
-                var dllPath = Path.Combine(Directory, simpleName + ".dll");
-                if (File.Exists(dllPath))
+                try
                 {
                     return Assembly.LoadFile(dllPath);
                 }
-            }
-            catch (Exception e) when (!e.IsCriticalException())
-            {
+                catch (Exception e) when (!e.IsCriticalException())
+                {
+                    // Nothing to do
+                }
             }
 
             return null;

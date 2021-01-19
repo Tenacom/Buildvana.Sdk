@@ -61,7 +61,6 @@ namespace Buildvana.Sdk.Tasks
 
                 using var resolver = AssemblyResolver.Install(
                     appDomain,
-                    "Microsoft.Build",
                     Path.GetDirectoryName(new Uri(typeof(AppDomainIsolatedTask).Assembly.Location).LocalPath)!);
 
                 var taskType = GetType();
