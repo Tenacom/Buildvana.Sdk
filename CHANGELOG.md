@@ -13,14 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
+### Known problems introduced by this release
+
+## [1.0.0-alpha.11](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.11) (2021-01-19)
+
+### Bugs fixed in this release
+
 - https://github.com/Buildvana/Buildvana.Sdk/pull/72 - False-positive BVW1400 and/or BVW1900 warnings are not raised any more.
 - https://github.com/Buildvana/Buildvana.Sdk/pull/72 - Properties `GenerateAssemblyCLSCompliantAttribute` and `GenerateAssemblyComVisibleAttribute` are not set any more if `GenerateLiteralAssemblyInfo` is set to `false`.
 - https://github.com/Buildvana/Buildvana.Sdk/pull/72 - `LiteralAssemblyAttribute` items are not generated any more if `GenerateLiteralAssemblyInfo` is set to `false`.
 - https://github.com/Buildvana/Buildvana.Sdk/pull/72 - Warning CS3021 ("'type' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute") is not suppressed any more if `GenerateLiteralAssemblyInfo` is set to `false`.
 - https://github.com/Buildvana/Buildvana.Sdk/pull/72 - Literal assembly attributes are now correctly regenerated if an attribute's named parameter changes.
 - https://github.com/Buildvana/Buildvana.Sdk/pull/72 - `WriteLiteralAssemblyAttributes` and `WriteThisAssemblyClass` tasks are now correctly unloaded after execution.
-
-### Known problems introduced by this release
 
 ## [1.0.0-alpha.10](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.10) (2021-01-03)
 
