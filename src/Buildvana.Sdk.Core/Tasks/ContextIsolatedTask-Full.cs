@@ -13,7 +13,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using Buildvana.Sdk.Tasks.Internal;
 using Buildvana.Sdk.Utilities;
 using JetBrains.Annotations;
@@ -29,8 +28,6 @@ namespace Buildvana.Sdk.Tasks
     // See THIRD-PARTY-NOTICES in the repository root for more information.
     public abstract partial class ContextIsolatedTask : AppDomainIsolatedTask // We need MarshalByRefObject -- we don't care for MSBuild's AppDomain though.
     {
-        private readonly ThreadLocal<bool> _resolvingAssembly = new();
-
         public sealed override bool Execute()
         {
             // We have to hook our own AppDomain so that the TransparentProxy works properly.
@@ -92,13 +89,6 @@ namespace Buildvana.Sdk.Tasks
 
         private Assembly? CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            if (_resolvingAssembly.Value)
-            {
-                // Guard against stack overflow exceptions.
-                return null;
-            }
-
-            _resolvingAssembly.Value = true;
             try
             {
                 return Assembly.Load(args.Name);
@@ -106,10 +96,6 @@ namespace Buildvana.Sdk.Tasks
             catch (Exception e) when (!e.IsCriticalException())
             {
                 return null;
-            }
-            finally
-            {
-                _resolvingAssembly.Value = false;
             }
         }
     }
