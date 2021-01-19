@@ -73,7 +73,8 @@ exit /B %ERRORLEVEL%
 :: SUB-ROUTINES
 
 :F_Zap
-rmdir /S /Q artifacts
+rmdir /S /Q artifacts >nul 2>&1
+rmdir /S /Q _ReSharper.Caches >nul 2>&1
 for /F "tokens=*" %%G in ('dir /B /AD /S bin ^& dir /B /AD /S obj') do rmdir /S /Q "%%G"
 exit /B 0
 
