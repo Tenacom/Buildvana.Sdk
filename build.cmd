@@ -1,6 +1,6 @@
 @echo off & setlocal enableextensions
 
-set _VERBOSITY=detailed
+set _VERBOSITY=normal
 set _CONFIGURATION=Release
 
 set _VS_MSBUILD_EXE="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
