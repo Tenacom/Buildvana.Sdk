@@ -33,11 +33,18 @@ namespace Buildvana.Sdk.Tasks
             {
                 var taskAssemblyPath = new Uri(GetType().Assembly.Location).LocalPath;
                 _context = new CustomAssemblyLoader(this);
-                var inContextAssembly = _context.LoadFromAssemblyPath(taskAssemblyPath);
-                var innerTaskType = inContextAssembly.GetType(GetType().FullName!);
+                try
+                {
+                    var inContextAssembly = _context.LoadFromAssemblyPath(taskAssemblyPath);
+                    var innerTaskType = inContextAssembly.GetType(GetType().FullName!);
 
-                var innerTask = Activator.CreateInstance(innerTaskType!);
-                return ExecuteInnerTask(innerTask!);
+                    var innerTask = Activator.CreateInstance(innerTaskType!);
+                    return ExecuteInnerTask(innerTask!);
+                }
+                finally
+                {
+                    _context.Unload();
+                }
             }
             catch (OperationCanceledException)
             {
@@ -61,6 +68,7 @@ namespace Buildvana.Sdk.Tasks
             private readonly ContextIsolatedTask _loaderTask;
 
             internal CustomAssemblyLoader(ContextIsolatedTask loaderTask)
+                : base("ContextIsolatedTask: " + loaderTask.GetType().Name, true)
             {
                 _loaderTask = loaderTask;
             }

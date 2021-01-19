@@ -55,21 +55,27 @@ namespace Buildvana.Sdk.Tasks
                     ConfigurationFile = pathToTaskAssembly + ".config",
                 };
                 var appDomain = AppDomain.CreateDomain("ContextIsolatedTask: " + GetType().Name, AppDomain.CurrentDomain.Evidence, appDomainSetup);
-
-                using var resolver = AssemblyResolver.Install(
-                    appDomain,
-                    Path.GetDirectoryName(new Uri(typeof(AppDomainIsolatedTask).Assembly.Location).LocalPath)!);
-
-                var taskType = GetType();
-                var assemblyName = taskType.Assembly.FullName;
-                var typeName = taskType.FullName!;
-                var innerTask = (ContextIsolatedTask?)Activator.CreateInstance(assemblyName, typeName)?.Unwrap();
-                if (innerTask == null)
+                try
                 {
-                    throw new TypeLoadException($"Cannot create an instance of '{typeName}' from '{assemblyName}'.");
-                }
+                    using var resolver = AssemblyResolver.Install(
+                        appDomain,
+                        Path.GetDirectoryName(new Uri(typeof(AppDomainIsolatedTask).Assembly.Location).LocalPath)!);
 
-                return ExecuteInnerTask(innerTask);
+                    var taskType = GetType();
+                    var assemblyName = taskType.Assembly.FullName;
+                    var typeName = taskType.FullName!;
+                    var innerTask = (ContextIsolatedTask?)Activator.CreateInstance(assemblyName, typeName)?.Unwrap();
+                    if (innerTask == null)
+                    {
+                        throw new TypeLoadException($"Cannot create an instance of '{typeName}' from '{assemblyName}'.");
+                    }
+
+                    return ExecuteInnerTask(innerTask);
+                }
+                finally
+                {
+                    AppDomain.Unload(appDomain);
+                }
             }
             catch (OperationCanceledException)
             {
