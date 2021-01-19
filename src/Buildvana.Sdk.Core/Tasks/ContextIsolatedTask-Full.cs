@@ -13,6 +13,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
+using System.Security;
 using Buildvana.Sdk.Tasks.Internal;
 using Buildvana.Sdk.Utilities;
 using JetBrains.Annotations;
@@ -26,9 +28,44 @@ namespace Buildvana.Sdk.Tasks
     // This file has been modified from the original form.
     // Original file: https://github.com/AArnott/Nerdbank.MSBuildExtension/blob/master/src/Nerdbank.MSBuildExtension/net45/ContextIsolatedTask.cs
     // See THIRD-PARTY-NOTICES in the repository root for more information.
-    public abstract partial class ContextIsolatedTask : AppDomainIsolatedTask // We need MarshalByRefObject -- we don't care for MSBuild's AppDomain though.
+    public abstract partial class ContextIsolatedTask : MarshalByRefObject, ITask
     {
-        public sealed override bool Execute()
+        protected ContextIsolatedTask()
+        {
+            Log = new TaskLoggingHelper(this);
+        }
+
+        protected ContextIsolatedTask(ResourceManager taskResources)
+            : this()
+        {
+            Log.TaskResources = taskResources;
+        }
+
+        protected ContextIsolatedTask(ResourceManager taskResources, string helpKeywordPrefix)
+            : this(taskResources)
+        {
+            Log.HelpKeywordPrefix = helpKeywordPrefix;
+        }
+
+        public IBuildEngine BuildEngine { get; set; } = null!; // Set externally after construction
+
+        public ITaskHost HostObject { get; set; } = null!; // Set externally after construction
+
+        public TaskLoggingHelper Log { get; }
+
+        protected ResourceManager TaskResources
+        {
+            get => Log.TaskResources;
+            set => Log.TaskResources = value;
+        }
+
+        protected string HelpKeywordPrefix
+        {
+            get => Log.HelpKeywordPrefix;
+            set => Log.HelpKeywordPrefix = value;
+        }
+
+        public bool Execute()
         {
             // We have to hook our own AppDomain so that the TransparentProxy works properly.
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
@@ -59,7 +96,7 @@ namespace Buildvana.Sdk.Tasks
                 {
                     using var resolver = AssemblyResolver.Install(
                         appDomain,
-                        Path.GetDirectoryName(new Uri(typeof(AppDomainIsolatedTask).Assembly.Location).LocalPath)!);
+                        Path.GetDirectoryName(new Uri(typeof(ITask).Assembly.Location).LocalPath)!);
 
                     var taskType = GetType();
                     var assemblyName = taskType.Assembly.FullName;
@@ -87,6 +124,9 @@ namespace Buildvana.Sdk.Tasks
                 AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
             }
         }
+
+        [SecurityCritical]
+        public override object? InitializeLifetimeService() => null; // null means infinite lease time
 
 #pragma warning disable CA1822 // Mark members as static - This is for consistency with .NET Core code
         [PublicAPI]
