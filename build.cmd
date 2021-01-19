@@ -1,5 +1,10 @@
 @echo off & setlocal enableextensions
 
+set _VERBOSITY=detailed
+set _CONFIGURATION=Release
+
+set _MSBUILD_EXE="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
+
 pushd "%~dp0"
 
 set _TASK=%1
@@ -31,9 +36,6 @@ exit /B %ERRORLEVEL%
 set _LOGFILE=build.log
 if exist %_LOGFILE% del %_LOGFILE%
 
-set _MSBUILD_OPTIONS=--verbosity normal
-set _CONFIGURATION=Release
-
 call :F_Timestamp
 
 :L_Run_Tasks_Loop
@@ -52,22 +54,30 @@ exit /B %ERRORLEVEL%
 
 :T_Restore
 call :F_Label Restore dependencies
-call :F_Exec dotnet restore %_MSBUILD_OPTIONS%
+if [%_MSBUILD_EXE%]==[] (
+    call :F_Exec dotnet restore --verbosity %_VERBOSITY%
+) else (
+    call :F_Exec %_MSBUILD_EXE% -t:restore -v:%_VERBOSITY%
+)
 exit /B %ERRORLEVEL%
 
 :T_Build
 call :F_Label Build solution
-call :F_Exec dotnet build --no-restore -MaxCpuCount:1 -c %_CONFIGURATION% %_MSBUILD_OPTIONS%
+if [%_MSBUILD_EXE%]==[] (
+    call :F_Exec dotnet build --no-restore -MaxCpuCount:1 -c %_CONFIGURATION% --verbosity %_VERBOSITY%
+) else (
+    call :F_Exec %_MSBUILD_EXE% -t:build -restore:False -MaxCpuCount:1 -p:Configuration=%_CONFIGURATION% -v:%_VERBOSITY%
+)
 exit /B %ERRORLEVEL%
 
 :T_Test
 call :F_Label Run tests
-call :F_Exec dotnet test --no-build -c %_CONFIGURATION% %_MSBUILD_OPTIONS%
+call :F_Exec dotnet test --no-build -c %_CONFIGURATION% --verbosity %_VERBOSITY%
 exit /B %ERRORLEVEL%
 
 :T_Pack
-call :F_Label Prepare NuGet packages
-call :F_Exec dotnet pack --no-build -c %_CONFIGURATION% %_MSBUILD_OPTIONS%
+call :F_Label Prepare for distribution
+call :F_Exec dotnet pack --no-restore -MaxCpuCount:1 -c %_CONFIGURATION% --verbosity %_VERBOSITY%
 exit /B %ERRORLEVEL%
 
 :: SUB-ROUTINES
