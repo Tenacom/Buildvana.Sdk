@@ -1,8 +1,11 @@
 <Project>
 
-  <!-- Coalesce GenerateThisAssemblyClass to a boolean value, defaulting to false. -->
+  <!-- Coalesce GenerateThisAssemblyClass to a boolean value, defaulting to false.
+       Force to false if Language property is not set (happens with several auxiliary targets, e.g. _IsProjectRestoreSupported),
+       to avoid warning BVW1900 on projects in supported languages. -->
   <PropertyGroup>
     <GenerateThisAssemblyClass Condition="'$(GenerateThisAssemblyClass)' != 'true'">false</GenerateThisAssemblyClass>
+    <GenerateThisAssemblyClass Condition="'$(Language)' == ''">false</GenerateThisAssemblyClass>
   </PropertyGroup>
 
   <!-- Issue a warning if GenerateThisAssemblyClass is set to true for a project in an unsupported language.
