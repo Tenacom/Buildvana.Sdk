@@ -204,8 +204,6 @@
   <Target Name="PublishBinariesInOutputDirectory"
           AfterTargets="CoreBuild">
 
-    <Message Importance="High" Text="*** Publishing binaries to $(OutputPath)" />
-
     <!-- Publish binary projects.
          Do not delete existing files, as some files are in common between projects and we don't want a second Publish to delete them. -->
 
