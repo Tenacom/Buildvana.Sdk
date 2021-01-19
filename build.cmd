@@ -82,7 +82,11 @@ exit /B %ERRORLEVEL%
 
 :T_Pack
 call :F_Label Prepare for distribution
-call :F_Exec dotnet pack --no-restore -MaxCpuCount:1 -c %_CONFIGURATION% --verbosity %_VERBOSITY%
+if [%_VS%]==[] (
+    call :F_Exec dotnet pack --no-restore -MaxCpuCount:1 -c %_CONFIGURATION% --verbosity %_VERBOSITY%
+) else (
+    call :F_Exec %_VS_MSBUILD_EXE% -t:pack -restore:False -MaxCpuCount:1 -p:Configuration=%_CONFIGURATION% -v:%_VERBOSITY%
+)
 exit /B %ERRORLEVEL%
 
 :: SUB-ROUTINES
