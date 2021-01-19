@@ -13,9 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
-- https://github.com/Buildvana/Buildvana.Sdk/pull/74 - Projects using Buildvana SDK now work with Omnisharp in VS Code.
-
 ### Known problems introduced by this release
+
+## [1.0.0-alpha.12](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.12) (2021-01-19)
+
+### Bugs fixed in this release
+
+- https://github.com/Buildvana/Buildvana.Sdk/pull/74 - Projects using Buildvana SDK now work with Omnisharp in VS Code.
 
 ## [1.0.0-alpha.11](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.11) (2021-01-19)
 
