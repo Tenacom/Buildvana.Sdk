@@ -114,17 +114,17 @@ exit /B %ERRORLEVEL%
 
 :T_Build
 call :F_Label Build solution
-call :F_Exec dotnet build --no-restore -MaxCpuCount:1 -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
+call :F_Exec dotnet build -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% --no-restore -maxCpuCount:1 %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
 
 :T_VS_Build
 call :F_Label Build solution
-call :F_Exec %_VS_MSBUILD_EXE% -t:build -restore:False -MaxCpuCount:1 -p:Configuration=%_MSBUILD_CONFIGURATION% -v:%_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
+call :F_Exec %_VS_MSBUILD_EXE% -t:build -p:Configuration=%_MSBUILD_CONFIGURATION% -v:%_MSBUILD_VERBOSITY% -restore:False -maxCpuCount:1 %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
 
 :T_Test
-call :F_Label Run tests
-call :F_Exec dotnet test --no-build -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
+call :F_Label Run unit tests
+call :F_Exec dotnet test -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% --no-build %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
 
 :T_VS_Test
@@ -132,12 +132,12 @@ exit /B 0
 
 :T_Pack
 call :F_Label Prepare for distribution
-call :F_Exec dotnet pack --no-restore -MaxCpuCount:1 -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
+call :F_Exec dotnet pack -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% --no-restore -maxCpuCount:1 %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
 
 :T_VS_Pack
 call :F_Label Prepare for distribution
-call :F_Exec %_VS_MSBUILD_EXE% -t:pack -restore:False -MaxCpuCount:1 -p:Configuration=%_MSBUILD_CONFIGURATION% -v:%_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
+call :F_Exec %_VS_MSBUILD_EXE% -t:pack -p:Configuration=%_MSBUILD_CONFIGURATION% -v:%_MSBUILD_VERBOSITY% -restore:False -maxCpuCount:1 %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
 
 :: SUB-ROUTINES
