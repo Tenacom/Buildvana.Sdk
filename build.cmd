@@ -1,34 +1,61 @@
 @echo off & setlocal enableextensions
-
-set _VERBOSITY=normal
-set _CONFIGURATION=Release
-
-set _VS_MSBUILD_EXE="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
-
 pushd "%~dp0"
 
+:: Configuration values
+set _SOLUTION_NAME=
+set _DEFAULT_TASK=
+set _MSBUILD_CONFIGURATION=
+set _MSBUILD_VERBOSITY=
+set _MSBUILD_OPTIONS=
+set _VS_MSBUILD_EXE=
+
+:: Load configuration
+if exist build-config.cmd call build-config.cmd
+
+:: Default for solution name is the same name as containing folder, including extension
+if "%_SOLUTION_NAME%" == "" call :F_SetToCurrentDirectoryName _SOLUTION_NAME
+set _SOLUTION_FILE=%_SOLUTION_NAME%.sln
+if not exist "%_SOLUTION_FILE%" (
+    echo *** Solution file '%_SOLUTION_FILE%' not found.
+    exit /B 1
+)
+
+:: Other default configuration values
+if "%_DEFAULT_TASK%"=="" set _DEFAULT_TASK=All
+if "%_MSBUILD_CONFIGURATION%"=="" set _MSBUILD_CONFIGURATION=Release
+if "%_MSBUILD_VERBOSITY%"=="" set _MSBUILD_VERBOSITY=normal
+if "%_MSBUILD_OPTIONS%"=="" set _MSBUILD_OPTIONS=
+if "%_VS_MSBUILD_EXE%"=="" set _VS_MSBUILD_EXE="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
+
+:: Use VisualStudio's MSBuild if specified
 if /I "%1" equ "VS" (
     set _VS=1
     shift
 )
 
+:: Task to run
 set _TASK=%1
-if "%_TASK%"=="" set _TASK=All
+if "%_TASK%"=="" set _TASK=%_DEFAULT_TASK%
 
+:: Define task dependencies
 if /I "%_TASK%"=="Clean" (
     call :F_Run_Tasks Clean
+) else if /I "%_TASK%"=="Tools" (
+    call :F_Run_Tasks Clean Tools
 ) else if /I "%_TASK%"=="Restore" (
-    call :F_Run_Tasks Clean Restore
+    call :F_Run_Tasks Clean Tools Restore
+) else if /I "%_TASK%"=="Inspect" (
+    call :F_Run_Tasks Clean Tools Restore Inspect
 ) else if /I "%_TASK%"=="Build" (
-    call :F_Run_Tasks Clean Restore Build
+    call :F_Run_Tasks Clean Tools Restore Inspect Build
 ) else if /I "%_TASK%"=="Test" (
-    call :F_Run_Tasks Clean Restore Build Test
+    call :F_Run_Tasks Clean Tools Restore Inspect Build Test
 ) else if /I "%_TASK%"=="Pack" (
-    call :F_Run_Tasks Clean Restore Build Test Pack
+    call :F_Run_Tasks Clean Tools Restore Inspect Build Test Pack
 ) else if /I "%_TASK%"=="All" (
-    call :F_Run_Tasks Clean Restore Build Test Pack
+    call :F_Run_Tasks Clean Tools Restore Inspect Build Test Pack
 ) else (
-    echo *** Unknown task '%1'
+    echo *** Unknown task '%_TASK%'
 )
 
 popd
@@ -45,7 +72,7 @@ call :F_Timestamp
 
 :L_Run_Tasks_Loop
 if "%1"=="" exit /B 0
-call :T_%1
+if "%_VS%" == "" ( call :T_%1 ) else ( call :T_VS_%1 )
 if errorlevel 1 exit /B %ERRORLEVEL%
 shift
 goto :L_Run_Tasks_Loop
@@ -53,40 +80,64 @@ goto :L_Run_Tasks_Loop
 :: TASKS
 
 :T_Clean
+:T_VS_Clean
 call :F_Label Clean output directories
 call :F_Exec call :F_Zap
 exit /B %ERRORLEVEL%
 
+:T_Tools
+call :F_Label Restore .NET CLI tools
+call :F_Exec dotnet tool restore
+exit /B %ERRORLEVEL%
+
+:T_VS_Tools
+exit /B 0
+
+:T_Inspect
+call :F_Label Inspect code with ReSharper tools
+call :F_Exec dotnet jb inspectcode "%_SOLUTION_FILE%" --output=inspect.log --format=Text
+call :F_Exec dotnet jb dupfinder "%_SOLUTION_FILE%" --output=dupfinder.log.xml
+exit /B %ERRORLEVEL%
+
+:T_VS_Inspect
+exit /B 0
+
 :T_Restore
 call :F_Label Restore dependencies
-if [%_VS%]==[] (
-    call :F_Exec dotnet restore --verbosity %_VERBOSITY%
-) else (
-    call :F_Exec %_VS_MSBUILD_EXE% -t:restore -v:%_VERBOSITY%
-)
+call :F_Exec dotnet restore --verbosity %_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
+exit /B %ERRORLEVEL%
+
+:T_VS_Restore
+call :F_Label Restore dependencies
+call :F_Exec %_VS_MSBUILD_EXE% -t:restore -v:%_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
 
 :T_Build
 call :F_Label Build solution
-if [%_VS%]==[] (
-    call :F_Exec dotnet build --no-restore -MaxCpuCount:1 -c %_CONFIGURATION% --verbosity %_VERBOSITY%
-) else (
-    call :F_Exec %_VS_MSBUILD_EXE% -t:build -restore:False -MaxCpuCount:1 -p:Configuration=%_CONFIGURATION% -v:%_VERBOSITY%
-)
+call :F_Exec dotnet build --no-restore -MaxCpuCount:1 -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
+exit /B %ERRORLEVEL%
+
+:T_VS_Build
+call :F_Label Build solution
+call :F_Exec %_VS_MSBUILD_EXE% -t:build -restore:False -MaxCpuCount:1 -p:Configuration=%_MSBUILD_CONFIGURATION% -v:%_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
 
 :T_Test
 call :F_Label Run tests
-call :F_Exec dotnet test --no-build -c %_CONFIGURATION% --verbosity %_VERBOSITY%
+call :F_Exec dotnet test --no-build -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
+
+:T_VS_Test
+exit /B 0
 
 :T_Pack
 call :F_Label Prepare for distribution
-if [%_VS%]==[] (
-    call :F_Exec dotnet pack --no-restore -MaxCpuCount:1 -c %_CONFIGURATION% --verbosity %_VERBOSITY%
-) else (
-    call :F_Exec %_VS_MSBUILD_EXE% -t:pack -restore:False -MaxCpuCount:1 -p:Configuration=%_CONFIGURATION% -v:%_VERBOSITY%
-)
+call :F_Exec dotnet pack --no-restore -MaxCpuCount:1 -c %_MSBUILD_CONFIGURATION% --verbosity %_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
+exit /B %ERRORLEVEL%
+
+:T_VS_Pack
+call :F_Label Prepare for distribution
+call :F_Exec %_VS_MSBUILD_EXE% -t:pack -restore:False -MaxCpuCount:1 -p:Configuration=%_MSBUILD_CONFIGURATION% -v:%_MSBUILD_VERBOSITY% %_MSBUILD_OPTIONS%
 exit /B %ERRORLEVEL%
 
 :: SUB-ROUTINES
@@ -113,7 +164,7 @@ exit /B 0
 
 :F_Timestamp_Core
 echo.
-echo ===^>^>^> %DATE% %TIME%
+echo ===^>^>^> '%_SOLUTION_NAME%'   %DATE% %TIME%
 exit /B 0
 
 :F_Label
@@ -135,6 +186,14 @@ exit /B 0
 :F_Display_Errorlevel_Core
 echo ^*^*^* ERRORLEVEL = %1
 echo.
+exit /B 0
+
+:F_SetToCurrentDirectoryName
+call :F_SetToCurrentDirectoryName_Core %1 "%CD%"
+exit /B 0
+
+:F_SetToCurrentDirectoryName_Core
+set %1=%~nx2
 exit /B 0
 
 :: EOF
