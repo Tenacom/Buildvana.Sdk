@@ -1,0 +1,197 @@
+{
+  // Editor
+  // Insert snippets when their prefix matches. Works best when 'quickSuggestions' aren't enabled.
+  "editor.tabCompletion": "on",
+  // Controls the display of line numbers. Possible values are 'on', 'off', and 'relative'. 'relative' shows the line count from the current cursor position.
+  "editor.lineNumbers": "on",
+  // The number of spaces a tab is equal to. This setting is overriden based on the file contents when `editor.detectIndentation` is on.
+  "editor.tabSize": 4,
+  // Insert spaces when pressing Tab. This setting is overriden based on the file contents when `editor.detectIndentation` is on.
+  "editor.insertSpaces": true,
+  // When opening a file, `editor.tabSize` and `editor.insertSpaces` will be detected based on the file contents.
+  "editor.detectIndentation": false,
+  // Controls if we seed the search string in Find Widget from editor selection
+  "editor.find.seedSearchStringFromSelection": true,
+  // Controls if Find in Selection flag is turned on when multiple characters or lines of text are selected in the editor
+  "editor.find.autoFindInSelection": "multiline",
+  // Controls how lines should wrap. Can be:
+  //  - 'off' (disable wrapping),
+  //  - 'on' (viewport wrapping),
+  //  - 'wordWrapColumn' (wrap at `editor.wordWrapColumn`) or
+  //  - 'bounded' (wrap at minimum of viewport and `editor.wordWrapColumn`).
+  "editor.wordWrap": "off",
+  // Controls the wrapping column of the editor when `editor.wordWrap` is 'wordWrapColumn' or 'bounded'.
+  "editor.wordWrapColumn": 80,
+  // Controls the indentation of wrapped lines. Can be one of 'none', 'same' or 'indent'.
+  "editor.wrappingIndent": "same",
+  // Controls if suggestions should automatically show up while typing
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+  // Controls if the editor should automatically close brackets after opening them
+  "editor.autoClosingBrackets": "languageDefined",
+  // Controls if the editor should automatically format the line after typing
+  "editor.formatOnType": false,
+  // Controls if the editor should automatically format the pasted content. A formatter must be available and the formatter should be able to format a range in a document.
+  "editor.formatOnPaste": false,
+  // Controls if the editor should automatically adjust the indentation when users type, paste or move lines. Indentation rules of the language must be available.
+  "editor.autoIndent": "full",
+  // Remove trailing auto inserted whitespace
+  "editor.trimAutoWhitespace": true,
+  // Keep peek editors open even when double clicking their content or when hitting Escape.
+  "editor.stablePeek": false,
+  // Controls if the editor should allow to move selections via drag and drop.
+  "editor.dragAndDrop": true,
+  // Controls whether the editor should run in a mode where it is optimized for screen readers.
+  "editor.accessibilitySupport": "auto",
+  // Controls whether the editor should detect links and make them clickable
+  "editor.links": true,
+  // Controls whether the editor should render the inline color decorators and color picker.
+  "editor.colorDecorators": true,
+  // Controls if the diff editor shows the diff side by side or inline
+  "diffEditor.renderSideBySide": true,
+  // Controls if the diff editor shows changes in leading or trailing whitespace as diffs
+  "diffEditor.ignoreTrimWhitespace": true,
+  // Controls if the diff editor shows +/- indicators for added/removed changes
+  "diffEditor.renderIndicators": true,
+  // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
+  "editor.formatOnSave": false,
+  // Overrides editor colors and font style from the currently selected color theme.
+  "editor.tokenColorCustomizations": {},
+  // Files
+  // Configure glob patterns for excluding files and folders.
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/.vs": true,
+    "**/_ReSharper.Caches": true
+  },
+  // Configure file associations to languages (e.g. "*.extension": "html"). These have precedence over the default associations of the languages installed.
+  "files.associations": {},
+  // The default character set encoding to use when reading and writing files.
+  "files.encoding": "utf8",
+  // When enabled, will attempt to guess the character set encoding when opening files
+  "files.autoGuessEncoding": false,
+  // The default end of line character. Use \n for LF and \r\n for CRLF.
+  "files.eol": "\r\n",
+  // When enabled, will trim trailing whitespace when saving a file.
+  "files.trimTrailingWhitespace": true,
+  // When enabled, insert a final new line at the end of the file when saving it.
+  "files.insertFinalNewline": false,
+  // Configure glob patterns of file paths to exclude from file watching. Patterns must match on absolute paths (i.e. prefix with ** or the full path to match properly). Changing this setting requires a restart. When you experience Code consuming lots of cpu time on startup, you can exclude large folders to reduce the initial load.
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true
+  },
+  // Debug
+  // Allows setting breakpoint in any file
+  "debug.allowBreakpointsEverywhere": false,
+  // Automatically open explorer view on the end of a debug session
+  "debug.openExplorerOnEnd": false,
+  // Show variable values inline in editor while debugging
+  "debug.inlineValues": false,
+  // Controls if the floating debug action bar should be hidden
+  "debug.hideActionBar": false,
+  // Controls behavior of the internal debug console.
+  "debug.internalConsoleOptions": "openOnFirstSessionStart",
+  // Global debug launch configuration. Should be used as an alternative to 'launch.json' that is shared across workspaces
+  "launch": {},
+  // JSON
+  // Associate schemas to JSON files in the current project
+  "json.schemas": [],
+  // Enable/disable default JSON formatter (requires restart)
+  "json.format.enable": true,
+  // Traces the communication between VS Code and the JSON language server.
+  "json.trace.server": "off",
+  // YAML
+  "yaml.format.printWidth": 132,
+  // Markdown
+  // A list of URLs or local paths to CSS style sheets to use from the markdown preview. Relative paths are interpreted relative to the folder open in the explorer. If there is no open folder, they are interpreted relative to the location of the markdown file. All '\' need to be written as '\\'.
+  "markdown.styles": [],
+  // Sets how line-breaks are rendered in the markdown preview. Setting it to 'true' creates a <br> for every newline.
+  "markdown.preview.breaks": false,
+  // Enable or disable conversion of URL-like text to links in the markdown preview.
+  "markdown.preview.linkify": true,
+  // Scrolls the markdown preview to reveal the currently selected line from the editor.
+  "markdown.preview.scrollPreviewWithEditorSelection": true,
+  // Mark the current editor selection in the markdown preview.
+  "markdown.preview.markEditorSelection": true,
+  // When the markdown preview is scrolled, update the view of the editor.
+  "markdown.preview.scrollEditorWithPreview": true,
+  // Double click in the markdown preview to switch to the editor.
+  "markdown.preview.doubleClickToSwitchToEditor": true,
+  // Enable debug logging for the markdown extension.
+  "markdown.trace": "off",
+  // Markdown extension settings
+  "markdown.extension.toc.levels": "2..6",
+  "markdown.extension.toc.unorderedList.marker": "-",
+  "markdown.extension.toc.updateOnSave": true,
+  // Default Configuration Overrides
+  // Configure editor settings to be overridden for [json] language.
+  "[json]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.quickSuggestions": {
+      "strings": true
+    }
+  },
+  // Configure editor settings to be overridden for [makefile] language.
+  "[makefile]": {
+    "editor.insertSpaces": false
+  },
+  // Configure editor settings to be overridden for [markdown] language.
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": false,
+    "editor.trimAutoWhitespace": false
+  },
+  // Configure editor settings to be overridden for [xml] language.
+  "[xml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2
+  },
+  // Configure editor settings to be overridden for [yaml] language.
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2
+  },
+  // Git
+  // Whether git is enabled
+  "git.enabled": true,
+  // Path to the git executable
+  "git.path": null,
+  // Whether auto refreshing is enabled
+  "git.autorefresh": true,
+  // Whether auto fetching is enabled
+  "git.autofetch": true,
+  // Confirm before synchronizing git repositories
+  "git.confirmSync": true,
+  // Controls the git badge counter. `all` counts all changes. `tracked` counts only the tracked changes. `off` turns it off.
+  "git.countBadge": "all",
+  // Controls what type of branches are listed when running `Checkout to...`. `all` shows all refs, `local` shows only the local branchs, `tags` shows only tags and `remote` shows only remote branches.
+  "git.checkoutType": "all",
+  // Ignores the legacy Git warning
+  "git.ignoreLegacyWarning": false,
+  // Ignores the warning when there are too many changes in a repository
+  "git.ignoreLimitWarning": false,
+  // The default location where to clone a git repository
+  "git.defaultCloneDirectory": null,
+  // Commit all changes when there are no staged changes.
+  "git.enableSmartCommit": false,
+  // Enables commit signing with GPG.
+  "git.enableCommitSigning": false,
+  // Merge Conflict
+  // Enable/disable merge conflict block CodeLens within editor
+  "merge-conflict.codeLens.enabled": true,
+  // Enable/disable merge conflict decorators within editor
+  "merge-conflict.decorators.enabled": true,
+  // OmniSharp
+  // Enables support for roslyn analyzers, code fixes and rulesets.
+  "omnisharp.enableRoslynAnalyzers": true
+}
