@@ -36,5 +36,8 @@ jobs:
     - name: Build solution
       run: dotnet build -c Release --no-restore /maxCpuCount:1
 
-    - name: Generate packages
-      run: dotnet pack -c Release --no-build
+    - name: Run unit tests
+      run: dotnet test -c Release --no-build
+
+    - name: Prepare for distribution
+      run: dotnet pack -c Release --no-build /maxCpuCount:1
