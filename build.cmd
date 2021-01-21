@@ -65,7 +65,10 @@ exit /B %ERRORLEVEL%
 
 :F_Run_Tasks
 
-set _LOGFILE=build.log
+set _LOGS_DIR=logs
+mkdir %_LOGS_DIR% >nul 2>&1
+
+set _LOGFILE=%_LOGS_DIR%\build.log
 if exist %_LOGFILE% del %_LOGFILE%
 
 call :F_Timestamp
@@ -95,8 +98,8 @@ exit /B 0
 
 :T_Inspect
 call :F_Label Inspect code with ReSharper tools
-call :F_Exec dotnet jb inspectcode "%_SOLUTION_FILE%" --output=inspect.log --format=Text
-call :F_Exec dotnet jb dupfinder "%_SOLUTION_FILE%" --output=dupfinder.log.xml
+call :F_Exec dotnet jb inspectcode "%_SOLUTION_FILE%" --output=%_LOGS_DIR%\inspect.log --format=Text
+call :F_Exec dotnet jb dupfinder "%_SOLUTION_FILE%" --output=%_LOGS_DIR%\dupfinder.log.xml
 exit /B %ERRORLEVEL%
 
 :T_VS_Inspect
