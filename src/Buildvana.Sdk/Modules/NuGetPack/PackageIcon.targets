@@ -1,0 +1,149 @@
+<Project>
+
+  <!-- Coalesce IconInPackage to a boolean value. Default is true. -->
+  <PropertyGroup>
+    <IconInPackage Condition="'$(IconInPackage)' == ''">true</IconInPackage>
+    <IconInPackage Condition="'$(IconInPackage)' != 'true'">false</IconInPackage>
+  </PropertyGroup>
+
+  <!--
+    Use a package icon:
+      - if IconInPackage is false, just don't;
+      - if PackageIconPath is specified, use it;
+      - otherwise, if PackageIcon is specified, look for it in project directory and going up.
+        If a file is found, set PackageIconPath to its full path;
+      - otherwise, look for a default icon file. If a file is found,
+       set PackageIconPath to its full path and PackageIcon to its filename.
+  -->
+  <Choose>
+    <When Condition="!$(IconInPackage)">
+      <PropertyGroup>
+        <PackageIcon />
+        <PackageIconPath />
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PackageIconPath)' != ''">
+      <PropertyGroup>
+        <PackageIcon>$([System.IO.Path]::GetFileName('$(PackageIconPath)'))</PackageIcon>
+      </PropertyGroup>
+      <ItemGroup>
+        <EvaluationError Condition="!Exists('$(PackageIconPath)')"
+                         Include="BVE1506"
+                         Text="Specified package icon file '$(PackageIconPath)' does not exist." />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(PackageIcon)' != ''">
+      <PropertyGroup>
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('$(PackageIcon)', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+      </PropertyGroup>
+      <ItemGroup>
+        <EvaluationError Condition="'$(PackageIconPath)' == ''"
+                         Include="BVE1507"
+                         Text="Specified package icon file '$(PackageIcon)' was not found." />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <!--
+        Default icon file can be one of (in order of discovery):
+          - <project_name>.package.png
+          - <project_name>.package.png in a "graphics" subfolder
+          - <project_name>.package.png in a "branding" subfolder
+          - <product_name>.package.png
+          - <product_name>.package.png in a "graphics" subfolder
+          - <product_name>.package.png in a "branding" subfolder
+          - PackageIcon.png
+          - PackageIcon.png in a "graphics" subfolder
+          - PackageIcon.png in a "branding" subfolder
+          - icon.png
+          - icon.png in a "graphics" subfolder
+          - icon.png in a "branding" subfolder
+
+        Files found outside repository are ignored.
+
+        To look for a file in a specific subfolder, since GetPathOfFileAbove only accepts filenames,
+        use GetDirectoryNameOfFileAbove and combine it with the searched-for subpath later if found.
+      -->
+      <PropertyGroup>
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('$(MSBuildProjectName).package.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>graphics/$(MSBuildProjectName).package.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>branding/$(MSBuildProjectName).package.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('$(Product).package.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>graphics/$(Product).package.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>branding/$(Product).package.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('PackageIcon.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>graphics/PackageIcon.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>branding/PackageIcon.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <PackageIconPath>$([MSBuild]::GetPathOfFileAbove('icon.png', '$(MSBuildProjectDirectory)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>graphics/icon.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageIconPath)' == ''">
+        <BV_PackageIconSubPath>branding/icon.png</BV_PackageIconSubPath>
+        <BV_PackageIconDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','$(BV_PackageIconSubPath)'))</BV_PackageIconDirectory>
+        <PackageIconPath Condition="'$(BV_PackageIconDirectory)' != ''">$([System.IO.Path]::Combine('$(BV_PackageIconDirectory)', '$(BV_PackageIconSubPath)'))</PackageIconPath>
+        <PackageIconPath Condition="'$(PackageIconPath)' != '' And !$(PackageIconPath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <!-- Use found filename to set PackageIcon. -->
+      <PropertyGroup Condition="'$(PackageIconPath)' != ''">
+        <PackageIcon>$([System.IO.Path]::GetFileName('$(PackageIconPath)'))</PackageIcon>
+      </PropertyGroup>
+      <!-- Error if not found. -->
+      <ItemGroup>
+        <EvaluationError Condition="'$(PackageIconPath)' == ''"
+                         Include="BVE1508"
+                         Text="No package icon file found." />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Add icon file to project items so the Pack target can find it. -->
+  <ItemGroup Condition="'$(PackageIconPath)' != '' And '$(PackageIcon)' != ''">
+    <Content Remove="$(PackageIconPath)" />
+    <Content Include="$(PackageIconPath)" Link="$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+</Project>
