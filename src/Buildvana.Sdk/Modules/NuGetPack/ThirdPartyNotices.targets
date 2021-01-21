@@ -1,0 +1,115 @@
+<Project>
+
+  <!-- Coalesce ThirdPartyNoticeInPackage to a boolean value. Default is true. -->
+  <PropertyGroup>
+    <ThirdPartyNoticeInPackage Condition="'$(ThirdPartyNoticeInPackage)' == ''">true</ThirdPartyNoticeInPackage>
+    <ThirdPartyNoticeInPackage Condition="'$(ThirdPartyNoticeInPackage)' != 'true'">false</ThirdPartyNoticeInPackage>
+  </PropertyGroup>
+
+  <!--
+    Include a third-party notice in package:
+      - if ThirdPartyNoticeInPackage is false, just don't;
+      - if PackageThirdPartyNoticePath is specified, use it;
+      - otherwise, if PackageThirdPartyNoticeFile is specified, look for it in project directory and going up.
+        If a file is found, set PackageThirdPartyNoticePath to its full path;
+      - otherwise, look for a default third-party notice file. If a file is found,
+        set PackageThirdPartyNoticePath to its full path and PackageThirdPartyNoticeFile to its filename.
+  -->
+  <Choose>
+    <When Condition="!$(ThirdPartyNoticeInPackage)">
+      <PropertyGroup>
+        <PackageThirdPartyNoticeFile />
+        <PackageThirdPartyNoticePath />
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PackageThirdPartyNoticePath)' != ''">
+      <PropertyGroup>
+        <PackageThirdPartyNoticeFile>$([System.IO.Path]::GetFileName('$(PackageThirdPartyNoticePath)'))</PackageThirdPartyNoticeFile>
+      </PropertyGroup>
+      <ItemGroup>
+        <EvaluationError Condition="!Exists('$(PackageThirdPartyNoticePath)')"
+                         Include="BVE1503"
+                         Text="Specified third-party notice file '$(PackageThirdPartyNoticePath)' does not exist." />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(PackageThirdPartyNoticeFile)' != ''">
+      <PropertyGroup>
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('$(PackageThirdPartyNoticeFile)', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+      </PropertyGroup>
+      <ItemGroup>
+        <EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
+                         Include="BVE1504"
+                         Text="Specified third-party notice file '$(PackageThirdPartyNoticeFile)' was not found." />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <!--
+        Default third-party notice file can be one of (in order of discovery):
+          - THIRD-PARTY-NOTICES
+          - THIRD-PARTY-NOTICES.txt
+          - THIRD-PARTY-NOTICES.md
+          - third-party-notices
+          - third-party-notices.txt
+          - third-party-notices.md
+          - ThirdPartyNotices
+          - ThirdPartyNotices.txt
+          - ThirdPartyNotices.md
+
+        Files found outside repository are ignored.
+      -->
+      <PropertyGroup>
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICES', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICES.txt', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('THIRD-PARTY-NOTICES.md', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('third-party-notices', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('third-party-notices.txt', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('third-party-notices.md', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('ThirdPartyNotices', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('ThirdPartyNotices.txt', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' == ''">
+        <PackageThirdPartyNoticePath>$([MSBuild]::GetPathOfFileAbove('ThirdPartyNotices.md', '$(MSBuildProjectDirectory)'))</PackageThirdPartyNoticePath>
+        <PackageThirdPartyNoticePath Condition="'$(PackageThirdPartyNoticePath)' != '' And !$(PackageThirdPartyNoticePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <!-- Use found filename to set PackageThirdPartyNoticeFile. -->
+      <PropertyGroup Condition="'$(PackageThirdPartyNoticePath)' != ''">
+        <PackageThirdPartyNoticeFile>$([System.IO.Path]::GetFileName('$(PackageThirdPartyNoticePath)'))</PackageThirdPartyNoticeFile>
+      </PropertyGroup>
+      <!-- Error if not found. -->
+      <ItemGroup>
+        <EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
+                         Include="BVE1505"
+                         Text="No third-party notice file found." />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Add third-party notice file to project items so the Pack target can find it.. -->
+  <ItemGroup Condition="'$(PackageThirdPartyNoticePath)' != '' And '$(PackageThirdPartyNoticeFile)' != ''">
+    <Content Remove="$(PackageThirdPartyNoticePath)" />
+    <Content Include="$(PackageThirdPartyNoticePath)" Link="$(PackageThirdPartyNoticeFile)" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+</Project>

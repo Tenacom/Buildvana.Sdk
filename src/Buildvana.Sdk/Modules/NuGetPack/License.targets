@@ -1,0 +1,117 @@
+<Project>
+
+  <!-- Coalesce LicenseFileInPackage to a boolean value.
+       Default is true, unless LicensePackageExpression is defined. -->
+  <PropertyGroup>
+    <LicenseFileInPackage Condition="'$(PackageLicenseExpression)' != ''">false</LicenseFileInPackage>
+    <LicenseFileInPackage Condition="'$(LicenseFileInPackage)' == ''">true</LicenseFileInPackage>
+    <LicenseFileInPackage Condition="'$(LicenseFileInPackage)' != 'true'">false</LicenseFileInPackage>
+  </PropertyGroup>
+
+  <!--
+    Include a license file in package:
+      - if LicenseFileInPackage is false, just don't;
+      - if PackageLicensePath is specified, use it;
+      - otherwise, if PackageLicenseFile is specified, look for it in project directory and going up.
+        If a file is found, set PackageLicensePath to its full path;
+      - otherwise, look for a default license file. If a file is found,
+        set PackageLicensePath to its full path and PackageLicenseFile to its filename.
+  -->
+  <Choose>
+    <When Condition="!$(LicenseFileInPackage)">
+      <PropertyGroup>
+        <PackageLicenseFile />
+        <PackageLicensePath />
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PackageLicensePath)' != ''">
+      <PropertyGroup>
+        <PackageLicenseFile>$([System.IO.Path]::GetFileName('$(PackageLicensePath)'))</PackageLicenseFile>
+      </PropertyGroup>
+      <ItemGroup>
+        <EvaluationError Condition="!Exists('$(PackageLicensePath)')"
+                         Include="BVE1500"
+                         Text="Specified license file '$(PackageLicensePath)' does not exist." />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(PackageLicenseFile)' != ''">
+      <PropertyGroup>
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('$(PackageLicenseFile)', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+      </PropertyGroup>
+      <ItemGroup>
+        <EvaluationError Condition="'$(PackageLicensePath)' == ''"
+                         Include="BVE1501"
+                         Text="Specified license file '$(PackageLicenseFile)' was not found." />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <!--
+        Default license file can be one of (in order of discovery):
+          - LICENSE
+          - LICENSE.txt
+          - LICENSE.md
+          - License
+          - License.txt
+          - License.md
+          - license
+          - license.txt
+          - license.md
+
+        Files found outside repository are ignored.
+      -->
+      <PropertyGroup>
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('LICENSE', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('LICENSE.txt', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('LICENSE.md', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('License', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('License.txt', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('License.md', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('license', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('license.txt', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageLicensePath)' == ''">
+        <PackageLicensePath>$([MSBuild]::GetPathOfFileAbove('license.md', '$(MSBuildProjectDirectory)'))</PackageLicensePath>
+        <PackageLicensePath Condition="'$(PackageLicensePath)' != '' And !$(PackageLicensePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <!-- Use found filename to set PackageLicenseFile. -->
+      <PropertyGroup Condition="'$(PackageLicensePath)' != ''">
+        <PackageLicenseFile>$([System.IO.Path]::GetFileName('$(PackageLicensePath)'))</PackageLicenseFile>
+      </PropertyGroup>
+      <!-- Error if not found. -->
+      <ItemGroup>
+        <EvaluationError Condition="'$(PackageLicensePath)' == ''"
+                         Include="BVE1502"
+                         Text="No license file found." />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Add license file to project items so the Pack target can find it.. -->
+  <ItemGroup Condition="'$(PackageLicensePath)' != '' And '$(PackageLicenseFile)' != ''">
+    <Content Remove="$(PackageLicensePath)" />
+    <Content Include="$(PackageLicensePath)" Link="$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+</Project>
