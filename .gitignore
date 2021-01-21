@@ -1,7 +1,5 @@
 artifacts/
-build.log
-inspect.log
-dupfinder.log.xml
+logs/
 
 # Visual Studio
 **/bin/
