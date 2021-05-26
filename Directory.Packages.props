@@ -3,7 +3,7 @@
   <ItemGroup>
     <PackageVersion Include="IndexRange" Version="1.0.0" />
     <PackageVersion Include="Microsoft.Build.Framework" Version="16.8.0" />
-    <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="16.8.0" />
+    <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="16.10.0" />
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="16.8.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.8.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="3.8.0" />
