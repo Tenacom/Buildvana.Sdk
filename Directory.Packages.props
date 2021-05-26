@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageVersion Include="NUnit" Version="3.13.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="3.17.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.8.3"/>
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.10.0"/>
   </ItemGroup>
 
 </Project>
