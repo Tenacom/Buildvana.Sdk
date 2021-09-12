@@ -36,11 +36,11 @@
   <!-- Check for a supported version of MSBuild. -->
   <PropertyGroup>
     <BV_MSBuildVersionSupported>false</BV_MSBuildVersionSupported>
-    <BV_MSBuildVersionSupported Condition="'$(MSBuildVersion)' &gt;= '16.7'">true</BV_MSBuildVersionSupported>
+    <BV_MSBuildVersionSupported Condition="'$(MSBuildVersion)' &gt;= '16.8'">true</BV_MSBuildVersionSupported>
   </PropertyGroup>
   <ItemGroup Condition="!$(BV_MSBuildVersionSupported)">
     <EvaluationError Include="BVE1004"
-                     Text="Buildvana SDK requires at least MSBuild v16.7." />
+                     Text="Buildvana SDK requires at least MSBuild v16.8." />
   </ItemGroup>
 
   <!-- BV_IsConfigured is true if HomeDirectory is configured and the MSBuild version is supported. -->
@@ -66,19 +66,10 @@
   </PropertyGroup>
 
   <!-- Select an appropriate assembly for compiled tasks. -->
-  <Choose>
-    <When Condition="'$(MSBuildRuntimeType)' == 'Core'">
-      <PropertyGroup>
-        <BV_SdkTasksTfm>netcoreapp3.1</BV_SdkTasksTfm>
-        <BV_SdkTasksTfm Condition="'$(MSBuildVersion)' &gt;= '16.8'">net5.0</BV_SdkTasksTfm>
-      </PropertyGroup>
-    </When>
-    <Otherwise> <!-- Building with .NET Framework or Mono -->
-      <PropertyGroup>
-        <BV_SdkTasksTfm>net472</BV_SdkTasksTfm>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
+  <PropertyGroup>
+    <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' == 'Core'">net5.0</BV_SdkTasksTfm>
+    <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' != 'Core'">net472</BV_SdkTasksTfm>
+  </PropertyGroup>
   <PropertyGroup>
     <BV_BinariesDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..\bin\$(BV_SdkTasksTfm)'))</BV_BinariesDir>
     <BV_SdkTasksAssembly>$(BV_BinariesDir)Buildvana.Sdk.Tasks.dll</BV_SdkTasksAssembly>
