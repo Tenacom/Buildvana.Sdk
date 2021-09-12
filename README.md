@@ -52,7 +52,7 @@ It is part of [the Buildvana project](https://github.com/Buildvana/), which also
 - Single source of truth for assembly versions
 - Single source of truth for package licenses and copyright notices
 - Helps you keep your project files clean and concise - even better than "plain" MSBuild SDKs
-- More auto-generated assembly information (`ClsComplient`, `COMVisible`)
+- More auto-generated assembly information (`ClsCompliant`, `COMVisible`)
 - Custom auto-generated assembly information
 - Automatic configuration of commonly-used code analyzers
 - ...
