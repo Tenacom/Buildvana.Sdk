@@ -22,7 +22,9 @@ namespace Buildvana.Sdk.Tasks.Internal
     internal sealed class AssemblyResolver : MarshalByRefObject, IDisposable
 #pragma warning restore CA1812
     {
-        private AssemblyResolver(string[] directories)
+#pragma warning disable IDE0051 // Unused constructor - invoked indirectly by Install static method
+        private AssemblyResolver(IEnumerable<string> directories)
+#pragma warning restore IDE0051
         {
             Directories = directories;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
@@ -40,9 +42,6 @@ namespace Buildvana.Sdk.Tasks.Internal
                 new object[] { directories },
                 null,
                 null);
-
-        public static AssemblyResolver Install(AppDomain appDomain, IEnumerable<string> directories)
-            => Install(appDomain, directories.ToArray());
 
         public void Dispose() => AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
 

@@ -28,7 +28,7 @@ namespace Buildvana.Sdk.Tasks
     // This file has been modified from the original form.
     // Original file: https://github.com/AArnott/Nerdbank.MSBuildExtension/blob/master/src/Nerdbank.MSBuildExtension/net45/ContextIsolatedTask.cs
     // See THIRD-PARTY-NOTICES in the repository root for more information.
-    public abstract partial class ContextIsolatedTask : MarshalByRefObject, ITask
+    public abstract partial class ContextIsolatedTask : MarshalByRefObject
     {
         protected ContextIsolatedTask()
         {
