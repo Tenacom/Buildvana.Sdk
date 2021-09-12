@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0-alpha.13](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.13) (2021-09-12)
 
+### Changes to existing features
+
+- **POTENTIALLY BREAKING CHANGE:** The minimum supported MSBuild version is now 16.8 (.NET SDK 5.0, Visual Studio 2019 v16.8).
+- **POTENTIALLY BREAKING CHANGE:** Building with .NET Core 3.1 SDK is not supported any longer.
+
 ### Bugs fixed in this release
 
 - https://github.com/Buildvana/Buildvana.Sdk/pull/98 - XML documentation files are now correctly created (regression in versions 1.0.0-alpha.10 through 12).
