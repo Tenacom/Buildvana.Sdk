@@ -27,16 +27,14 @@ namespace Buildvana.Sdk.Tasks
         public string? Namespace { get; set; }
 
         [PublicAPI]
-#pragma warning disable CA1819 // Properties should not return arrays - Required by MSBuild APIs
         public ITaskItem[]? Constants { get; set; }
-#pragma warning restore CA1819
 
         protected override IEnumerable<CodeFragment> GetCodeFragments()
         {
             var classNamespace = StringUtility.IsNullOrEmpty(Namespace) ? null : Namespace;
             var className = StringUtility.IsNullOrEmpty(ClassName) ? "ThisAssembly" : ClassName;
             var constants = (Constants ?? Enumerable.Empty<ITaskItem>()).Select(ExtractConstantDefinitionFromItem);
-            var fragment = new CodeGeneration.Configuration.ThisAssemblyClass(classNamespace, className, constants);
+            var fragment = new ThisAssemblyClass(classNamespace, className, constants);
             yield return fragment;
         }
 

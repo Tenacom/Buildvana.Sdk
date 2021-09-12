@@ -34,7 +34,7 @@ namespace Buildvana.Sdk.Utilities
         public static bool IsIORelatedException(this Exception @this)
             => @this is UnauthorizedAccessException
             || @this is NotSupportedException
-            || (@this is ArgumentException && @this is not ArgumentNullException)
+            || @this is ArgumentException and not ArgumentNullException
             || @this is SecurityException
             || @this is IOException;
 
@@ -115,7 +115,7 @@ namespace Buildvana.Sdk.Utilities
             || @this is AccessViolationException;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsCriticalExceptionCore([System.Diagnostics.CodeAnalysis.NotNull] this Exception @this)
+        private static bool IsCriticalExceptionCore(this Exception @this)
             => IsFatalExceptionCore(@this)
             || @this is AppDomainUnloadedException
             || @this is BadImageFormatException
@@ -124,7 +124,7 @@ namespace Buildvana.Sdk.Utilities
             || @this is NullReferenceException;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsSecurityOrCriticalExceptionCore([System.Diagnostics.CodeAnalysis.NotNull] this Exception @this)
+        private static bool IsSecurityOrCriticalExceptionCore(this Exception @this)
             => @this is SecurityException || IsCriticalExceptionCore(@this);
     }
 }
