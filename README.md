@@ -87,9 +87,9 @@ Private repositories may or may not work. Testers welcome.
 
 Building via the following tools is supported:
 
-- MSBuild v16.7 or newer (`msbuild`) under .NET Framework 4.7.2 or newer, .NET Core SDK 3.1 or newer, .NET SDK 5.0 or newer, or any recent version of Mono
-- Visual Studio 2019 v16.7 or newer (building from IDE)
-- .NET Core SDK 3.1.300 or newer, or .NET SDK 5.0.100 or newer (`dotnet build`, `dotnet msbuild`, etc.)
+- MSBuild v16.8 or newer (`msbuild`) under .NET Framework 4.7.2 or newer, .NET SDK 5.0 or newer, or any recent version of Mono
+- Visual Studio 2019 v16.8 or newer (building from IDE)
+- .NET SDK 5.0.100 or newer (`dotnet build`, `dotnet msbuild`, etc.)
 
 Latest versions of Visual Studio for Mac _should_ work, but we need confirmation by someone with a Mac.
 
