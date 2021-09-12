@@ -42,7 +42,7 @@ If you're unsure about any of the following items, don't hesitate to ask. We're 
 - [ ] My contribution is my original work
 - [ ] My contribution, or part of it, comes from projects with an MIT-compatible license AND I have updated the THIRD-PARTY-NOTICES file accordingly
 - [ ] I have added and/or updated related documentation (if applicable)
-- [ ] I have updated the "Unreleased changes" section in [CHANGELOG.md](https://github.com/Buildvana/Buildvana.Sdk/blob/master/CHANGELOG.md) according to the modifications I made
+- [ ] I have updated the "Unreleased changes" section in [CHANGELOG.md](https://github.com/Buildvana/Buildvana.Sdk/blob/main/CHANGELOG.md) according to the modifications I made
 
 ## Other information
 
