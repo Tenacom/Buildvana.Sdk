@@ -90,6 +90,13 @@
   <UsingTask TaskName="WriteLiteralAssemblyAttributes" AssemblyFile="$(BV_SdkTasksAssembly)" />
   <UsingTask TaskName="WriteThisAssemblyClass" AssemblyFile="$(BV_SdkTasksAssembly)" />
 
+  <!-- Import modules -->
+  <ImportGroup Condition="$(BV_IsConfigured)">
+    <Import Project="$(BuildvanaModulesDirectory)**\BeforeModules.props" />
+    <Import Project="$(BuildvanaModulesDirectory)**\Module.props" />
+    <Import Project="$(BuildvanaModulesDirectory)**\AfterModules.props" />
+  </ImportGroup>
+
   <!-- Import BeforeCommon.props, Common.props, and AfterCommon.props files  -->
   <ImportGroup Condition="$(BV_IsConfigured)">
     <Import Project="$(BuildvanaSdkDirectory)Import.BeforeCommon.props.proj" />
