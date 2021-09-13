@@ -85,11 +85,9 @@
     <!--
       Transform BV_PackageReference items into PackageReference items.
       No need for PackageVersion items because our packages are defined implicitly.
-      The NoWarn metadata prevents a yellow triangle to appear on each of our packages in the project tree in VS2019 (tested on v16.7.3).
     -->
     <PackageReference Include="@(BV_PackageReference)"
-                      IsImplicitlyDefined="true"
-                      NoWarn="NU1604" />
+                      IsImplicitlyDefined="true" />
 
   </ItemGroup>
 
