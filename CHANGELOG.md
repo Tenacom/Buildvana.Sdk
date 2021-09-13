@@ -11,11 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
-- Warning NU1604 is no longer suppressed on dependencies automatically introduced in projects by Buildvana SDK. Suppressing the warning prevented a yellow triangle from appearing near the affected packages in Visual Studio 2019 until version 16.7; in version 16.11, on the contrary, the yellow triangle appears if the warning _is_ suppressed.
-
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
+
+## [1.0.0-alpha.14](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.14) (2021-09-13)
+
+### Changes to existing features
+
+- Warning NU1604 is no longer suppressed on dependencies automatically introduced in projects by Buildvana SDK. Suppressing the warning prevented a yellow triangle from appearing near the affected packages in Visual Studio 2019 until version 16.7; in version 16.11, on the contrary, the yellow triangle appears if the warning _is_ suppressed.
 
 ## [1.0.0-alpha.13](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.13) (2021-09-12)
 
