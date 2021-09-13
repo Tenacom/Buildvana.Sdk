@@ -99,7 +99,7 @@ exit /B 0
 :T_Inspect
 call :F_Label Inspect code with ReSharper tools
 call :F_Exec dotnet jb inspectcode "%_SOLUTION_FILE%" --output=%_LOGS_DIR%\inspect.log --format=Text
-call :F_Exec dotnet jb dupfinder "%_SOLUTION_FILE%" --output=%_LOGS_DIR%\dupfinder.log.xml
+call :F_Exec dotnet jb dupfinder "%_SOLUTION_FILE%" --output=%_LOGS_DIR%\dupfinder.log.xml --exclude="**\obj\**\*"
 exit /B %ERRORLEVEL%
 
 :T_VS_Inspect
