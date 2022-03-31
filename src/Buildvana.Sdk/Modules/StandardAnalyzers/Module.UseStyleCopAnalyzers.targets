@@ -30,19 +30,4 @@
     <AdditionalFiles Include="$(StyleCopJsonPath)" Link="stylecop.json" Visible="false" CopyToOutputFolder="false" />
   </ItemGroup>
 
-  <!-- Find a StyleCop.Analyzers.ruleset file to configure StyleCop.Analyzers. -->
-  <PropertyGroup>
-    <!-- Find StyleCop.Analyzers.ruleset -->
-    <StyleCopAnalyzersRuleSetPath>$([MSBuild]::GetPathOfFileAbove('StyleCop.Analyzers.ruleset', $(MSBuildProjectFullPath)))</StyleCopAnalyzersRuleSetPath>
-    <!-- Reject if not in repository -->
-    <StyleCopAnalyzersRuleSetPath Condition="'$(StyleCopAnalyzersRuleSetPath)' != '' And !$(StyleCopAnalyzersRuleSetPath.StartsWith('$(HomeDirectory)'))" />
-  </PropertyGroup>
-
-  <!-- Automatically and silently add StyleCopAnalyzersRuleSetPath file to the project if found. -->
-  <ItemGroup Condition="'$(StyleCopAnalyzersRuleSetPath)' != ''">
-    <None Remove="$(StyleCopAnalyzersRuleSetPath)" />
-    <AdditionalFiles Remove="$(StyleCopAnalyzersRuleSetPath)" />
-    <AdditionalFiles Include="$(StyleCopAnalyzersRuleSetPath)" Link="StyleCopAnalyzersRuleSetPath" Visible="false" CopyToOutputFolder="false" />
-  </ItemGroup>
-
 </Project>
