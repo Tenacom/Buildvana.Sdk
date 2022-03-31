@@ -1,0 +1,6 @@
+<Project>
+
+  <Import Project="Module.Core.targets"
+          Condition="'$(UseAlternatePack)' == 'true'" />
+
+</Project>
