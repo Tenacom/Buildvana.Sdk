@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- https://github.com/Buildvana/Buildvana.Sdk/pull/124 - When the new `UseAlternatePack` property is set to `true`, Buildvana SDK hijacks the Pack target to publish a project to one or more folders and/or create a setup executable using InnoSetup.
+
 ### Changes to existing features
 
 - https://github.com/Buildvana/Buildvana.Sdk/pull/123 - **POTENTIALLY BREAKING CHANGE:** The minimum supported MSBuild version is now 17.0 (.NET SDK 6.0, Visual Studio 2022 v17.0). As a consequence, the only supported .NET environments are .NET 6.0 or newer and .NET Framework 4.7.2 or newer. This of course refers to the build phase; you can use Buildvana SDK to target older versions of .NET, .NET Core, or .NET Framework.
