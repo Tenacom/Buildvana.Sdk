@@ -19,11 +19,8 @@
     <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AnalysisLevel>latest</AnalysisLevel>
-    <AnalysisMode>Default</AnalysisMode>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <CLSCompliant>true</CLSCompliant>
     <ComVisible>false</ComVisible>
   </PropertyGroup>

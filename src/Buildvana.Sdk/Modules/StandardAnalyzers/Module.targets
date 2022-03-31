@@ -1,6 +1,22 @@
 <Project>
 
-  <!-- UseStyleCopAnalyzers default = true, except for test projects and no-target projects. -->
+  <!-- EnableNETAnalyzers default = true, except for no-target projects. -->
+  <PropertyGroup Condition="'$(EnableNETAnalyzers)' == ''">
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnableNETAnalyzers Condition="$(BV_IsNoTargetsProject)">false</EnableNETAnalyzers>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableNETAnalyzers)' != 'true'">
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+  </PropertyGroup>
+
+  <!-- Default values for code analysis-related properties -->
+  <PropertyGroup>
+    <AnalysisLevel Condition="'$(AnalysisLevel)' == ''">latest</AnalysisLevel>
+    <AnalysisMode Condition="'$(AnalysisMode)' == ''">All</AnalysisMode>
+    <EnforceCodeStyleInBuild Condition="'$(EnforceCodeStyleInBuild)' != 'false'">true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <!-- UseStyleCopAnalyzers default = true, except for no-target projects. -->
   <PropertyGroup Condition="'$(UseStyleCopAnalyzers)' == ''">
     <UseStyleCopAnalyzers>true</UseStyleCopAnalyzers>
     <UseStyleCopAnalyzers Condition="$(BV_IsNoTargetsProject)">false</UseStyleCopAnalyzers>
@@ -23,17 +39,5 @@
 
   <Import Project="$(MSBuildThisFileDirectory)Module.UsePublicApiAnalyzers.targets"
           Condition="$(UsePublicApiAnalyzers)" />
-
-  <!-- AllowUnderscoresInMemberNames default = true only on test projects. -->
-  <PropertyGroup Condition="'$(AllowUnderscoresInMemberNames)' == ''">
-    <AllowUnderscoresInMemberNames>false</AllowUnderscoresInMemberNames>
-    <AllowUnderscoresInMemberNames Condition="$(BV_IsTestProject)">true</AllowUnderscoresInMemberNames>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(AllowUnderscoresInMemberNames)' != 'true'">
-    <AllowUnderscoresInMemberNames>false</AllowUnderscoresInMemberNames>
-  </PropertyGroup>
-
-  <Import Project="$(MSBuildThisFileDirectory)Module.AllowUnderscoresInMemberNames.targets"
-          Condition="$(AllowUnderscoresInMemberNames)" />
 
 </Project>
