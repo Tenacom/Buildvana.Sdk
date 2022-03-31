@@ -67,7 +67,7 @@
 
   <!-- Select an appropriate assembly for compiled tasks. -->
   <PropertyGroup>
-    <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' == 'Core'">net5.0</BV_SdkTasksTfm>
+    <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' == 'Core'">net6.0</BV_SdkTasksTfm>
     <BV_SdkTasksTfm Condition="'$(MSBuildRuntimeType)' != 'Core'">net472</BV_SdkTasksTfm>
   </PropertyGroup>
   <PropertyGroup>
