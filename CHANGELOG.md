@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
-- **POTENTIALLY BREAKING CHANGE:** The minimum supported MSBuild version is now 17.0 (.NET SDK 6.0, Visual Studio 2022 v17.0). As a consequence, the only supported .NET environments are .NET 6.0 or newer and .NET Framework 4.7.2 or newer. This of course refers to the build phase; you can use Buildvana SDK to target older versions of .NET, .NET Core, or .NET Framework.
-- **BREAKING CHANGE:** The `AllowUnderscoresInMemberNames` property is no longer supported. Just append `;CA1707` to the `NoWarn` property instead.
+- https://github.com/Buildvana/Buildvana.Sdk/pull/123 - **POTENTIALLY BREAKING CHANGE:** The minimum supported MSBuild version is now 17.0 (.NET SDK 6.0, Visual Studio 2022 v17.0). As a consequence, the only supported .NET environments are .NET 6.0 or newer and .NET Framework 4.7.2 or newer. This of course refers to the build phase; you can use Buildvana SDK to target older versions of .NET, .NET Core, or .NET Framework.
+- https://github.com/Buildvana/Buildvana.Sdk/pull/123 - **BREAKING CHANGE:** The `AllowUnderscoresInMemberNames` property is no longer supported. Just append `;CA1707` to the `NoWarn` property instead.
 
 ### Bugs fixed in this release
 
