@@ -16,56 +16,55 @@ using System.Linq;
 using System.Reflection;
 using Buildvana.Sdk.Utilities;
 
-namespace Buildvana.Sdk.Tasks.Internal
-{
+namespace Buildvana.Sdk.Tasks.Internal;
+
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes - Instantiated via Install static method
-    internal sealed class AssemblyResolver : MarshalByRefObject, IDisposable
+internal sealed class AssemblyResolver : MarshalByRefObject, IDisposable
 #pragma warning restore CA1812
-    {
+{
 #pragma warning disable IDE0051 // Unused constructor - invoked indirectly by Install static method
-        private AssemblyResolver(IEnumerable<string> directories)
+    private AssemblyResolver(IEnumerable<string> directories)
 #pragma warning restore IDE0051
+    {
+        Directories = directories;
+        AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+    }
+
+    private IEnumerable<string> Directories { get; }
+
+    public static AssemblyResolver Install(AppDomain appDomain, params string[] directories)
+        => (AssemblyResolver)appDomain.CreateInstanceAndUnwrap(
+            Assembly.GetExecutingAssembly().FullName,
+            typeof(AssemblyResolver).FullName,
+            false,
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            null,
+            new object[] { directories },
+            null,
+            null);
+
+    public void Dispose() => AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
+
+    private Assembly? CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+    {
+        var assemblyName = new AssemblyName(args.Name);
+        var simpleName = assemblyName.Name;
+        var dllPaths = Directories
+            .Select(directory => Path.Combine(directory, simpleName + ".dll"))
+            .Where(File.Exists);
+        foreach (var dllPath in dllPaths)
         {
-            Directories = directories;
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-        }
-
-        private IEnumerable<string> Directories { get; }
-
-        public static AssemblyResolver Install(AppDomain appDomain, params string[] directories)
-            => (AssemblyResolver)appDomain.CreateInstanceAndUnwrap(
-                Assembly.GetExecutingAssembly().FullName,
-                typeof(AssemblyResolver).FullName,
-                false,
-                BindingFlags.Instance | BindingFlags.NonPublic,
-                null,
-                new object[] { directories },
-                null,
-                null);
-
-        public void Dispose() => AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
-
-        private Assembly? CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            var assemblyName = new AssemblyName(args.Name);
-            var simpleName = assemblyName.Name;
-            var dllPaths = Directories
-                .Select(directory => Path.Combine(directory, simpleName + ".dll"))
-                .Where(File.Exists);
-            foreach (var dllPath in dllPaths)
+            try
             {
-                try
-                {
-                    return Assembly.LoadFile(dllPath);
-                }
-                catch (Exception e) when (!e.IsCriticalException())
-                {
-                    // Nothing to do
-                }
+                return Assembly.LoadFile(dllPath);
             }
-
-            return null;
+            catch (Exception e) when (!e.IsCriticalException())
+            {
+                // Nothing to do
+            }
         }
+
+        return null;
     }
 }
 

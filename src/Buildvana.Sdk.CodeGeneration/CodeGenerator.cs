@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using Buildvana.Sdk.CodeGeneration.Configuration;
 using Buildvana.Sdk.CodeGeneration.Internal;
 
@@ -17,12 +18,14 @@ namespace Buildvana.Sdk.CodeGeneration;
 
 public abstract class CodeGenerator
 {
-    private static readonly IReadOnlyDictionary<CodeGeneratorLanguage, Func<CodeGenerator>> Factories
-        = new Dictionary<CodeGeneratorLanguage, Func<CodeGenerator>>
-        {
-            { CodeGeneratorLanguage.CSharp, () => new CSharpCodeGenerator() },
-            { CodeGeneratorLanguage.VisualBasic, () => new VisualBasicCodeGenerator() },
-        };
+    private static readonly Lazy<IReadOnlyDictionary<CodeGeneratorLanguage, Func<CodeGenerator>>> Factories
+        = new(
+            () => new Dictionary<CodeGeneratorLanguage, Func<CodeGenerator>>
+            {
+                { CodeGeneratorLanguage.CSharp, () => new CSharpCodeGenerator() },
+                { CodeGeneratorLanguage.VisualBasic, () => new VisualBasicCodeGenerator() },
+            },
+            LazyThreadSafetyMode.ExecutionAndPublication);
 
     public static string GenerateCode(GeneratedCode configuration)
     {
@@ -43,7 +46,7 @@ public abstract class CodeGenerator
 
     private static bool TryCreate(CodeGeneratorLanguage language, [MaybeNullWhen(false)] out CodeGenerator result)
     {
-        if (!Factories.TryGetValue(language, out var factory))
+        if (!Factories.Value.TryGetValue(language, out var factory))
         {
             result = null;
             return false;
