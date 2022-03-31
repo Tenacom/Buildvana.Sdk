@@ -1,6 +1,10 @@
 @echo off & setlocal enableextensions
 pushd "%~dp0"
 
+:: .NET environment variables
+set DOTNET_NOLOGO=true
+set DOTNET_CLI_UI_LANGUAGE=en-US
+
 :: Configuration values
 set _SOLUTION_NAME=
 set _DEFAULT_TASK=
@@ -25,7 +29,7 @@ if "%_DEFAULT_TASK%"=="" set _DEFAULT_TASK=All
 if "%_MSBUILD_CONFIGURATION%"=="" set _MSBUILD_CONFIGURATION=Release
 if "%_MSBUILD_VERBOSITY%"=="" set _MSBUILD_VERBOSITY=normal
 if "%_MSBUILD_OPTIONS%"=="" set _MSBUILD_OPTIONS=
-if "%_VS_MSBUILD_EXE%"=="" set _VS_MSBUILD_EXE="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
+if "%_VS_MSBUILD_EXE%"=="" set _VS_MSBUILD_EXE="%ProgramFiles%\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
 
 :: Use VisualStudio's MSBuild if specified
 if /I "%1" equ "VS" (

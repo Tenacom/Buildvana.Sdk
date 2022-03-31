@@ -31,7 +31,6 @@
   <!-- Solution-wide build options -->
 
   <PropertyGroup>
-    <TargetFrameworks>net472;net5.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <XmlDocs>false</XmlDocs> <!--Do not generate XML documentation -->
