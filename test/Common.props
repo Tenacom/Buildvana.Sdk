@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <Packable>false</Packable>
-    <NoWarn>CA1707;SA1201;SA1202;SA1203;SA1204;SA1600</NoWarn>
+    <NoWarn>CA1707;SA1201;SA1202;SA1203;SA1204;SA1600;$(NoWarn)</NoWarn>
   </PropertyGroup>
 
 </Project>
