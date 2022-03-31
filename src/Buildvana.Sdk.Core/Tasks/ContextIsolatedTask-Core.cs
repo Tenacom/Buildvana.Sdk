@@ -16,85 +16,84 @@ using System.Runtime.Loader;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-namespace Buildvana.Sdk.Tasks
-{
-    // Copyright (C) Andrew Arnott and Nerdbank.MSBuildExtension contributors.
-    // Licensed under the Microsoft Public License.
-    // This file has been modified from the original form.
-    // Original file: https://github.com/AArnott/Nerdbank.MSBuildExtension/blob/master/src/Nerdbank.MSBuildExtension/netstandard1.5/ContextIsolatedTask.cs
-    // See THIRD-PARTY-NOTICES in the repository root for more information.
-    public abstract partial class ContextIsolatedTask : Task
-    {
-        private AssemblyLoadContext? _context;
+namespace Buildvana.Sdk.Tasks;
 
-        public sealed override bool Execute()
+// Copyright (C) Andrew Arnott and Nerdbank.MSBuildExtension contributors.
+// Licensed under the Microsoft Public License.
+// This file has been modified from the original form.
+// Original file: https://github.com/AArnott/Nerdbank.MSBuildExtension/blob/master/src/Nerdbank.MSBuildExtension/netstandard1.5/ContextIsolatedTask.cs
+// See THIRD-PARTY-NOTICES in the repository root for more information.
+public abstract partial class ContextIsolatedTask : Task
+{
+    private AssemblyLoadContext? _context;
+
+    public sealed override bool Execute()
+    {
+        try
         {
+            var taskAssemblyPath = new Uri(GetType().Assembly.Location).LocalPath;
+            _context = new CustomAssemblyLoader(this);
             try
             {
-                var taskAssemblyPath = new Uri(GetType().Assembly.Location).LocalPath;
-                _context = new CustomAssemblyLoader(this);
-                try
-                {
-                    var inContextAssembly = _context.LoadFromAssemblyPath(taskAssemblyPath);
-                    var innerTaskType = inContextAssembly.GetType(GetType().FullName!);
+                var inContextAssembly = _context.LoadFromAssemblyPath(taskAssemblyPath);
+                var innerTaskType = inContextAssembly.GetType(GetType().FullName!);
 
-                    var innerTask = Activator.CreateInstance(innerTaskType!);
-                    return ExecuteInnerTask(innerTask!);
-                }
-                finally
-                {
-                    _context.Unload();
-                }
+                var innerTask = Activator.CreateInstance(innerTaskType!);
+                return ExecuteInnerTask(innerTask!);
             }
-            catch (OperationCanceledException)
+            finally
             {
-                Log.LogMessage(MessageImportance.High, $"Task {GetType().Name} canceled.");
-                return false;
+                _context.Unload();
             }
         }
-
-        protected Assembly LoadAssemblyByPath(string assemblyPath)
+        catch (OperationCanceledException)
         {
-            if (_context == null)
-            {
-                throw new InvalidOperationException($"{nameof(AssemblyLoadContext)} must be set before calling {nameof(LoadAssemblyByPath)}.");
-            }
+            Log.LogMessage(MessageImportance.High, $"Task {GetType().Name} canceled.");
+            return false;
+        }
+    }
 
-            return _context.LoadFromAssemblyPath(assemblyPath);
+    protected Assembly LoadAssemblyByPath(string assemblyPath)
+    {
+        if (_context == null)
+        {
+            throw new InvalidOperationException($"{nameof(AssemblyLoadContext)} must be set before calling {nameof(LoadAssemblyByPath)}.");
         }
 
-        private class CustomAssemblyLoader : AssemblyLoadContext
+        return _context.LoadFromAssemblyPath(assemblyPath);
+    }
+
+    private class CustomAssemblyLoader : AssemblyLoadContext
+    {
+        private readonly ContextIsolatedTask _loaderTask;
+
+        internal CustomAssemblyLoader(ContextIsolatedTask loaderTask)
+            : base("ContextIsolatedTask: " + loaderTask.GetType().Name, true)
         {
-            private readonly ContextIsolatedTask _loaderTask;
+            _loaderTask = loaderTask;
+        }
 
-            internal CustomAssemblyLoader(ContextIsolatedTask loaderTask)
-                : base("ContextIsolatedTask: " + loaderTask.GetType().Name, true)
+        protected override Assembly Load(AssemblyName assemblyName)
+            => _loaderTask.LoadAssemblyByName(assemblyName) ?? Default.LoadFromAssemblyName(assemblyName);
+
+        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+        {
+            string? unmanagedDllPath = null;
+            var unmanagedDllDirectory = _loaderTask.UnmanagedDllDirectory;
+            if (unmanagedDllDirectory != null)
             {
-                _loaderTask = loaderTask;
+                unmanagedDllPath = Directory.EnumerateFiles(
+                        unmanagedDllDirectory,
+                        $"{unmanagedDllName}.*")
+                    .Concat(Directory.EnumerateFiles(
+                        unmanagedDllDirectory,
+                        $"lib{unmanagedDllName}.*"))
+                    .FirstOrDefault();
             }
 
-            protected override Assembly Load(AssemblyName assemblyName)
-                => _loaderTask.LoadAssemblyByName(assemblyName) ?? Default.LoadFromAssemblyName(assemblyName);
-
-            protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
-            {
-                string? unmanagedDllPath = null;
-                var unmanagedDllDirectory = _loaderTask.UnmanagedDllDirectory;
-                if (unmanagedDllDirectory != null)
-                {
-                    unmanagedDllPath = Directory.EnumerateFiles(
-                            unmanagedDllDirectory,
-                            $"{unmanagedDllName}.*")
-                        .Concat(Directory.EnumerateFiles(
-                            unmanagedDllDirectory,
-                            $"lib{unmanagedDllName}.*"))
-                        .FirstOrDefault();
-                }
-
-                return unmanagedDllPath != null
-                    ? LoadUnmanagedDllFromPath(unmanagedDllPath)
-                    : base.LoadUnmanagedDll(unmanagedDllName);
-            }
+            return unmanagedDllPath != null
+                ? LoadUnmanagedDllFromPath(unmanagedDllPath)
+                : base.LoadUnmanagedDll(unmanagedDllName);
         }
     }
 }
