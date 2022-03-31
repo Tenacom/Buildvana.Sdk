@@ -26,6 +26,11 @@ jobs:
       with:
         fetch-depth: 0 # Nerdbank.GitVersioning needs a deep clone, as it needs access to Git history.
 
+    - name: Setup .NET 5.0 # Needed for ExportAnnotations
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 5.0.x
+
     - name: Setup .NET 6.0
       uses: actions/setup-dotnet@v2
       with:
