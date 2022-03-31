@@ -48,16 +48,16 @@ if /I "%_TASK%"=="Clean" (
     call :F_Run_Tasks Clean Tools
 ) else if /I "%_TASK%"=="Restore" (
     call :F_Run_Tasks Clean Tools Restore
-) else if /I "%_TASK%"=="Inspect" (
-    call :F_Run_Tasks Clean Tools Restore Inspect
 ) else if /I "%_TASK%"=="Build" (
-    call :F_Run_Tasks Clean Tools Restore Inspect Build
+    call :F_Run_Tasks Clean Tools Restore Build
+) else if /I "%_TASK%"=="Inspect" (
+    call :F_Run_Tasks Clean Tools Restore Build Inspect
 ) else if /I "%_TASK%"=="Test" (
-    call :F_Run_Tasks Clean Tools Restore Inspect Build Test
+    call :F_Run_Tasks Clean Tools Restore Build Inspect Test
 ) else if /I "%_TASK%"=="Pack" (
-    call :F_Run_Tasks Clean Tools Restore Inspect Build Test Pack
+    call :F_Run_Tasks Clean Tools Restore Build Inspect Test Pack
 ) else if /I "%_TASK%"=="All" (
-    call :F_Run_Tasks Clean Tools Restore Inspect Build Test Pack
+    call :F_Run_Tasks Clean Tools Restore Build Inspect Test Pack
 ) else (
     echo *** Unknown task '%_TASK%'
 )
@@ -102,7 +102,7 @@ exit /B 0
 
 :T_Inspect
 call :F_Label Inspect code with ReSharper tools
-call :F_Exec dotnet jb inspectcode "%_SOLUTION_FILE%" --output=%_LOGS_DIR%\inspect.log --format=Text
+call :F_Exec dotnet jb inspectcode "%_SOLUTION_FILE%" --no-build --output=%_LOGS_DIR%\inspect.log --format=Text
 exit /B %ERRORLEVEL%
 
 :T_VS_Inspect
