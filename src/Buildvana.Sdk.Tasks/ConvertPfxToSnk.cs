@@ -69,7 +69,7 @@ namespace Buildvana.Sdk.Tasks
 
         private static byte[] ExtractPrivateKey(X509Certificate2 certificate, string certificatePath)
         {
-            if (certificate.PrivateKey is not RSACryptoServiceProvider privateKey)
+            if (certificate.GetRSAPrivateKey() is not RSACryptoServiceProvider privateKey)
             {
                 throw new BuildErrorException(Strings.AssemblySigning.MissingRsaPrivateKey, certificatePath);
             }

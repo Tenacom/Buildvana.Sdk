@@ -65,7 +65,7 @@ namespace Buildvana.Sdk.Tasks
 
         private static byte[] Hash(byte[] buffer, int count)
         {
-            using var algorithm = new SHA512CryptoServiceProvider();
+            using var algorithm = SHA512.Create();
             return algorithm.ComputeHash(buffer, 0, count);
         }
 

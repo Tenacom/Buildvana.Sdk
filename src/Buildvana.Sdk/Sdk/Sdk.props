@@ -36,11 +36,11 @@
   <!-- Check for a supported version of MSBuild. -->
   <PropertyGroup>
     <BV_MSBuildVersionSupported>false</BV_MSBuildVersionSupported>
-    <BV_MSBuildVersionSupported Condition="'$(MSBuildVersion)' &gt;= '16.8'">true</BV_MSBuildVersionSupported>
+    <BV_MSBuildVersionSupported Condition="'$(MSBuildVersion)' &gt;= '17.0'">true</BV_MSBuildVersionSupported>
   </PropertyGroup>
   <ItemGroup Condition="!$(BV_MSBuildVersionSupported)">
     <EvaluationError Include="BVE1004"
-                     Text="Buildvana SDK requires at least MSBuild v16.8." />
+                     Text="Buildvana SDK requires at least MSBuild v17.0." />
   </ItemGroup>
 
   <!-- BV_IsConfigured is true if HomeDirectory is configured and the MSBuild version is supported. -->

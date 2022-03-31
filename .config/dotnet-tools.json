@@ -3,13 +3,13 @@
   "isRoot": true,
   "tools": {
     "nukeeper": {
-      "version": "0.34.0",
+      "version": "0.35.0",
       "commands": [
         "nukeeper"
       ]
     },
-    "jetbrains.resharper.globaltools": {
-      "version": "2021.2.0",
+    "JetBrains.ReSharper.GlobalTools": {
+      "version": "2021.3.4",
       "commands": [
         "jb"
       ]
