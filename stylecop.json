@@ -5,12 +5,6 @@
 
   "settings": {
 
-    "indentation": {
-      "indentationSize": 4,
-      "tabSize": 4,
-      "useTabs": false
-    },
-
     "spacingRules": {
     },
 
@@ -22,7 +16,7 @@
       "elementOrder": [ "kind", "accessibility", "constant", "static", "readonly" ],
       "systemUsingDirectivesFirst": true,
       "usingDirectivesPlacement": "outsideNamespace",
-      "blankLinesBetweenUsingGroups": "allow"
+      "blankLinesBetweenUsingGroups": "omit"
     },
 
     "namingRules": {
@@ -39,20 +33,20 @@
 
     "layoutRules": {
       "newlineAtEndOfFile": "require",
-      "allowConsecutiveUsings": true
+      "allowConsecutiveUsings": true,
+      "allowDoWhileOnClosingBrace":  true 
     },
 
     "documentationRules": {
-      "companyName": "Riccardo De Agostini and Buildvana contributors",
-      "copyrightText": "{decoration}\nCopyright (C) {companyName}. All rights reserved.\nLicensed under the {licenseName} license.\nSee {licenseFile} file in the project root for full license information.\n\nPart of this file may be third-party code, distributed under a compatible license.\nSee {thirdPartyNoticeFile} file in the project root for third-party copyright notices.\n{decoration}",
+      "companyName": "Riccardo De Agostini",
+      "copyrightText": "{decoration}\r\nCopyright (C) {companyName} and contributors. All rights reserved.\nLicensed under the {licenseName} license.\nSee the {licenseFile} file in the project root for full license information.\r\n\r\nPart of this file may be third-party code, distributed under a compatible license.\r\nSee the THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.\r\n{decoration}",
       "variables": {
+        "decoration": "---------------------------------------------------------------------------------------",
         "licenseName": "MIT",
-        "licenseFile": "LICENSE",
-        "thirdPartyNoticeFile": "THIRD-PARTY-NOTICES",
-        "decoration": "-----------------------------------------------------------------------------------"
+        "licenseFile": "LICENSE"
       },
       "xmlHeader": false,
-      "documentInterfaces": true,
+      "documentInterfaces": false,
       "documentExposedElements": true,
       "documentInternalElements": false,
       "documentPrivateElements": false,

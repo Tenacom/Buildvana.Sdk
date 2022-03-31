@@ -1,11 +1,11 @@
-﻿// -----------------------------------------------------------------------------------
-// Copyright (C) Riccardo De Agostini and Buildvana contributors. All rights reserved.
+﻿// ---------------------------------------------------------------------------------------
+// Copyright (C) Riccardo De Agostini and contributors. All rights reserved.
 // Licensed under the MIT license.
-// See LICENSE file in the project root for full license information.
+// See the LICENSE file in the project root for full license information.
 //
 // Part of this file may be third-party code, distributed under a compatible license.
-// See THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
-// -----------------------------------------------------------------------------------
+// See the THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
+// ---------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
 using System.Linq;
@@ -16,38 +16,39 @@ using Buildvana.Sdk.Utilities;
 using JetBrains.Annotations;
 using Microsoft.Build.Framework;
 
-namespace Buildvana.Sdk.Tasks
+namespace Buildvana.Sdk.Tasks;
+
+public sealed class WriteThisAssemblyClass : BuildvanaSdkCodeGeneratorTask
 {
-    public sealed class WriteThisAssemblyClass : BuildvanaSdkCodeGeneratorTask
+    [PublicAPI]
+    public string? ClassName { get; set; }
+
+    [PublicAPI]
+    public string? Namespace { get; set; }
+
+    [PublicAPI]
+#pragma warning disable CA1819 // Properties should not return arrays - MSBuild wants it like this
+    public ITaskItem[]? Constants { get; set; }
+#pragma warning restore CA1819
+
+    protected override IEnumerable<CodeFragment> GetCodeFragments()
     {
-        [PublicAPI]
-        public string? ClassName { get; set; }
+        var classNamespace = StringUtility.IsNullOrEmpty(Namespace) ? null : Namespace;
+        var className = StringUtility.IsNullOrEmpty(ClassName) ? "ThisAssembly" : ClassName;
+        var constants = (Constants ?? Enumerable.Empty<ITaskItem>()).Select(ExtractConstantDefinitionFromItem);
+        var fragment = new ThisAssemblyClass(classNamespace, className, constants);
+        yield return fragment;
+    }
 
-        [PublicAPI]
-        public string? Namespace { get; set; }
-
-        [PublicAPI]
-        public ITaskItem[]? Constants { get; set; }
-
-        protected override IEnumerable<CodeFragment> GetCodeFragments()
+    private static Constant ExtractConstantDefinitionFromItem(ITaskItem item)
+    {
+        var name = item.ItemSpec.Trim();
+        var valueStr = item.GetMetadata("Value")?.Trim() ?? "<null>";
+        if (!CodeGeneratorConfigurationUtility.TryParseConstantValue(valueStr, out var value))
         {
-            var classNamespace = StringUtility.IsNullOrEmpty(Namespace) ? null : Namespace;
-            var className = StringUtility.IsNullOrEmpty(ClassName) ? "ThisAssembly" : ClassName;
-            var constants = (Constants ?? Enumerable.Empty<ITaskItem>()).Select(ExtractConstantDefinitionFromItem);
-            var fragment = new ThisAssemblyClass(classNamespace, className, constants);
-            yield return fragment;
+            throw new BuildErrorException(Strings.ThisAssemblyClass.InvalidConstantValueFmt, name, valueStr);
         }
 
-        private static Constant ExtractConstantDefinitionFromItem(ITaskItem item)
-        {
-            var name = item.ItemSpec.Trim();
-            var valueStr = item.GetMetadata("Value")?.Trim() ?? "<null>";
-            if (!CodeGeneratorConfigurationUtility.TryParseConstantValue(valueStr, out var value))
-            {
-                throw new BuildErrorException(Strings.ThisAssemblyClass.InvalidConstantValueFmt, name, valueStr);
-            }
-
-            return new Constant(name, value);
-        }
+        return new Constant(name, value);
     }
 }
