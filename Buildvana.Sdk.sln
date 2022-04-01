@@ -17,7 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Configuration", "- Config
 		Directory.Build.targets = Directory.Build.targets
 		Directory.Packages.props = Directory.Packages.props
 		stylecop.json = stylecop.json
-		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Documentation", "- Documentation", "{F2FA2D74-645C-4F7A-A60D-EE2355E5CBA1}"
