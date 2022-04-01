@@ -5,5 +5,5 @@
     "allowPrerelease": false
   },
   "msbuild-sdks": {
-    "Buildvana.Sdk": "1.0.0-alpha.14"
+    "Buildvana.Sdk": "1.0.0-alpha.15"
 }}
