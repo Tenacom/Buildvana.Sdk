@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Known problems introduced by this release
 
+## [1.0.0-alpha.16](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.16) (2022-04-01)
+
+### Bugs fixed in this release
+
+- When using Buildvana SDK v1.0.0-alpha.14 with .NET SDK 6.0 and using ReSharper annotations, .NET SDK 5.0 was required too, because it was needed by the `Resharper.ExportAnnotations` dependency. This version updates `Resharper.ExportAnnotations` to a version that works with .NET SDK 6, thus removing the aforementioned requirement.
+
 ## [1.0.0-alpha.15](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.15) (2022-04-01)
 
 ### New features
