@@ -7,7 +7,7 @@
     <Authors>Riccardo De Agostini and Buildvana contributors</Authors>
     <Owners>Buildvana</Owners>
     <Company>The Buildvana team</Company>
-    <Copyright>Copyright (C) 2020-2021 Riccardo De Agostini and Buildvana contributors.</Copyright>
+    <Copyright>Copyright (C) 2020-2022 Riccardo De Agostini and Buildvana contributors.</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 

@@ -9,16 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
-- https://github.com/Buildvana/Buildvana.Sdk/pull/124 - When the new `UseAlternatePack` property is set to `true`, Buildvana SDK hijacks the Pack target to publish a project to one or more folders and/or create a setup executable using InnoSetup.
-
 ### Changes to existing features
-
-- https://github.com/Buildvana/Buildvana.Sdk/pull/123 - **POTENTIALLY BREAKING CHANGE:** The minimum supported MSBuild version is now 17.0 (.NET SDK 6.0, Visual Studio 2022 v17.0). As a consequence, the only supported .NET environments are .NET 6.0 or newer and .NET Framework 4.7.2 or newer. This of course refers to the build phase; you can use Buildvana SDK to target older versions of .NET, .NET Core, or .NET Framework.
-- https://github.com/Buildvana/Buildvana.Sdk/pull/123 - **BREAKING CHANGE:** The `AllowUnderscoresInMemberNames` property is no longer supported. Just append `;CA1707` to the `NoWarn` property instead.
 
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
+
+## [1.0.0-alpha.15](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.15) (2022-04-01)
+
+### New features
+
+- https://github.com/Buildvana/Buildvana.Sdk/pull/124 - Alternate Pack target: use the Pack target to publish to one or more folders and/or create setup executables with InnoSetup. See the PR for more information.
+
+### Changes to existing features
+
+- https://github.com/Buildvana/Buildvana.Sdk/pull/123 - **POTENTIALLY BREAKING CHANGE:** The minimum supported MSBuild version is now 17.0 (.NET SDK 6.0, Visual Studio 2022 v17.0).
+- https://github.com/Buildvana/Buildvana.Sdk/pull/123 - **POTENTIALLY BREAKING CHANGE:** The only supported .NET environments are now .NET 6.0 or newer and .NET Framework 4.7.2 or newer. This of course refers to the build phase; you can use Buildvana SDK to target older versions of .NET, .NET Core, or .NET Framework.
+- https://github.com/Buildvana/Buildvana.Sdk/pull/123 - **POTENTIALLY BREAKING CHANGE:** The `AllowUnderscoresInMemberNames` property is no longer supported. Just append `;CA1707` to the `NoWarn` property instead.
 
 ## [1.0.0-alpha.14](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.14) (2021-09-13)
 
