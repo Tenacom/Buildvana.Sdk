@@ -10,7 +10,7 @@
     <BV_PackageVersion Include="JetBrains.Annotations" Version="2021.3.0" />
     <BV_PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.3" />
     <BV_PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" />
-    <BV_PackageVersion Include="ReSharper.ExportAnnotations.Task" Version="1.3.2" />
+    <BV_PackageVersion Include="ReSharper.ExportAnnotations.Task" Version="1.4.0" />
     <BV_PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.406" />
     <BV_PackageVersion Include="Tools.InnoSetup" Version="6.2.0" />
   </ItemGroup>
