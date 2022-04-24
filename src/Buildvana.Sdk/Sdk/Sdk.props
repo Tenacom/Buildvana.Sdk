@@ -10,11 +10,13 @@
 
   <!--
     Rules for HomeDirectory:
+      * the nearest directory above the project file containing a file named .buildvana-home
       * the Git submodule above the project's directory (look for a file named .git)
       * the Git repository above the project's directory (look for a file named HEAD in a .git subdirectory)
   -->
   <PropertyGroup>
-    <HomeDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git'))</HomeDirectory>
+    <HomeDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.buildvana-home'))</HomeDirectory>
+    <HomeDirectory Condition="'$(HomeDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git'))</HomeDirectory>
     <!--
         NOTE: Check for ".git/HEAD", not ".git\HEAD", because the latter only works on Windows.
               MSBuild doesn't convert directory separators on the second argument to GetDirectoryNameOfFileAbove,
