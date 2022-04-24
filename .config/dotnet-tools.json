@@ -8,8 +8,8 @@
         "nukeeper"
       ]
     },
-    "JetBrains.ReSharper.GlobalTools": {
-      "version": "2021.3.4",
+    "jetbrains.resharper.globaltools": {
+      "version": "2022.1.0",
       "commands": [
         "jb"
       ]
