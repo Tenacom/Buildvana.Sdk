@@ -128,6 +128,10 @@
                          IncludeAssets="build"
                          ExcludeAssets="runtime"
                          PrivateAssets="all" />
+    <BV_PackageReference Include="Tools.InnoDownloadPlugin"
+                         IncludeAssets="build"
+                         ExcludeAssets="runtime"
+                         PrivateAssets="all" />
   </ItemGroup>
 
   <Target Name="CompleteInnoSetupScriptMetadata"
@@ -174,7 +178,7 @@
   <Target Name="GenerateSetup">
 
     <PropertyGroup>
-      <InnoSetupCommandLine>&quot;$(InnoSetupCompiler)&quot; &quot;/J$(InnoSetupIncludePath)&quot; &quot;$(InnoSetupScriptFullPath)&quot;</InnoSetupCommandLine>
+      <InnoSetupCommandLine>&quot;$(InnoSetupCompiler)&quot; &quot;/I$(InnoDownloadPluginDir)&quot; &quot;/J$(InnoSetupIncludePath)&quot; &quot;$(InnoSetupScriptFullPath)&quot;</InnoSetupCommandLine>
     </PropertyGroup>
 
     <Message Importance="High" Text="&gt;&gt;&gt;&gt;$(InnoSetupCommandLine)&lt;&lt;&lt;&lt;" />
