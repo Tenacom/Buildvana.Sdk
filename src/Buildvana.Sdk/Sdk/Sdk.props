@@ -12,12 +12,14 @@
     Rules for HomeDirectory:
       * the Git submodule above the project's directory (look for a file named .git)
       * the Git repository above the project's directory (look for a file named HEAD in a .git subdirectory)
-        NOTE: Check for ".git/HEAD", not ".git\HEAD", because the latter only works on Windows.
-              MSBuild doesn't convert directory separators on the second argument to GetDirectoryNameOfFileAbove,
-              probably due to https://github.com/microsoft/msbuild/issues/1024
   -->
   <PropertyGroup>
     <HomeDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git'))</HomeDirectory>
+    <!--
+        NOTE: Check for ".git/HEAD", not ".git\HEAD", because the latter only works on Windows.
+              MSBuild doesn't convert directory separators on the second argument to GetDirectoryNameOfFileAbove,
+              probably due to https://github.com/microsoft/msbuild/issues/1024
+    -->
     <HomeDirectory Condition="'$(HomeDirectory)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)','.git/HEAD'))</HomeDirectory>
   </PropertyGroup>
 
