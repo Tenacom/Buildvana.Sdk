@@ -34,7 +34,7 @@
     "layoutRules": {
       "newlineAtEndOfFile": "require",
       "allowConsecutiveUsings": true,
-      "allowDoWhileOnClosingBrace":  true 
+      "allowDoWhileOnClosingBrace":  true
     },
 
     "documentationRules": {
@@ -46,7 +46,7 @@
         "licenseFile": "LICENSE"
       },
       "xmlHeader": false,
-      "documentInterfaces": false,
+      "documentInterfaces": true,
       "documentExposedElements": true,
       "documentInternalElements": false,
       "documentPrivateElements": false,
