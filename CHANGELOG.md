@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- https://github.com/Buildvana/Buildvana.Sdk/pull/132 - InnoSetup integration now automatically includes Inno Download Plugin.
+- https://github.com/Buildvana/Buildvana.Sdk/pull/132 - Buildvana SDK can now be used outside of a Git repository: just put a file named ".buildvana-home" in the home directory (usually the same directory as your solution file). The ".buildvana-home" file is searched for before looking for a Git submodule or repository.
+
 ### Changes to existing features
 
 ### Bugs fixed in this release
