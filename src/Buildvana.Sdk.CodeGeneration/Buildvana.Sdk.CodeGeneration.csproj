@@ -11,10 +11,8 @@
   <!-- References -->
 
   <ItemGroup>
-    <PackageReference Include="IndexRange" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
-    <PackageReference Include="Nullable" />
   </ItemGroup>
 
   <ItemGroup>
