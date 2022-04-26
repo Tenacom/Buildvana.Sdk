@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
-- https://github.com/Buildvana/Buildvana.Sdk/pull/134 - Buildvana SDK will, by default, include in every C# project some polyfills that let developers use latest C# features on older platforms. To disable this feature set the `UsePolyfills` property to `false`.
+- https://github.com/Buildvana/Buildvana.Sdk/pull/135 - Buildvana SDK will, by default, include in every C# project some polyfills that let developers use latest C# features on older platforms. To disable this feature set the `UsePolyfills` property to `false`.
   - Polyfills are provided by adding a reference to the following NuGet Packages:
     - [IndexRange](https://www.nuget.org/packages/IndexRange/);
     - [Nullable](https://www.nuget.org/packages/Nullable/).
