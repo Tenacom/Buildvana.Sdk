@@ -15,7 +15,6 @@
     <PackageReference Include="Microsoft.Build.Framework" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" />
-    <PackageReference Include="Nullable" />
   </ItemGroup>
 
   <!-- Make all package references private -->
