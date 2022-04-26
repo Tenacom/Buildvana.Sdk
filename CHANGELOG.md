@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- https://github.com/Buildvana/Buildvana.Sdk/pull/134 - Buildvana SDK will, by default, include in every C# project some polyfills that let developers use latest C# features on older platforms. To disable this feature set the `UsePolyfills` property to `false`.
+  - Polyfills are provided by adding a reference to the following NuGet Packages:
+    - [IndexRange](https://www.nuget.org/packages/IndexRange/);
+    - [Nullable](https://www.nuget.org/packages/Nullable/).
+  - In addition, the following classes are added to the project on platforms where they are not part of the BCL:
+    - [System.Runtime.CompilerServices.CallerArgumentExpressionAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.callerargumentexpressionattribute)
+    - [System.Runtime.CompilerServices.IsExternalInitAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.isexternalinitattribute)
+    - [System.Runtime.CompilerServices.SkipLocalsInitAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.skiplocalsinitattribute)
+    - [System.Diagnostics.StackTraceHiddenAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.stacktracehiddenattribute) - This one is excluded from release builds, as it would have no effect anyway; it is here just to avoid preprocessor conditionals in multi-targeted projects.
+    - [ValidatedNotNullAttribute](https://docs.microsoft.com/en-us/dotnet/api/microsoft.validatednotnullattribute) - This attribute, as included by Buildvana SDK, does not have a namespace and thus does not require any `using` directive. Since a lot of projects already define this attribute, and to prevent conflicts with the Visual Studio SDK, you can disable the inclusion of this attribute buy setting the `UseValidatedNotNullAttribute` property to `false`.
+
 ### Changes to existing features
 
 ### Bugs fixed in this release
