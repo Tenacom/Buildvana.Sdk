@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+### Changes to existing features
+
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.0-alpha.18](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.18) (2022-04-26)
+
+### New features
+
 - https://github.com/Buildvana/Buildvana.Sdk/pull/135 - Buildvana SDK will, by default, include in every C# project some polyfills that let developers use latest C# features on older platforms. To disable this feature set the `UsePolyfills` property to `false`.
   - Polyfills are provided by adding a reference to the following NuGet Packages:
     - [IndexRange](https://www.nuget.org/packages/IndexRange/);
@@ -19,12 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - [System.Runtime.CompilerServices.SkipLocalsInitAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.skiplocalsinitattribute)
     - [System.Diagnostics.StackTraceHiddenAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.stacktracehiddenattribute) - This one is excluded from release builds, as it would have no effect anyway; it is here just to avoid preprocessor conditionals in multi-targeted projects.
     - [ValidatedNotNullAttribute](https://docs.microsoft.com/en-us/dotnet/api/microsoft.validatednotnullattribute) - This attribute, as included by Buildvana SDK, does not have a namespace and thus does not require any `using` directive. Since a lot of projects already define this attribute, and to prevent conflicts with the Visual Studio SDK, you can disable the inclusion of this attribute buy setting the `UseValidatedNotNullAttribute` property to `false`.
-
-### Changes to existing features
-
-### Bugs fixed in this release
-
-### Known problems introduced by this release
 
 ## [1.0.0-alpha.17](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.17) (2022-04-24)
 
