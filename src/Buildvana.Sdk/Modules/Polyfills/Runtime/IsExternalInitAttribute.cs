@@ -6,6 +6,7 @@
 #if !NET5_0_OR_GREATER
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Runtime.CompilerServices;
 
