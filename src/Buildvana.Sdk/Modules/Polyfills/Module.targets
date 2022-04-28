@@ -2,7 +2,7 @@
 
   <!-- Coalesce UsePolyfills to a boolean value, defaulting to true; force to false for non-C# projects. -->
   <PropertyGroup>
-    <UsePolyfills> Condition="'$(MSBuildProjectExtension)' != '.csproj'">false</UsePolyfills>
+    <UsePolyfills Condition="'$(MSBuildProjectExtension)' != '.csproj'">false</UsePolyfills>
     <UsePolyfills Condition="'$(UsePolyfills)' != 'false'">true</UsePolyfills>
   </PropertyGroup>
 
