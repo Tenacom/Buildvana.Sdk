@@ -36,16 +36,16 @@ internal abstract class CodeGenerator<TSyntaxNode> : CodeGenerator
 
     protected abstract SyntaxTrivia GenerateLineComment(string comment);
 
-    protected abstract TSyntaxNode GenerateAssemblyAttribute(AssemblyAttribute assemblyAttribute);
+    protected abstract TSyntaxNode GenerateAssemblyAttribute(AssemblyAttributeFragment assemblyAttribute);
 
-    protected abstract TSyntaxNode GenerateThisAssemblyClass(ThisAssemblyClass thisAssemblyClass);
+    protected abstract TSyntaxNode GenerateThisAssemblyClass(ThisAssemblyClassFragment thisAssemblyClass);
 
     protected abstract TSyntaxNode GenerateCompilationUnit(IEnumerable<TSyntaxNode> syntaxNodes);
 
     private TSyntaxNode GenerateCodeFragment(CodeFragment? fragment)
         => fragment switch {
-            AssemblyAttribute assemblyAttribute => GenerateAssemblyAttribute(assemblyAttribute),
-            ThisAssemblyClass thisAssemblyClass => GenerateThisAssemblyClass(thisAssemblyClass),
+            AssemblyAttributeFragment assemblyAttribute => GenerateAssemblyAttribute(assemblyAttribute),
+            ThisAssemblyClassFragment thisAssemblyClass => GenerateThisAssemblyClass(thisAssemblyClass),
             null => throw new ArgumentNullException(nameof(fragment)),
             _ => throw new ArgumentException($"Unknown code fragment class '{fragment.GetType().Name}' passed to {nameof(GenerateCodeFragment)}.", nameof(fragment)),
         };

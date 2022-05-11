@@ -24,14 +24,14 @@ internal sealed class VisualBasicCodeGenerator : CodeGenerator<VisualBasicSyntax
     protected override SyntaxTrivia GenerateLineComment(string comment)
         => CommentTrivia("' " + comment);
 
-    protected override VisualBasicSyntaxNode GenerateAssemblyAttribute(AssemblyAttribute assemblyAttribute)
+    protected override VisualBasicSyntaxNode GenerateAssemblyAttribute(AssemblyAttributeFragment assemblyAttribute)
         => BuildAttribute(
             SyntaxKind.AssemblyKeyword,
             assemblyAttribute.Type,
             assemblyAttribute.OrderedParameters.Select(p => p.Value),
             assemblyAttribute.NamedParameters.Select(p => (p.Name, p.Value)));
 
-    protected override VisualBasicSyntaxNode GenerateThisAssemblyClass(ThisAssemblyClass thisAssemblyClass)
+    protected override VisualBasicSyntaxNode GenerateThisAssemblyClass(ThisAssemblyClassFragment thisAssemblyClass)
     {
         var moduleBlock = ModuleBlock(
                 ModuleStatement(thisAssemblyClass.Name)

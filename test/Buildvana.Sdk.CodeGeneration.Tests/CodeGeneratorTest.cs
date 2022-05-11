@@ -18,11 +18,11 @@ public class CodeGeneratorTest
     [TestCase("VisualBasic")]
     public void GenerateCode_ReturnsNonEmptyString(string languageStr)
     {
-        var assemblyAttribute = new AssemblyAttribute(
+        var assemblyAttribute = new AssemblyAttributeFragment(
             "System.Runtime.InteropServices.ComVisible",
             new[] { new OrderedParameter(false) });
 
-        var thisAssemblyClass = new ThisAssemblyClass(
+        var thisAssemblyClass = new ThisAssemblyClassFragment(
             null,
             "ThisAssembly",
             new[] { new Constant("Answer", 42) });
