@@ -92,6 +92,9 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 | BVE1506 | Specified package icon file '...' does not exist. | A package icon file specified by the `PackageIconPath` property does not exist. |
 | BVE1507 | Specified package icon file '...' was not found. | A package icon file specified by the `PackageIcon` property was not found in the project's directory nor in any containing directory. |
 | BVE1508 | No package icon file found. | No package icon file was specified, and no default package icon has been found. Set the `IconInPackage` property to `false` to explicitly exclude any package icon to be included in the package. |
+| BVE1509 | Specified README file '...' does not exist. | A README file specified by the `PackageReadmePath` property does not exist. |
+| BVE1510 | Specified README file '...' was not found. | A README file specified by the `PackageReadmeFile` property was not found in the project's directory nor in any containing directory. |
+| BVE1511 | No README file found for package. | No README file was specified, and no default README file has been found. Set the `ReadmeFileInPackage` property to `false` to explicitly exclude any README file to be included in the package. |
 
 | Warning code | Message | Description |
 | ------------ | ------- | ----------- |

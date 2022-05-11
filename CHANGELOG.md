@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- https://github.com/Buildvana/Buildvana.Sdk/pull/142 - For packable projects, Buildvana SDK will automatically find a README.md file and include it in the NuGet package. To disable this feature, set the `ReadmeFileInPackage` property to `false`.  
+Recognized names for the README file, in order of lookup, are: `Package-README.md`; `package-readme.md`; `NuGet-README.md`; `nuget-readme.md`; `NuGet.md`; `nuget.md`; `README.md`; `readme.md`.
 ### Changes to existing features
 
 ### Bugs fixed in this release
