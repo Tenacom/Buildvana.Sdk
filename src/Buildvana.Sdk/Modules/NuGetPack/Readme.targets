@@ -1,0 +1,112 @@
+<Project>
+
+  <!-- Coalesce ReadmeFileInPackage to a boolean value. Default is true. -->
+  <PropertyGroup>
+    <ReadmeFileInPackage Condition="'$(ReadmeFileInPackage)' == ''">true</ReadmeFileInPackage>
+    <ReadmeFileInPackage Condition="'$(ReadmeFileInPackage)' != 'true'">false</ReadmeFileInPackage>
+  </PropertyGroup>
+
+  <!--
+    Include a README file in package:
+      - if ReadmeFileInPackage is false, just don't;
+      - if PackageReadmePath is specified, use it;
+      - otherwise, if PackageReadmeFile is specified, look for it in project directory and going up.
+        If a file is found, set PackageReadmePath to its full path;
+      - otherwise, look for a default README file. If a file is found,
+        set PackageReadmePath to its full path and PackageReadmeFile to its filename.
+  -->
+  <Choose>
+    <When Condition="!$(ReadmeFileInPackage)">
+      <PropertyGroup>
+        <PackageReadmeFile />
+        <PackageReadmePath />
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(PackageReadmePath)' != ''">
+      <PropertyGroup>
+        <PackageReadmeFile>$([System.IO.Path]::GetFileName('$(PackageReadmePath)'))</PackageReadmeFile>
+      </PropertyGroup>
+      <ItemGroup>
+        <EvaluationError Condition="!Exists('$(PackageReadmePath)')"
+                         Include="BVE1509"
+                         Text="Specified README file '$(PackageReadmePath)' does not exist." />
+      </ItemGroup>
+    </When>
+    <When Condition="'$(PackageReadmeFile)' != ''">
+      <PropertyGroup>
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('$(PackageLicenseFile)', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+      </PropertyGroup>
+      <ItemGroup>
+        <EvaluationError Condition="'$(PackageReadmePath)' == ''"
+                         Include="BVE1510"
+                         Text="Specified README file '$(PackageReadmeFile)' was not found." />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <!--
+        Default README file can be one of (in order of discovery):
+          - Package-README.md
+          - package-readme.md
+          - NuGet-README.md
+          - nuget-readme.md
+          - NuGet.md
+          - nuget.md
+          - README.md
+          - readme.md
+
+        Files found outside repository are ignored.
+      -->
+      <PropertyGroup>
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('Package-README.md', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+        <PackageReadmePath Condition="'$(PackageReadmePath)' != '' And !$(PackageReadmePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageReadmePath)' == ''">
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('package-readme.md', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+        <PackageReadmePath Condition="'$(PackageReadmePath)' != '' And !$(PackageReadmePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageReadmePath)' == ''">
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('NuGet-README.md', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+        <PackageReadmePath Condition="'$(PackageReadmePath)' != '' And !$(PackageReadmePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageReadmePath)' == ''">
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('nuget-readme.md', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+        <PackageReadmePath Condition="'$(PackageReadmePath)' != '' And !$(PackageReadmePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageReadmePath)' == ''">
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('NuGet.md', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+        <PackageReadmePath Condition="'$(PackageReadmePath)' != '' And !$(PackageReadmePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageReadmePath)' == ''">
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('nuget.md', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+        <PackageReadmePath Condition="'$(PackageReadmePath)' != '' And !$(PackageReadmePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageReadmePath)' == ''">
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('README.md', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+        <PackageReadmePath Condition="'$(PackageReadmePath)' != '' And !$(PackageReadmePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(PackageReadmePath)' == ''">
+        <PackageReadmePath>$([MSBuild]::GetPathOfFileAbove('readme.md', '$(MSBuildProjectDirectory)'))</PackageReadmePath>
+        <PackageReadmePath Condition="'$(PackageReadmePath)' != '' And !$(PackageReadmePath.StartsWith('$(HomeDirectory)'))" />
+      </PropertyGroup>
+      <!-- Use found filename to set PackageReadmeFile. -->
+      <PropertyGroup Condition="'$(PackageReadmePath)' != ''">
+        <PackageReadmeFile>$([System.IO.Path]::GetFileName('$(PackageReadmePath)'))</PackageReadmeFile>
+      </PropertyGroup>
+      <!-- Error if not found. -->
+      <ItemGroup>
+        <EvaluationError Condition="'$(PackageReadmePath)' == ''"
+                         Include="BVE1511"
+                         Text="No README file found for package." />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Add README file to project items so the Pack target can find it.
+       https://devblogs.microsoft.com/nuget/add-a-readme-to-your-nuget-package/#add-a-readme-in-your-project-file-recommended
+  -->
+  <ItemGroup Condition="'$(PackageReadmePath)' != '' And '$(PackageReadmeFile)' != ''">
+    <Content Remove="$(PackageReadmePath)" />
+    <Content Include="$(PackageReadmePath)" Link="$(PackageReadmeFile)" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+
+</Project>
