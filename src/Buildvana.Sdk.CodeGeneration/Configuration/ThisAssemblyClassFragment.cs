@@ -12,9 +12,9 @@ using System.Linq;
 
 namespace Buildvana.Sdk.CodeGeneration.Configuration;
 
-public sealed class ThisAssemblyClass : CodeFragment
+public sealed class ThisAssemblyClassFragment : CodeFragment
 {
-    public ThisAssemblyClass(
+    public ThisAssemblyClassFragment(
         string? @namespace,
         string name,
         IEnumerable<Constant> constants)

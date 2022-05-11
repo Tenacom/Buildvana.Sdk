@@ -36,7 +36,7 @@ public sealed class WriteThisAssemblyClass : BuildvanaSdkCodeGeneratorTask
         var classNamespace = StringUtility.IsNullOrEmpty(Namespace) ? null : Namespace;
         var className = StringUtility.IsNullOrEmpty(ClassName) ? "ThisAssembly" : ClassName;
         var constants = (Constants ?? Enumerable.Empty<ITaskItem>()).Select(ExtractConstantDefinitionFromItem);
-        var fragment = new ThisAssemblyClass(classNamespace, className, constants);
+        var fragment = new ThisAssemblyClassFragment(classNamespace, className, constants);
         yield return fragment;
     }
 

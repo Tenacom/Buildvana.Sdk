@@ -29,7 +29,7 @@ public sealed class WriteLiteralAssemblyAttributes : BuildvanaSdkCodeGeneratorTa
     protected override IEnumerable<CodeFragment> GetCodeFragments()
         => (LiteralAssemblyAttributes ?? Enumerable.Empty<ITaskItem>()).Select(ExtractAttributeFromItem);
 
-    private static AssemblyAttribute ExtractAttributeFromItem(ITaskItem item)
+    private static AssemblyAttributeFragment ExtractAttributeFromItem(ITaskItem item)
     {
         var type = item.ItemSpec;
 
@@ -102,7 +102,7 @@ public sealed class WriteLiteralAssemblyAttributes : BuildvanaSdkCodeGeneratorTa
             }
         }
 
-        return new AssemblyAttribute(
+        return new AssemblyAttributeFragment(
             type,
             orderedParameters.Select(p => new OrderedParameter(p)),
             namedParameters.Select(p => new NamedParameter(p.Key, p.Value)));

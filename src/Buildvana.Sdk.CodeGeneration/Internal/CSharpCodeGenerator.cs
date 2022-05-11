@@ -24,14 +24,14 @@ internal sealed class CSharpCodeGenerator : CodeGenerator<CSharpSyntaxNode>
     protected override SyntaxTrivia GenerateLineComment(string comment)
         => Comment("// " + comment);
 
-    protected override CSharpSyntaxNode GenerateAssemblyAttribute(AssemblyAttribute assemblyAttribute)
+    protected override CSharpSyntaxNode GenerateAssemblyAttribute(AssemblyAttributeFragment assemblyAttribute)
         => BuildAttribute(
             SyntaxKind.AssemblyKeyword,
             assemblyAttribute.Type,
             assemblyAttribute.OrderedParameters.Select(p => p.Value),
             assemblyAttribute.NamedParameters.Select(p => (p.Name, p.Value)));
 
-    protected override CSharpSyntaxNode GenerateThisAssemblyClass(ThisAssemblyClass thisAssemblyClass)
+    protected override CSharpSyntaxNode GenerateThisAssemblyClass(ThisAssemblyClassFragment thisAssemblyClass)
     {
         var classDeclaration = ClassDeclaration(thisAssemblyClass.Name)
             .AddModifiers(

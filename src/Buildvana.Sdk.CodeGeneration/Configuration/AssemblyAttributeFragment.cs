@@ -12,11 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Buildvana.Sdk.CodeGeneration.Configuration;
-#pragma warning disable CA1711 // Rename type so that it does not end in 'Attribute' - Does anyone have a better name for this type?
-public sealed class AssemblyAttribute : CodeFragment
-#pragma warning restore CA1711
+public sealed class AssemblyAttributeFragment : CodeFragment
 {
-    public AssemblyAttribute(
+    public AssemblyAttributeFragment(
         string type,
         IEnumerable<OrderedParameter> orderedParameters,
         IEnumerable<NamedParameter>? namedParameters = null)
