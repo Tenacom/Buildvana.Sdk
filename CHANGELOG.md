@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+### Changes to existing features
+
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.0-alpha.20](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.20) (2022-05-12)
+
+### New features
+
 - https://github.com/Buildvana/Buildvana.Sdk/pull/142 - For packable projects, Buildvana SDK will automatically find a README.md file and include it in the NuGet package. To disable this feature, set the `ReadmeFileInPackage` property to `false`.
 Recognized names for the README file, in order of lookup, are: `Package-README.md`; `package-readme.md`; `NuGet-README.md`; `nuget-readme.md`; `NuGet.md`; `nuget.md`; `README.md`; `readme.md`.
 
@@ -16,10 +26,6 @@ Recognized names for the README file, in order of lookup, are: `Package-README.m
 
 - https://github.com/Buildvana/Buildvana.Sdk/pull/146 - **BREAKING CHANGE:** The Polyfills module, introduced in v1.0.0-alpha.18, has been removed.
 Polyfills are a complicated topic, with lots of edge cases. They are best dealt with at a project level. The experience acquired with the Polyfills module has helped shape a polyfill library that will be open-sourced shortly (and is, needless to say, built with Buildvana SDK).
-
-### Bugs fixed in this release
-
-### Known problems introduced by this release
 
 ## [1.0.0-alpha.19](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.19) (2022-04-29)
 
