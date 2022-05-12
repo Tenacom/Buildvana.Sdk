@@ -109,6 +109,7 @@ goto :L_Run_Tasks_Loop
 :T_VS_Clean
 call :F_Label Clean output directories
 if exist "%~dp0%_ARTIFACTS_DIRECTORY%\" call :F_Exec rmdir /S /Q "%~dp0%_ARTIFACTS_DIRECTORY%"
+if exist "%~dp0.vs\" call :F_Exec rmdir /S /Q "%~dp0.vs"
 if exist "%~dp0_ReSharper.Caches\" call :F_Exec rmdir /S /Q "%~dp0_ReSharper.Caches"
 for /F "tokens=*" %%G in ('dir /B /AD /S bin 2^>nul ^& dir /B /AD /S obj 2^>nul') do call :F_Exec rmdir /S /Q "%%G"
 exit /B %ERRORLEVEL%
