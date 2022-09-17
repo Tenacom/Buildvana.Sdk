@@ -2,12 +2,6 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "nukeeper": {
-      "version": "0.35.0",
-      "commands": [
-        "nukeeper"
-      ]
-    },
     "jetbrains.resharper.globaltools": {
       "version": "2022.1.1",
       "commands": [
