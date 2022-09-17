@@ -3,7 +3,7 @@
 
 is_global = true
 
-#### .NET Coding Conventions ####
+### .NET Coding Conventions
 
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 
@@ -52,7 +52,7 @@ dotnet_style_readonly_field = true:suggestion
 # Parameter preferences
 dotnet_code_quality_unused_parameters = non_public:suggestion
 
-#### C# Coding Conventions ####
+### C# Coding Conventions
 
 # Namespace declarations
 csharp_style_namespace_declarations = file_scoped:warning
@@ -103,7 +103,7 @@ csharp_style_unused_value_expression_statement_preference = discard_variable:sug
 # 'using' directive preferences
 csharp_using_directive_placement = outside_namespace:warning
 
-#### C# Formatting Rules ####
+### C# Formatting Rules
 
 # New line preferences
 csharp_new_line_before_catch = true
@@ -150,43 +150,35 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = false
 
-#### Naming styles ####
+### Naming styles
 
 # Naming rules
-
 dotnet_naming_rule.interface_should_be_begins_with_i.severity = suggestion
 dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
 dotnet_naming_rule.interface_should_be_begins_with_i.style = begins_with_i
-
 dotnet_naming_rule.types_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.types_should_be_pascal_case.symbols = types
 dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
-
 dotnet_naming_rule.non_field_members_should_be_pascal_case.severity = silent
 dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_members
 dotnet_naming_rule.non_field_members_should_be_pascal_case.style = pascal_case
 
 # Symbol specifications
-
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal
 dotnet_naming_symbols.interface.required_modifiers =
-
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal
 dotnet_naming_symbols.types.required_modifiers =
-
 dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
 dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal
 dotnet_naming_symbols.non_field_members.required_modifiers =
 
 # Naming styles
-
 dotnet_naming_style.pascal_case.required_prefix =
 dotnet_naming_style.pascal_case.required_suffix =
 dotnet_naming_style.pascal_case.word_separator =
 dotnet_naming_style.pascal_case.capitalization = pascal_case
-
 dotnet_naming_style.begins_with_i.required_prefix = I
 dotnet_naming_style.begins_with_i.required_suffix =
 dotnet_naming_style.begins_with_i.word_separator =
@@ -194,20 +186,33 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
 ### Miscellaneous code analysis configuration
 
-dotnet_diagnostic.IDE0043.severity = warning
-dotnet_diagnostic.IDE0076.severity = warning
-dotnet_diagnostic.IDE0077.severity = warning
-dotnet_diagnostic.CA1000.severity = silent
-dotnet_diagnostic.CA1001.severity = warning
-dotnet_diagnostic.CA1032.severity = suggestion
-dotnet_diagnostic.CA1070.severity = warning
-dotnet_diagnostic.CA1047.severity = warning
-dotnet_diagnostic.CA1303.severity = none      # CA1303: Do not pass literals as localized parameters
-dotnet_code_quality.CA1303.use_naming_heuristic = false
-dotnet_code_quality.CA1062.exclude_extension_method_this_parameter = true # Extension methods: null check may be skipped on "this" parameter
-dotnet_code_quality.dispose_ownership_transfer_at_constructor = true # Disposables passed to a constructor must be disposed by the constructed object
+# Relaxed rules related to IDisposable implementation - https://blog.stephencleary.com/2009/08/how-to-implement-idisposable-and.html
+dotnet_diagnostic.CA1063.severity = none # CA1063: Implement IDisposable correctly
+dotnet_diagnostic.CA1816.severity = none # CA1816: Call GC.SuppressFinalize correctly
 
-### StyleCop Analyzers rules ###
+# Disable CA1508 (false positive when a value is set inside a catch block)
+dotnet_diagnostic.CA1508.severity = none       # CA1508: Avoid dead conditional code
+
+# Rules stricter than the default
+dotnet_diagnostic.CA1001.severity = warning # CA1001: Types that own disposable fields should be disposable
+dotnet_diagnostic.CA1047.severity = warning # CA1047: Do not declare protected members in sealed types
+dotnet_diagnostic.CA1070.severity = warning # CA1070: Do not declare event fields as virtual
+dotnet_diagnostic.IDE0043.severity = error # IDE0043: Format string contains invalid placeholder
+dotnet_diagnostic.IDE0076.severity = warning # IDE0076: Remove invalid global 'SuppressMessageAttribute'
+dotnet_diagnostic.IDE0077.severity = warning # IDE0077: Avoid legacy format target in global 'SuppressMessageAttribute'
+
+# Miscellaneous relaxations
+dotnet_diagnostic.CA1000.severity = none       # CA1000: Do not declare static members on generic types
+dotnet_diagnostic.CA1032.severity = suggestion # CA1032: Implement standard exception constructors
+dotnet_diagnostic.CA1303.severity = none       # CA1303: Do not pass literals as localized parameters
+
+# Miscellaneous configuration
+dotnet_code_quality.CA1303.use_naming_heuristic = false                   # Don't raise CA1303 just because a parameter name contains Text, Message, or Caption.
+dotnet_code_quality.CA1062.exclude_extension_method_this_parameter = true # Extension methods: null check may be skipped on "this" parameter.
+dotnet_code_quality.CA1062.null_check_validation_methods = System.String.IsNullOrEmpty|System.String.IsNullOrWhiteSpace
+dotnet_code_quality.dispose_ownership_transfer_at_constructor = true      # Disposables passed to a constructor must be disposed by the constructed object.
+
+### StyleCop Analyzers rules
 
 # StyleCop Analyzers - Special rules
 dotnet_diagnostic.SA0001.severity = warning # XML comment analysis disabled
@@ -416,3 +421,9 @@ dotnet_diagnostic.SA1648.severity = warning # Inheritdoc should be used with inh
 dotnet_diagnostic.SA1649.severity = warning # File name should match first type name
 dotnet_diagnostic.SA1650.severity = warning # Element documentation should be spelled correctly
 dotnet_diagnostic.SA1651.severity = warning # Do not use placeholder elements
+
+# Suppress some annoying IDE messages
+dotnet_diagnostic.IDE0040.severity = none # Accessibility modifiers required - has confusing rules and is a dupe of SA1400.
+dotnet_diagnostic.IDE0079.severity = none # Remove unnecessary suppression - apparently VS (as of v17.3.0) deems way too much stuff "unnecessary".
+
+# Solution-specific overrides
