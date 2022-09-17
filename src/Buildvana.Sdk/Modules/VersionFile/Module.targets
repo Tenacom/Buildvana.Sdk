@@ -1,6 +1,0 @@
-<Project>
-
-  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
-          Condition="$(UseVersionFile)" />
-
-</Project>
