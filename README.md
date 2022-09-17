@@ -45,7 +45,9 @@ Buildvana SDK is an opinionated, best-practices-based, CI-friendly, VS-friendly,
 
 It is part of [the Buildvana project](https://github.com/Buildvana/), which also comprises ready-to-use template repositories that implement automated build, testing, and deployment for .NET projects.
 
-**NOTE:** Buildvana SDK, just as the whole Buildvana project, is still a work in progress. All standard disclaimers apply. However, the SDK has already been used successfully for internal projects at [Tenacom](https://github.com/Tenacom/), before it even became a project of its own.
+> **DISCLAIMER:** Buildvana SDK, just as the whole Buildvana project, is still a work in progress.  
+Your mileage may vary, if you break your build you own both pieces, and so on and so forth.  
+However, Buildvana SDK has already been used successfully in production, for both business and open source projects.
 
 ### Benefits
 
@@ -59,19 +61,23 @@ It is part of [the Buildvana project](https://github.com/Buildvana/), which also
 
 ### Supported project types
 
-At the moment, Buildvana SDK is being used mainly by .NET Standard and .NET Core libraries written in C#.
+- :heart: Multi-platform / Cross-platform projects
+- :heart: Libraries
+- :heart: Console apps
+- :heart: Windows Forms
+- :heart: Projects using `Microsoft.Build.NoTargets` SDK
+- :heart: [Avalonia](https://avaloniaui.net) (still experimenting, but no problems so far)
+- :question: WPF (testers welcome)
+- :question: [UNO Platform](https://platform.uno) (testers welcome)
+- :question: All kinds of Web projects (testers welcome)
+- :thumbsdown: Legacy (non-SDK) projects
 
-It _should_ work for .NET Core console applications.
+### Supported languages
 
-It _may_ work for ASP.NET Core websites.
-
-It _will not_ work for .NET Framework applications or libraries.
-
-It _will not_ work for non-SDK (legacy) projects.
-
-It _may_ work for WindowsDesktop projects. These will definitely be supported soon.
-
-As for language support: Buildvana SDK _will_ work with C# projects, _should_ work with Visual Basic projects and _may_ work with F# projects.
+- :heart: C#
+- :heart: Visual Basic
+- :yellow_heart: F# (some features disabled)
+- :thumbsdown: other languages
 
 ### Requirements
 
@@ -101,6 +107,13 @@ Latest versions of Visual Studio for Mac _should_ work, but we need confirmation
 
 **TODO**
 
+## Proudly built using Buildvana SDK
+
+- [PolyKit](https://github.com/Buildvana/PolyKit), itself a part of the Buildvana project, is both a polyfill library _and_ a polyfill construction kit for C# projects.
+- [L.o.U.I.S.](https://github.com/Tenacom/Louis) is a general-purpose library, providing both polyfills (via PolyKit) and commonly-used types, suitable for multi-platform libraries and applications.
+- [Cecil.XmlDocNames](https://github.com/Tenacom/Cecil.XmlDocNames) is a tiny library that generates XML-documentation-compliant names for [Mono.Cecil](https://github.com/jbevain/cecil) objects.
+- [ReSharper.ExportAnnotations](https://github.com/Tenacom/ReSharper.ExportAnnotations) lets you distribute ReSharper code annotations in XML format along with your libraries, without keeping a transient dependency on the [JetBrains.Annotations](https://www.nuget.org/packages/JetBrains.Annotations) package.
+- Practically every one of [Tenacom](https://github.com/Tenacom)'s private projects since the first preview of Buildvana SDK: almost 50 libraries, a bunch of console apps, some WinForms apps, even an Avalonia app (with more coming soon).
 ## Credits
 
 The peaceful octopus logo is a modified version of [Peace](https://thenounproject.com/icon/1951204) by AomAm from [the Noun Project](https://thenounproject.com/).
