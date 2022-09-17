@@ -1,0 +1,39 @@
+﻿<Project>
+
+  <Target Name="BV_CheckRoslynVersion"
+          BeforeTargets="BeforeCompile;CoreCompile"
+          DependsOnTargets="ResolvePackageAssets">
+
+    <!--Evaluate error conditons -->
+    <ItemGroup>
+      <Error Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'"
+             Code="BVE1100"
+             Text="Buildvana SDK source generators are only supported in C# and Visual Basic projects."
+             File="$(MSBuildProjectFullPath)" />
+      <!--
+        CompilerApiVersion: https://github.com/dotnet/sdk/pull/20793
+        VersionLessThan: https://github.com/dotnet/msbuild/pull/4911
+      -->
+      <Error Condition="!$(CompilerApiVersion.StartsWith('roslyn'))
+                     Or $(CompilerApiVersion.Length) &lt; 9
+                     Or $([MSBuild]::VersionLessThan('$(CompilerApiVersion.Substring(6))', '$(BV_MinRoslynVersion)'))" 
+             Code="BVE1101"
+             Text="Buildvana SDK source generators require Roslyn version $(BV_MinRoslynVersion) or later ($(BV_MinRoslynVersionHint))" />
+    </ItemGroup>
+
+  </Target>
+
+  <!--
+    Use Buildvana SDK code generators if requested by other modules.
+    We must add this package reference to consume analyzers and thus use our code generators,
+    so that the project system "sees" our analyzers folder.
+  -->
+  <ItemGroup>
+    <BV_PackageReference Include="Buildvana.Sdk"
+                         PrivateAssets="all"
+                         IncludeAssets="analyzers"
+                         IsImplicitlyDefined="true" />
+
+  </ItemGroup>
+
+</Project>

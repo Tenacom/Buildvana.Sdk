@@ -1,0 +1,33 @@
+<Project>
+
+  <!-- Save the value of GenerateAdditionalAssemblyInfo for later determination of whether to issue a warning.
+       Force to false if Language property is not set (happens with several auxiliary targets, e.g. _IsProjectRestoreSupported),
+       to avoid warning BVW1400 on projects in supported languages.
+       Also force to false for projects using Microsoft.Build.NoTargets SDK.-->
+  <PropertyGroup>
+    <BV_SaveGenerateAdditionalAssemblyInfo>$(GenerateAdditionalAssemblyInfo)</BV_SaveGenerateAdditionalAssemblyInfo>
+    <BV_SaveGenerateAdditionalAssemblyInfo Condition="'$(Language)' == ''">false</BV_SaveGenerateAdditionalAssemblyInfo>
+    <BV_SaveGenerateAdditionalAssemblyInfo Condition="'$(UsingMicrosoftNoTargetsSdk)' == 'true'">false</BV_SaveGenerateAdditionalAssemblyInfo>
+  </PropertyGroup>
+
+  <!-- Coalesce GenerateAdditionalAssemblyInfo to a boolean value:
+         - force to false for projects in unsupported languages;
+         - force to false for NoTargets projects. -->
+  <PropertyGroup>
+    <GenerateAdditionalAssemblyInfo Condition="'$(Language)' != 'C#' And '$(Language)' != 'VB'">false</GenerateAdditionalAssemblyInfo>
+    <GenerateAdditionalAssemblyInfo Condition="'$(UsingMicrosoftNoTargetsSdk)' == 'true'">false</GenerateAdditionalAssemblyInfo>
+    <GenerateAdditionalAssemblyInfo Condition="'$(GenerateAdditionalAssemblyInfo)' == ''">true</GenerateAdditionalAssemblyInfo>
+    <GenerateAdditionalAssemblyInfo Condition="'$(GenerateAdditionalAssemblyInfo)' != 'true'">false</GenerateAdditionalAssemblyInfo>
+  </PropertyGroup>
+
+  <!-- Issue a warning if GenerateAdditionalAssemblyInfo was set to true for a project in an unsupported language. -->
+  <ItemGroup>
+    <EvaluationWarning Condition="'$(BV_SaveGenerateAdditionalAssemblyInfo)' == 'true' And !$(GenerateAdditionalAssemblyInfo)"
+                       Include="BVW1400"
+                       Text="Additional assembly info generation is not supported for language '$(Language)'." />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
+          Condition="$(GenerateAdditionalAssemblyInfo)" />
+
+</Project>

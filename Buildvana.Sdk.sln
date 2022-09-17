@@ -4,13 +4,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk", "src\Buildvana.Sdk\Buildvana.Sdk.csproj", "{3D872329-6B84-4739-B727-1AED462DFD5A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B1D01A58-0476-4EC2-A390-36125D1E41A7} = {B1D01A58-0476-4EC2-A390-36125D1E41A7}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Configuration", "- Configuration", "{B70FD773-A518-43AE-B948-EE7AE99856B8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		.globalconfig = .globalconfig
 		Common.props = Common.props
 		Directory.Build.props = Directory.Build.props
@@ -30,27 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Documentation", "- Docume
 		THIRD-PARTY-NOTICES = THIRD-PARTY-NOTICES
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk.Tasks", "src\Buildvana.Sdk.Tasks\Buildvana.Sdk.Tasks.csproj", "{B1D01A58-0476-4EC2-A390-36125D1E41A7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk.CodeGeneration.Tests", "test\Buildvana.Sdk.CodeGeneration.Tests\Buildvana.Sdk.CodeGeneration.Tests.csproj", "{5060C38A-E769-4574-807B-B6E265CD7CF0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FDDF51C9-C7BF-4F06-BEBD-485006512357}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2892EA74-A368-4551-9DC1-CB194E002910}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk.CodeGeneration", "src\Buildvana.Sdk.CodeGeneration\Buildvana.Sdk.CodeGeneration.csproj", "{FF6128F1-543B-4FB1-97FF-83EAE831BCA5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk.Core", "src\Buildvana.Sdk.Core\Buildvana.Sdk.Core.csproj", "{17CF6B23-D725-42E4-A494-6CC39029B0FE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Configuration", "- Configuration", "{867D3DD0-3C27-49A6-869E-E86B187437BB}"
-	ProjectSection(SolutionItems) = preProject
-		src\Common.props = src\Common.props
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Configuration", "- Configuration", "{B605F4C9-BA6B-4A4A-85DA-0A4715227E87}"
-	ProjectSection(SolutionItems) = preProject
-		test\Common.props = test\Common.props
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk.SourceGenerators", "src\Buildvana.Sdk.SourceGenerators\Buildvana.Sdk.SourceGenerators.csproj", "{A9CB2A6D-93AD-4028-8FE1-274319D03A58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,34 +43,17 @@ Global
 		{3D872329-6B84-4739-B727-1AED462DFD5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D872329-6B84-4739-B727-1AED462DFD5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D872329-6B84-4739-B727-1AED462DFD5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1D01A58-0476-4EC2-A390-36125D1E41A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1D01A58-0476-4EC2-A390-36125D1E41A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1D01A58-0476-4EC2-A390-36125D1E41A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1D01A58-0476-4EC2-A390-36125D1E41A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5060C38A-E769-4574-807B-B6E265CD7CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5060C38A-E769-4574-807B-B6E265CD7CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5060C38A-E769-4574-807B-B6E265CD7CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5060C38A-E769-4574-807B-B6E265CD7CF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF6128F1-543B-4FB1-97FF-83EAE831BCA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF6128F1-543B-4FB1-97FF-83EAE831BCA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF6128F1-543B-4FB1-97FF-83EAE831BCA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF6128F1-543B-4FB1-97FF-83EAE831BCA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17CF6B23-D725-42E4-A494-6CC39029B0FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17CF6B23-D725-42E4-A494-6CC39029B0FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17CF6B23-D725-42E4-A494-6CC39029B0FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17CF6B23-D725-42E4-A494-6CC39029B0FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9CB2A6D-93AD-4028-8FE1-274319D03A58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9CB2A6D-93AD-4028-8FE1-274319D03A58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9CB2A6D-93AD-4028-8FE1-274319D03A58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9CB2A6D-93AD-4028-8FE1-274319D03A58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3D872329-6B84-4739-B727-1AED462DFD5A} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
-		{B1D01A58-0476-4EC2-A390-36125D1E41A7} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
-		{5060C38A-E769-4574-807B-B6E265CD7CF0} = {2892EA74-A368-4551-9DC1-CB194E002910}
-		{FF6128F1-543B-4FB1-97FF-83EAE831BCA5} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
-		{17CF6B23-D725-42E4-A494-6CC39029B0FE} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
-		{867D3DD0-3C27-49A6-869E-E86B187437BB} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
-		{B605F4C9-BA6B-4A4A-85DA-0A4715227E87} = {2892EA74-A368-4551-9DC1-CB194E002910}
+		{A9CB2A6D-93AD-4028-8FE1-274319D03A58} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {97D994FA-A1EC-459B-8072-7688E21AC205}

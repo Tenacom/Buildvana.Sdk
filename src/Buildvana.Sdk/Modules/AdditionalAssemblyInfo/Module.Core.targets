@@ -1,0 +1,42 @@
+<Project>
+
+  <!-- Coalesce GenerateAssemblyCLSCompliantAttribute to a boolean value, defaulting to true. -->
+  <PropertyGroup>
+    <GenerateAssemblyCLSCompliantAttribute Condition="'$(GenerateAssemblyCLSCompliantAttribute)' == ''">true</GenerateAssemblyCLSCompliantAttribute>
+    <GenerateAssemblyCLSCompliantAttribute Condition="'$(GenerateAssemblyCLSCompliantAttribute)' != 'true'">false</GenerateAssemblyCLSCompliantAttribute>
+  </PropertyGroup>
+
+  <!-- Coalesce CLSCompliant to a boolean value, defaulting to true. -->
+  <PropertyGroup Condition="$(GenerateAssemblyCLSCompliantAttribute)">
+    <CLSCompliant Condition="'$(CLSCompliant)' == ''">true</CLSCompliant>
+    <CLSCompliant Condition="'$(CLSCompliant)' != 'true'">false</CLSCompliant>
+  </PropertyGroup>
+
+  <!-- Make CLSCompliant property visible to code generators. -->
+  <ItemGroup Condition="$(GenerateAssemblyCLSCompliantAttribute)">
+    <CompilerVisibleProperty Include="CLSCompliant" />
+  </ItemGroup>
+
+  <!-- Coalesce GenerateAssemblyComVisibleAttribute to a boolean value, defaulting to true. -->
+  <PropertyGroup>
+    <GenerateAssemblyComVisibleAttribute Condition="'$(GenerateAssemblyComVisibleAttribute)' == ''">true</GenerateAssemblyComVisibleAttribute>
+    <GenerateAssemblyComVisibleAttribute Condition="'$(GenerateAssemblyComVisibleAttribute)' != 'true'">false</GenerateAssemblyComVisibleAttribute>
+  </PropertyGroup>
+
+  <!-- Coalesce ComVisible to a boolean value, defaulting to false. -->
+  <PropertyGroup Condition="$(GenerateAssemblyComVisibleAttribute)">
+    <ComVisible Condition="'$(ComVisible)' == ''">false</ComVisible>
+    <ComVisible Condition="'$(ComVisible)' != 'true'">false</ComVisible>
+  </PropertyGroup>
+
+  <!-- Make ComVisible property visible to code generators. -->
+  <ItemGroup Condition="$(GenerateAssemblyComVisibleAttribute)">
+    <CompilerVisibleProperty Include="ComVisible" />
+  </ItemGroup>
+
+  <!-- Use Buildvana SDK code generators -->
+  <PropertyGroup>
+    <BV_UseSdkCodeGenerators>true</BV_UseSdkCodeGenerators>
+  </PropertyGroup>
+
+</Project>

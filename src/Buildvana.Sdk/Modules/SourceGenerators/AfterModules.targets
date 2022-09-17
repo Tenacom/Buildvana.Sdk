@@ -1,0 +1,10 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <BV_UseSdkCodeGenerators Condition="'$(BV_UseSdkCodeGenerators)' != 'true'">false</BV_UseSdkCodeGenerators>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)AfterModules.Core.targets"
+          Condition="$(BV_UseSdkCodeGenerators)" />
+
+</Project>

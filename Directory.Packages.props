@@ -1,20 +1,35 @@
 <Project>
 
-  <ItemGroup>
-    <PackageVersion Include="IndexRange" Version="1.0.2" />
-    <PackageVersion Include="Microsoft.Build.Framework" Version="17.2.0" />
-    <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="17.2.0" />
-    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.2.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="4.1.0" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-    <PackageVersion Include="Nullable" Version="1.3.0" />
-  </ItemGroup>
+  <!--
+    Minimum version of Roslyn supporting our source generators.
+    These properties MUST be kept in sync with the version of Microsoft.CodeAnalysis.CSharp.
+  -->
+  <PropertyGroup>
+
+    <!--
+      The minimum supported version of Roslyn.
+      Used by the SDK to determine whether the compiler in use is supported.
+    -->
+    <BV_MinRoslynVersion>4.3</BV_MinRoslynVersion>
+
+    <!--
+      A textual hint telling which toolchains contain a suupported version of Roslyn.
+      Used by the SDK to construct a meaningful diagnostic message when an unsupported Roslyn version is detected.
+    -->
+    <BV_MinRoslynVersionHint>.NET SDK v6.0.400+ / Visual Studio 2022 17.3+</BV_MinRoslynVersionHint>
+
+    <!--
+      The package folder, under analyzers/dotnet, where the source generators DLL is put when packing the SDK.
+      Used by the SDK project when packing.
+    -->
+    <BV_SourceGeneratorsPackageFolder>roslyn4.3</BV_SourceGeneratorsPackageFolder>
+
+  </PropertyGroup>
 
   <ItemGroup>
-    <PackageVersion Include="NUnit" Version="3.13.3" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.2.1" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.2.0"/>
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
+    <PackageVersion Include="PolyKit.Embedded" Version="1.0.0-preview.6" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,12 @@
 
   <PropertyGroup>
 
+    <!--
+      IMPORTANT: TargetFramework must have the same value as in the source generators project,
+      so we can use the OutputPath property (which is a relative path) to locate the source generators DLL.
+    -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+
     <!-- Common properties -->
     <Title>Buildvana SDK</Title>
     <Summary>An opinionated, best-practices-based, CI- / CLI- / VS-friendly, MSBuild-powered build system for .NET projects.</Summary>
@@ -16,16 +22,15 @@
     <DevelopmentDependency>true</DevelopmentDependency>
     <Serviceable>true</Serviceable>
     <MinClientVersion>4.3</MinClientVersion> <!-- Minimum NuGet client version supporting SemVer 2.0 -->
-    <NoWarn>$(NoWarn);NU5100</NoWarn> <!-- The assembly '...' is not inside the 'lib' folder and hence it won't be added as a reference. -->
-    <NoWarn>$(NoWarn);NU5128</NoWarn> <!-- Some target frameworks [...] do not have exact matches [in the lib folder]. -->
-
     <!-- Remove the <dependencies> tag from .nupkg, because it makes the package "depend" on our TargetPlatform. -->
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 
-    <!-- Prevent the SDK from adding an actual ProjectReference item for binary packages.
-         Dependency on them is set in the solution file.
-         The project system won't let you ProjectReference a multi-targeting project.
-         See https://github.com/dotnet/msbuild/issues/4303 -->
+    <!--
+      Prevent the SDK from adding an actual ProjectReference item for binary packages.
+      Dependency on them is set in the solution file.
+      The project system won't let you ProjectReference a multi-targeting project.
+      See https://github.com/dotnet/msbuild/issues/4303
+    -->
     <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
 
   </PropertyGroup>
@@ -53,9 +58,9 @@
   </ItemGroup>
 
   <!--
-    ================
-    SDK VERSION FILE
-    ================
+    =================================
+    SDK VERSION / ROSLYN VERSION FILE
+    =================================
   -->
 
   <PropertyGroup>
@@ -70,15 +75,14 @@
         <Project>
           <PropertyGroup>
             <BuildvanaSdkVersion>$(Version)</BuildvanaSdkVersion>
+            <BV_MinRoslynVersion>$(BV_MinRoslynVersion)</BV_MinRoslynVersion>
+            <BV_MinRoslynVersionHint>$(BV_MinRoslynVersionHint)</BV_MinRoslynVersionHint>
           </PropertyGroup>
         </Project>
       </_SdkVersionPropsXml>
     </PropertyGroup>
 
-    <WriteLinesToFile File="$(_SdkVersionPropsPath)"
-                      Lines="$(_SdkVersionPropsXml)"
-                      Overwrite="true"
-                      WriteOnlyWhenDifferent="true" />
+    <WriteLinesToFile File="$(_SdkVersionPropsPath)" Lines="$(_SdkVersionPropsXml)" Overwrite="true" WriteOnlyWhenDifferent="true" />
 
     <ItemGroup>
       <Content Include="$(_SdkVersionPropsPath)" Visible="false" PackagePath="Sdk" />
@@ -97,9 +101,11 @@
     <None Include="Aliased\**\*" Pack="false" />
   </ItemGroup>
 
-  <!-- _AliasedContent items work backwards: each item's identity is its package target path,
-       while the Source metadata is the path to the actual file being included in the package.
-       This lets us add the same file to a package multiple times, as their identities will be different. -->
+  <!--
+    _AliasedContent items work backwards: each item's identity is its package target path,
+    while the Source metadata is the path to the actual file being included in the package.
+    This lets us add the same file to a package multiple times, as their identities will be different.
+  -->
   <ItemGroup>
     <_AliasedContent Include="Sdk\Import.BeforeCommon.props.proj" Source="Aliased\ImportFiles.proj" />
     <_AliasedContent Include="Sdk\Import.Common.props.proj" Source="Aliased\ImportFiles.proj" />
@@ -109,9 +115,11 @@
     <_AliasedContent Include="Sdk\Import.AfterCommon.targets.proj" Source="Aliased\ImportFiles.proj" />
   </ItemGroup>
 
-  <!-- Compute the path for the aliased content intermediate directory.
-       IntermediateOutputPath is unknown to us at evaluation time, because it is set in a Microsoft SDK .targets file.
-       Therefore we can only use it in a task. -->
+  <!--
+    Compute the path for the aliased content intermediate directory.
+    IntermediateOutputPath is unknown to us at evaluation time, because it is set in a Microsoft SDK .targets file.
+    Therefore we can only use it in a task.
+  -->
 
   <Target Name="_ComputeAliasedContentPaths">
 
@@ -119,8 +127,10 @@
       <_IntermediateAliasedContentDir>$(IntermediateOutputPath)AliasedContent\</_IntermediateAliasedContentDir>
     </PropertyGroup>
 
-    <!-- Now is the right time to actually evaluate sources for aliased content.
-         All targets that depend on this target are executed after Build. -->
+    <!--
+      Now is the right time to actually evaluate sources for aliased content.
+      All targets that depend on this target are executed after Build.
+    -->
     <ItemGroup>
       <_AliasedContentSource_NonDistinct Include="%(_AliasedContent.Source)" />
       <_AliasedContentSource Include="@(_AliasedContentSource_NonDistinct-&gt;Distinct())" />
@@ -135,39 +145,34 @@
 
   <!-- Create an intermediate folder with aliased content. Folder layout must mimic package layout. -->
 
-  <Target Name="_CopyAliasedContentToIntermediateDirectory"
-          DependsOnTargets="_ComputeAliasedContentPaths"
-          Inputs="@(_AliasedContentSource)"
-          Outputs="@(_AliasedContentDestination)">
+  <Target Name="_CopyAliasedContentToIntermediateDirectory" DependsOnTargets="_ComputeAliasedContentPaths" Inputs="@(_AliasedContentSource)" Outputs="@(_AliasedContentDestination)">
 
     <MakeDir Directories="$(_IntermediateAliasedContentDir)" />
 
-    <Copy SourceFiles="%(_AliasedContent.Source)"
-          DestinationFiles="$([System.IO.Path]::Combine('$(_IntermediateAliasedContentDir)', '%(_AliasedContent.Identity)'))" />
+    <Copy SourceFiles="%(_AliasedContent.Source)" DestinationFiles="$([System.IO.Path]::Combine('$(_IntermediateAliasedContentDir)', '%(_AliasedContent.Identity)'))" />
 
   </Target>
 
   <!-- Clean aliased content intermediate directory on clean. -->
 
-  <Target Name="_CleanAliasedContentIntermediateDirectory"
-          AfterTargets="BeforeClean"
-          DependsOnTargets="_CopyAliasedContentToIntermediateDirectory">
+  <Target Name="_CleanAliasedContentIntermediateDirectory" AfterTargets="BeforeClean" DependsOnTargets="_CopyAliasedContentToIntermediateDirectory">
 
     <RemoveDir Directories="$(_IntermediateAliasedContentDir)" />
 
   </Target>
 
-  <!-- We need to execute _IncludeAliasedContentInPackage before GenerateNuspec.
-       Declaring BeforeTargets="Pack" in our target is not sufficient, because Pack depends on GenerateNuspec,
-       and dependency targets are executed before "before" targets.
-       We cannot set PackDependsOn either, because NuGet.Build.Tasks.Pack.targets would later prepend GenerateNuspec to it.
-       The only correct way is to add our target to BeforePack. -->
+  <!--
+    We need to execute _IncludeAliasedContentInPackage before GenerateNuspec.
+    Declaring BeforeTargets="Pack" in our target is not sufficient, because Pack depends on GenerateNuspec,
+    and dependency targets are executed before "before" targets.
+    We cannot set PackDependsOn either, because NuGet.Build.Tasks.Pack.targets would later prepend GenerateNuspec to it.
+    The only correct way is to add our target to BeforePack.
+  -->
   <PropertyGroup>
     <BeforePack>$(BeforePack);_IncludeAliasedContentInPackage</BeforePack>
   </PropertyGroup>
 
-  <Target Name="_IncludeAliasedContentInPackage"
-          DependsOnTargets="_ComputeAliasedContentPaths;_CopyAliasedContentToIntermediateDirectory">
+  <Target Name="_IncludeAliasedContentInPackage" DependsOnTargets="_ComputeAliasedContentPaths;_CopyAliasedContentToIntermediateDirectory">
 
     <ItemGroup>
       <_CopiedAliasedContent Include="$(_IntermediateAliasedContentDir)**\*" />
@@ -178,74 +183,25 @@
   </Target>
 
   <!--
-    ================
-    PUBLISH BINARIES
-    ================
+    =================
+    SOURCE GENERATORS
+    =================
   -->
 
-  <!-- NOTE @rdeago 2020-12-02
-       Do not include symbols in Release package.
-       Otherwise, .pdb files for published binaries will be in BOTH the .nupkg and .snupkg files.
-       This is maybe due to the fact that published binaries are packaged as content, not build output.
-       I've already wasted enough time investigating this. Help / suggestions welcome. -->
-
-  <PropertyGroup>
-    <IncludeSymbols Condition="'$(Configuration)' != 'Debug'">false</IncludeSymbols>
-  </PropertyGroup>
-
-  <!-- Define the list of projects to publish. -->
-
   <ItemGroup>
-    <_BinaryProject Include="..\Buildvana.Sdk.Tasks\Buildvana.Sdk.Tasks.csproj" />
+    <ProjectReference Include="..\Buildvana.Sdk.SourceGenerators\Buildvana.Sdk.SourceGenerators.csproj" />
   </ItemGroup>
 
-  <!-- During build, publish projects to this project's output directory. -->
-
-  <Target Name="PublishBinariesInOutputDirectory"
-          AfterTargets="CoreBuild">
-
-    <!-- Publish binary projects.
-         Do not delete existing files, as some files are in common between projects and we don't want a second Publish to delete them. -->
-
-    <MSBuild Projects="%(_BinaryProject.Identity)"
-             Targets="Publish"
-             Properties="Configuration=$(Configuration);
-                         PublishProtocol=FileSystem;
-                         PublishDir=$(MSBuildProjectDirectory)\$(OutputPath);
-                         TargetFramework=$(TargetFramework);
-                         SelfContained=false;
-                         DeleteExistingFiles=false;
-                         ExcludeGeneratedDebugSymbols=false" />
-
-  </Target>
-
-  <!-- During pack, include published binaries as package content. -->
-
-  <PropertyGroup>
-    <TargetsForTfmSpecificContentInPackage>IncludePublishedBinariesInPackage</TargetsForTfmSpecificContentInPackage>
-  </PropertyGroup>
-
-  <Target Name="IncludePublishedBinariesInPackage">
-
-    <ItemGroup>
-
-      <!-- Include published binaries. -->
-      <_PublishedBinaries Include="$(OutputPath)\**\*" />
-
-      <!-- Never include the automatically created .deps.json file. -->
-      <_PublishedBinaries Remove="$(OutputPath)\*.deps.json" />
-
-      <!-- Never include XML documentations and external annotations. -->
-      <_PublishedBinaries Remove="$(OutputPath)\**\*.xml" />
-
-      <!-- Don't include .pdb files in non-debug configurations (i.e. Release). -->
-      <_PublishedBinaries Remove="$(OutputPath)\**\*.pdb" Condition="'$(Configuration)' != 'Debug'" />
-
-      <TfmSpecificPackageFile Include="@(_PublishedBinaries)" PackagePath="bin\$(TargetFramework)\%(RecursiveDir)%(Filename)%(Extension)" />
-      <_PublishedBinaries Remove="@(_PublishedBinaries)" /> <!-- Free up some memory. -->
-
-    </ItemGroup>
-
-  </Target>
+  <!--
+    This being a NoTargets project, the output of a referenced project is not copied to this project's
+    output directory, so we must retrieve it from its original location.
+    We can use OutputPath (whose value is computed even in NoTargets projects) because we have the same
+    TargetFramework as the referenced project.
+  -->
+  <ItemGroup>
+    <None Include="..\Buildvana.Sdk.SourceGenerators\$(OutputPath)\Buildvana.Sdk.SourceGenerators.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/$(BV_SourceGeneratorsPackageFolder)" />
+  </ItemGroup>
 
 </Project>

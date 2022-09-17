@@ -2,22 +2,22 @@
 
 - [Overview](#overview)
 - [Buildvana SDK core (1000-1099)](#buildvana-sdk-core-1000-1099)
-- [Compiled tasks (1100-1199)](#compiled-tasks-1100-1199)
+- [Source generators (1100-1199)](#source-generators-1100-1199)
 - [AssemblySigning module (1200-1299)](#assemblysigning-module-1200-1299)
 - [JetBrainsAnnotations module (1300-1399)](#jetbrainsannotations-module-1300-1399)
-- [LiteralAssemblyAttributes module (1400-1499)](#literalassemblyattributes-module-1400-1499)
+- [AdditionalAssemblyInfo module (1400-1499)](#additionalassemblyinfo-module-1400-1499)
 - [NuGetPack module (1500-1599)](#nugetpack-module-1500-1599)
-- [ParseVersionFile module (1600-1699)](#parseversionfile-module-1600-1699)
+- [VersionFile module (1600-1699)](#versionfile-module-1600-1699)
 - [ReferenceAssemblies module (1700-1799)](#referenceassemblies-module-1700-1799)
 - [StandardAnalyzers module (1800-1899)](#standardanalyzers-module-1800-1899)
-- [ThisAssemblyClass module (1900-1999)](#thisassemblyclass-module-1900-1999)
-- [XmlDocumentation module (2000-2099)](#xmldocumentation-module-2000-2099)
+- [XmlDocumentation module (1900-1999)](#xmldocumentation-module-1900-1999)
+- [AlternatePack module (2000-2099)](#alternatepack-module-2000-2099)
 
 ## Overview
 
 All errors defined by the Buildvana SDK have a `BVE` prefix, while warnings have a `BVW` prefix. All error and warning numbers start from 1000, so they have no leading zeros.
 
-Each module, as well as the SDK itself, is assigned a contiguous range of 100 error and 100 warning numbers, as listed below.
+Each module is assigned a contiguous range of 100 error and 100 warning numbers, as listed below. The first two ranges are reserved for the SDK itself and for source generators.
 
 ## Buildvana SDK core (1000-1099)
 
@@ -33,13 +33,11 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 | ------------ | ------- | ----------- |
 | No warnings defined. |  |  |
 
-## Compiled tasks (1100-1199)
+## Source generators (1100-1199)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
-| BVE1100 | Parameter '...' is missing or empty. | Something went wrong with a Buildvana SDK module. Please [open an issue](https://github.com/Buildvana/Buildvana.Sdk/issues/new/choose). |
-| BVE1101 | Language '...' is not supported. | Something went wrong with a Buildvana SDK module. Please [open an issue](https://github.com/Buildvana/Buildvana.Sdk/issues/new/choose). |
-| BVE1102 | The file '...' could not be created. | There was an error trying to write to a file. Try cleaning the project and rebuilding it. If the problem arises again, please [open an issue](https://github.com/Buildvana/Buildvana.Sdk/issues/new/choose). |
+| No errors defined. |  |  |
 
 | Warning code | Message | Description |
 | ------------ | ------- | ----------- |
@@ -66,18 +64,15 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 | ------------ | ------- | ----------- |
 | No warnings defined. |  |  |
 
-## LiteralAssemblyAttributes module (1400-1499)
+## AdditionalAssemblyInfo module (1400-1499)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
-| BVE1400 | The parameter '...' has an invalid name. | A `LiteralAssemblyAttribute` item's metadata has a name starting with `_Parameter`, but what follows could not be parsed as an integer number. |
-| BVE1401 | The parameter '...' has an invalid parameter index. | A `LiteralAssemblyAttribute` item's metadata has a name starting with `_Parameter` followed by an integer number lower than 1 (e.g. `_Parameter0` or `_Parameter-5`). |
-| BVE1402 | The parameter '...' was supplied, but not all previously numbered parameters. | A `LiteralAssemblyAttribute` item's metadata specifying one or more numbered parameters are not in a 1-based sequence (e.g. there is a `_Parameter2` but no `_Parameter1`, or there are `_Parameter1`  and `_Parameter3` but no `_Parameter2`). |
-| BVE1403 | The parameter '...' is empty. | A `LiteralAssemblyAttribute` item's metadata has empty content. To specify the empty string as a parameter, use `""` (e.g. `<_Parameter1>""<_Parameter1>`).
+| No errors defined. |  |  |
 
 | Warning code | Message | Description |
 | ------------ | ------- | ----------- |
-| BVW1400 | Language '...' is not supported by LiteralAssemblyInfo. | Property `GenerateLiteralAssemblyInfo` was set to `true` in a project in a language that is neither C#, nor Visual Basic. Literal assembly attributes will not be generated. |
+| BVW1400 | Additional assembly info generation is not supported for language '...'. | Property `GenerateAdditionalAssemblyInfo` was set to `true` in a project in a language that is neither C# nor Visual Basic. Additional assembly info will not be generated. |
 
 ## NuGetPack module (1500-1599)
 
@@ -100,7 +95,7 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 | ------------ | ------- | ----------- |
 | No warnings defined. |  |  |
 
-## ParseVersionFile module (1600-1699)
+## VersionFile module (1600-1699)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
@@ -133,17 +128,17 @@ Each module, as well as the SDK itself, is assigned a contiguous range of 100 er
 | ------------ | ------- | ----------- |
 | No warnings defined. |  |  |
 
-## ThisAssemblyClass module (1900-1999)
+## XmlDocumentation module (1900-1999)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
-| BVE1900 | Constant '...' has invalid value '...'. | The specified `ThisAssemblyConstant` item contains a `Value` metadata that cannot be successfully parsed as the type indicated by the `Type` metadata of the same item. |
+| No errors defined. |  |  |
 
 | Warning code | Message | Description |
 | ------------ | ------- | ----------- |
-| BVW1900 | ThisAssembly class generation is only supported in C# and Visual Basic projects (Language='...'). | Property `GenerateThisAssemblyClass` was set to `true` in a project in a language that is neither C#, nor Visual Basic. The `ThisAssembly` class (or whatever name set via the `ThisAssemblyClassName` property) will not be created, possibly causing compilation errors. The message includes the `Language` MSBuild property value for the project.|
+| No warnings defined. |  |  |
 
-## XmlDocumentation module (2000-2099)
+## AlternatePack module (2000-2099)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
