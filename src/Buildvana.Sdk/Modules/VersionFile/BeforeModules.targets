@@ -1,19 +1,10 @@
 <Project>
 
-  <PropertyGroup Condition="'$(VersionFileName)' == ''">
-    <VersionFileName>VERSION</VersionFileName>
+  <PropertyGroup>
+    <UseVersionFile Condition="'$(UseVersionFile)' != 'false'">true</UseVersionFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(VersionFileFullPath)' != ''">
-    <BV_VersionFileFullPathAutomatic>false</BV_VersionFileFullPathAutomatic>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(VersionFileFullPath)' == ''">
-    <VersionFileFullPath>$([MSBuild]::GetPathOfFileAbove('$(VersionFileName)', '$(MSBuildProjectDirectory)'))</VersionFileFullPath>
-    <BV_VersionFileFullPathAutomatic>true</BV_VersionFileFullPathAutomatic>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(AutoPackageVersion)' != 'false'">
-    <AutoPackageVersion>true</AutoPackageVersion>
-  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)BeforeModules.Core.targets"
+          Condition="$(UseVersionFile)" />
 
 </Project>
