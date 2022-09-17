@@ -7,11 +7,10 @@
 - [JetBrainsAnnotations module (1300-1399)](#jetbrainsannotations-module-1300-1399)
 - [AdditionalAssemblyInfo module (1400-1499)](#additionalassemblyinfo-module-1400-1499)
 - [NuGetPack module (1500-1599)](#nugetpack-module-1500-1599)
-- [VersionFile module (1600-1699)](#versionfile-module-1600-1699)
-- [ReferenceAssemblies module (1700-1799)](#referenceassemblies-module-1700-1799)
-- [StandardAnalyzers module (1800-1899)](#standardanalyzers-module-1800-1899)
-- [XmlDocumentation module (1900-1999)](#xmldocumentation-module-1900-1999)
-- [AlternatePack module (2000-2099)](#alternatepack-module-2000-2099)
+- [ReferenceAssemblies module (1600-1699)](#referenceassemblies-module-1600-1699)
+- [StandardAnalyzers module (1700-1799)](#standardanalyzers-module-1700-1799)
+- [XmlDocumentation module (1800-1899)](#xmldocumentation-module-1800-1899)
+- [AlternatePack module (1900-1999)](#alternatepack-module-1900-1999)
 
 ## Overview
 
@@ -95,20 +94,7 @@ Each module is assigned a contiguous range of 100 error and 100 warning numbers,
 | ------------ | ------- | ----------- |
 | No warnings defined. |  |  |
 
-## VersionFile module (1600-1699)
-
-| Error code | Message | Description |
-| ---------- | ------- | ----------- |
-| BVE1600 | Version file '...' not found. | A version file, either specified via the VersionFileName property or the default "VERSION", has not been found. |
-| BVE1601 | Version file '...' found outside repository. | A version file, either specified via the VersionFileName property or the default "VERSION", has been found but it is outside of the repository (above the home directory). |
-| BVE1602 | Version file '...' not found. | A version file, specified via the VersionFileFullPath property, has not been found. |
-| BVE1603 | _(may vary)_ | The version file contains an invalid semantic version. The error message may contain more details. |
-
-| Warning code | Message | Description |
-| ------------ | ------- | ----------- |
-| No warnings defined. |  |  |
-
-## ReferenceAssemblies module (1700-1799)
+## ReferenceAssemblies module (1600-1699)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
@@ -118,7 +104,7 @@ Each module is assigned a contiguous range of 100 error and 100 warning numbers,
 | ------------ | ------- | ----------- |
 | No warnings defined. |  |  |
 
-## StandardAnalyzers module (1800-1899)
+## StandardAnalyzers module (1700-1799)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
@@ -128,7 +114,7 @@ Each module is assigned a contiguous range of 100 error and 100 warning numbers,
 | ------------ | ------- | ----------- |
 | No warnings defined. |  |  |
 
-## XmlDocumentation module (1900-1999)
+## XmlDocumentation module (1800-1899)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
@@ -138,7 +124,7 @@ Each module is assigned a contiguous range of 100 error and 100 warning numbers,
 | ------------ | ------- | ----------- |
 | No warnings defined. |  |  |
 
-## AlternatePack module (2000-2099)
+## AlternatePack module (1900-1999)
 
 | Error code | Message | Description |
 | ---------- | ------- | ----------- |
