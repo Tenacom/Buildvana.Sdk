@@ -1,10 +1,11 @@
 {
   "sdk": {
-    "version": "6.0.0",
+    "version": "6.0.400",
     "rollForward": "latestMinor",
     "allowPrerelease": false
   },
   "msbuild-sdks": {
     "Buildvana.Sdk": "1.0.0-alpha.20",
-    "Microsoft.Build.NoTargets": "3.4.0"
-}}
+    "Microsoft.Build.NoTargets": "3.5.6"
+  }
+}
