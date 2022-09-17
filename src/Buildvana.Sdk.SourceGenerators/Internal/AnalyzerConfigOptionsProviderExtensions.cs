@@ -7,12 +7,13 @@
 // See the THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.
 // ---------------------------------------------------------------------------------------
 
-namespace Buildvana.Sdk.CodeGeneration.Configuration;
+using System;
+using Microsoft.CodeAnalysis.Diagnostics;
 
-public sealed class OrderedParameter : ParameterBase
+namespace Buildvana.Sdk.SourceGenerators.Internal;
+
+internal static class AnalyzerConfigOptionsProviderExtensions
 {
-    public OrderedParameter(object? value)
-        : base(value)
-    {
-    }
+    public static bool? GetBooleanMSBuildProperty(this AnalyzerConfigOptionsProvider @this, string name)
+        => @this.GlobalOptions.TryGetValue($"build_property.{name}", out var value) ? value.Equals("true", StringComparison.OrdinalIgnoreCase) : null;
 }

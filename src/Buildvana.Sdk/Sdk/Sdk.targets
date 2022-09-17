@@ -71,7 +71,10 @@
   <!-- Import our package versions -->
   <Import Condition="$(BV_IsConfigured)" Project="$(MSBuildThisFileDirectory)PackageVersions.props" />
 
-  <ItemGroup>
+  <ItemGroup Condition="$(BV_IsConfigured)">
+
+    <!-- Add a BV_PackageVersion item for Buildvana.SDK itself (for our source generators) -->
+    <BV_PackageVersion Include="Buildvana.Sdk" Version="$(BuildvanaSdkVersion)" />
 
     <!-- Let PackageReference items override corresponding BV_PackageReference items -->
     <BV_PackageReference Remove="@(PackageReference)" />
