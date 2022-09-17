@@ -16,7 +16,7 @@
     <!-- NuGet package configuration -->
     <IsPackable>true</IsPackable>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking> <!-- Remove the <dependencies> tag from .nupkg, because it makes the package "depend" on our TargetPlatform. -->
-    <PackageType>MSBuildSdk</PackageType>
+    <PackageType>MSBuildSdk;Dependency</PackageType>
     <PackageTags>build msbuild sdk dotnet</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <DevelopmentDependency>true</DevelopmentDependency>
