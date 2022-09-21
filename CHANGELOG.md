@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### New features
 
 - Quite a few more properties are exported to the external `NuSpecFile`. The complete list can be seen [in the source code](https://github.com/Buildvana/Buildvana.Sdk/blob/main/src/Buildvana.Sdk/Modules/NuGetPack/NuspecFile.targets). A notable addition is `configuration`, the only default "nuspec property" missing in Buildvana SDK so far.
+- Files used for the generation of a NuGet package are now shown in Visual Studio's Solution Explorer tree view, under a "virtual" folder named "- Package". This includes: the license file, the third-party notice file, the Readme file, the package icon, and the `NuspecFile` if specified either explicitly or implicitly (i.e. by having a `{ProjectName}.nuspec` file in the project folder).
 
 ### Changes to existing features
 

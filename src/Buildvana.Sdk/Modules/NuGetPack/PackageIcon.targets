@@ -140,10 +140,13 @@
     </Otherwise>
   </Choose>
 
-  <!-- Add icon file to project items so the Pack target can find it. -->
+  <!--
+    Add icon file to project items so the Pack target can find it.
+    Also show it in Visual Studio, under the "- Package" virtual folder.
+  -->
   <ItemGroup Condition="'$(PackageIconPath)' != '' And '$(PackageIcon)' != ''">
-    <Content Remove="$(PackageIconPath)" />
-    <Content Include="$(PackageIconPath)" Link="$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
+    <None Remove="$(PackageIconPath)" />
+    <None Include="$(PackageIconPath)" Link="- Package\$(PackageIcon)" Pack="true" PackagePath="" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
 </Project>

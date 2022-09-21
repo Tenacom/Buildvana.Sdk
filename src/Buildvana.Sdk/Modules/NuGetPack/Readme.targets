@@ -101,12 +101,15 @@
     </Otherwise>
   </Choose>
 
-  <!-- Add README file to project items so the Pack target can find it.
-       https://devblogs.microsoft.com/nuget/add-a-readme-to-your-nuget-package/#add-a-readme-in-your-project-file-recommended
+  <!--
+    Add README file to project items so the Pack target can find it.
+    https://devblogs.microsoft.com/nuget/add-a-readme-to-your-nuget-package/#add-a-readme-in-your-project-file-recommended
+    
+    Also show it in Visual Studio, under the "- Package" virtual folder.
   -->
   <ItemGroup Condition="'$(PackageReadmePath)' != '' And '$(PackageReadmeFile)' != ''">
-    <Content Remove="$(PackageReadmePath)" />
-    <Content Include="$(PackageReadmePath)" Link="$(PackageReadmeFile)" Pack="true" PackagePath="\" Visible="false" />
+    <None Remove="$(PackageReadmePath)" />
+    <None Include="$(PackageReadmePath)" Link="- Package\$(PackageReadmeFile)" Pack="true" PackagePath="\" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
 </Project>

@@ -14,6 +14,11 @@
     <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);BV_SetNuspecProperties</GenerateNuspecDependsOn>
   </PropertyGroup>
 
+  <!-- Show the nuspec file in Visual Studio, under the "- Package" virtual folder -->
+  <ItemGroup Condition="'$(NuspecFile)' != ''">
+    <None Remove="$(NuspecFile)" />
+    <None Include="$(NuspecFile)" Link="- Package\$([System.IO.Path]::GetFileName('$(NuspecFile)'))" Pack="false" CopyToOutputDirectory="Never" />
+  </ItemGroup>
 
   <Target Name="BV_SetNuspecProperties"
           DependsOnTargets="InitializeSourceControlInformation">

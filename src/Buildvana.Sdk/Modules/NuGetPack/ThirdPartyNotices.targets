@@ -106,10 +106,13 @@
     </Otherwise>
   </Choose>
 
-  <!-- Add third-party notice file to project items so the Pack target can find it.. -->
+  <!--
+    Add third-party notice file to project items so the Pack target can find it.
+    Also show it in Visual Studio, under the "- Package" virtual folder.
+  -->
   <ItemGroup Condition="'$(PackageThirdPartyNoticePath)' != '' And '$(PackageThirdPartyNoticeFile)' != ''">
-    <Content Remove="$(PackageThirdPartyNoticePath)" />
-    <Content Include="$(PackageThirdPartyNoticePath)" Link="$(PackageThirdPartyNoticeFile)" Pack="true" PackagePath="" Visible="false" />
+    <None Remove="$(PackageThirdPartyNoticePath)" />
+    <None Include="$(PackageThirdPartyNoticePath)" Link="- Package\$(PackageThirdPartyNoticeFile)" Pack="true" PackagePath="" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
 </Project>

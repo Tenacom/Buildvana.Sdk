@@ -108,10 +108,13 @@
     </Otherwise>
   </Choose>
 
-  <!-- Add license file to project items so the Pack target can find it.. -->
+  <!--
+    Add license file to project items so the Pack target can find it.
+    Also show it in Visual Studio, under the "- Package" virtual folder.
+  -->
   <ItemGroup Condition="'$(PackageLicensePath)' != '' And '$(PackageLicenseFile)' != ''">
-    <Content Remove="$(PackageLicensePath)" />
-    <Content Include="$(PackageLicensePath)" Link="$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
+    <None Remove="$(PackageLicensePath)" />
+    <None Include="$(PackageLicensePath)" Link="$(PackageLicenseFile)" Pack="true" PackagePath="" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
 </Project>
