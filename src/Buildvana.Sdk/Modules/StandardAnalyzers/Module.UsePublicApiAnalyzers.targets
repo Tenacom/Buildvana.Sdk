@@ -12,10 +12,14 @@
     https://github.com/dotnet/roslyn-analyzers/blob/main/src/PublicApiAnalyzers/PublicApiAnalyzers.Help.md#conditional-api-differences
   -->
   <ItemGroup>
-    <None Remove="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Shipped.txt" />
-    <None Remove="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Unshipped.txt" />
-    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Shipped.txt" />
-    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Unshipped.txt" />
+    <None Include="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Shipped.txt" />
+    <None Include="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != ''">
+    <None Remove="$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Shipped.txt" />
+    <None Remove="$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Unshipped.txt" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Unshipped.txt" />
   </ItemGroup>
 
 </Project>
