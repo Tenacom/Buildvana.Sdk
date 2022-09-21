@@ -12,31 +12,17 @@
   <Import Project="ThirdPartyNotices.targets" />
   <Import Project="PackageIcon.targets" />
 
-  <Target Name="BV_ShowFilesUsedInPackage"
-          AfterTargets="BeforePack">
-
-    <Message Importance="High"
-             Condition="'$(PackageReadmePath)' != '' And '$(PackageReadmeFile)' != ''"
-             Text="Using '$(PackageReadmePath)' as README file in package '$(PackageId)'." />
-
-    <Message Importance="High"
-             Condition="'$(PackageLicensePath)' != '' And '$(PackageLicenseFile)' != ''"
-             Text="Using '$(PackageLicensePath)' as license file in package '$(PackageId)'." />
-
-    <Message Importance="High"
-             Condition="'$(PackageThirdPartyNoticesPath)' != '' And '$(PackageThirdPartyNoticesFile)' != ''"
-             Text="Using '$(PackageThirdPartyNoticesPath)' as third-party notices file in package '$(PackageId)'." />
-
-    <Message Importance="High"
-             Condition="'$(PackageIconPath)' != '' And '$(PackageIcon)' != ''"
-             Text="Using '$(PackageIconPath)' as package icon in package '$(PackageId)'." />
-
-  </Target>
-
   <!-- Coalesce PackageRequireLicenseAcceptance to a boolean value. Default is false. -->
   <PropertyGroup>
     <PackageRequireLicenseAcceptance Condition="'$(LicensePackageExpression)' == '' And !$(LicenseFileInPackage)">false</PackageRequireLicenseAcceptance>
     <PackageRequireLicenseAcceptance Condition="'$(PackageRequireLicenseAcceptance)' != 'true'">false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <!-- Coalesce other properties. -->
+  <PropertyGroup>
+    <DevelopmentDependency Condition="'$(DevelopmentDependency)' != 'true'">false</DevelopmentDependency>
+    <PackageType Condition="'$(PackageType)' == ''">Dependency</PackageType>
+    <Serviceable Condition="'$(Serviceable)' != 'false'">true</Serviceable>
   </PropertyGroup>
 
   <Import Project="NuspecFile.targets" />

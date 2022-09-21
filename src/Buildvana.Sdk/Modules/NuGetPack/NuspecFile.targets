@@ -1,24 +1,31 @@
 <Project>
 
-  <!-- Automatically use a <project_name>.nuspec file if present alongside the project file. -->
+  <!--
+    Automatically use a <project_name>.nuspec file if present alongside the project file.
+    This would be done anyway by NuGet, but we make it more explicit, also enabling all the goodies below.
+  -->
   <PropertyGroup Condition="'$(NuspecFile)' == ''">
     <NuspecFile Condition="Exists('$(MSBuildProjectDirectory)\$(MSBuildProjectName).nuspec')">$(MSBuildProjectName).nuspec</NuspecFile>
   </PropertyGroup>
 
   <!-- Set NuspecProperties if there is a .nuspec file to use. -->
   <PropertyGroup Condition="'$(NuspecFile)' != ''">
+    <NuspecBasePath Condition="'$(NuspecBasePath)' == ''">$(MSBuildProjectDirectory)</NuspecBasePath>
     <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);BV_SetNuspecProperties</GenerateNuspecDependsOn>
   </PropertyGroup>
 
-  <Target Name="BV_SetNuspecProperties">
 
+  <Target Name="BV_SetNuspecProperties"
+          DependsOnTargets="InitializeSourceControlInformation">
+
+    <!-- Reset 'SourceRevisionId' to default value when not set -->
     <PropertyGroup>
-      <!-- Reset 'SourceRevisionId' to default value when not set -->
       <SourceRevisionId Condition="'$(SourceRevisionId)' == ''">0</SourceRevisionId>
     </PropertyGroup>
 
     <PropertyGroup>
       <NuspecProperties>
+        minClientVersion=$(MinClientVersion);
         id=$(PackageId);
         title=$(Title);
         version=$(PackageVersion);
@@ -27,12 +34,20 @@
         owners=$(Owners.Replace(';',','));
         authors=$(Authors.Replace(';',','));
         copyright=$(Copyright);
+        configuration=$(Configuration);
         tags=$(PackageTags.Replace(';',','));
         repositoryType=$(RepositoryType);
         repositoryUrl=$(RepositoryUrl);
         projectUrl=$(PackageProjectUrl);
+        licenseExpression=$(PackageLicenseExpression);
         licenseFile=$(PackageLicenseFile);
-        icon=$([System.IO.Path]::GetFileName('$(PackageIcon)'));
+        licensePath=$(PackageLicensePath);
+        thirdPartyNoticeFile=$(PackageThirdPartyNoticeFile);
+        thirdPartyNoticePath=$(PackageThirdPartyNoticePath);
+        readmeFile=$(PackageReadmeFile);
+        readmePath=$(PackageReadmePath);
+        icon=$(PackageIcon);
+        iconPath=$(PackageIconPath);
         requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);
         packageType=$(PackageType);
         releaseNotes=$(PackageReleaseNotes);

@@ -1,0 +1,16 @@
+<Project>
+
+  <!--
+    This target is defined in Microsoft.Common.CurrentVersion.targets,
+    which is only imported in inner builds, so it is not available when packing.
+    
+    SourceLink defines it so it can work in outer builds,
+    but we need it to exist regardless of SourceLink being present,
+    because our target that sets .nuspec file properties depende on it
+    (see NuspecFile.targets).
+
+    See also https://github.com/dotnet/msbuild/issues/3294
+  -->
+  <Target Name="InitializeSourceControlInformation" />
+
+</Project>

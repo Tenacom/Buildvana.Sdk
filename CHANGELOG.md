@@ -9,9 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- Quite a few more properties are exported to the external `NuSpecFile`. The complete list can be seen [in the source code](https://github.com/Buildvana/Buildvana.Sdk/blob/main/src/Buildvana.Sdk/Modules/NuGetPack/NuspecFile.targets). A notable addition is `configuration`, the only default "nuspec property" missing in Buildvana SDK so far.
+
 ### Changes to existing features
 
+- When generating a NuGet package, previous versions of Buildvana SDK wrote messages to the build log specifying the full paths of license, third-party notice, readme, and icon files. These messages have been removed in favor of showing the files in Visual Studio's Solution Explorer.
+
 ### Bugs fixed in this release
+
+- When using an external `.nuspec` file, the `$configuration$` tag did not work in previous versions of Buildvana SDK. This has been fixed.
+- When using an external `.nuspec` file, the `$repositoryType$` tag did not work in previous versions of Buildvana SDK. This has been fixed.
 
 ### Known problems introduced by this release
 
