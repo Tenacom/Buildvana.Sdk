@@ -114,7 +114,7 @@
   -->
   <ItemGroup Condition="'$(PackageLicensePath)' != '' And '$(PackageLicenseFile)' != ''">
     <None Remove="$(PackageLicensePath)" />
-    <None Include="$(PackageLicensePath)" Link="$(PackageLicenseFile)" Pack="true" PackagePath="" CopyToOutputDirectory="Never" />
+    <None Include="$(PackageLicensePath)" Link="- Package\$(PackageLicenseFile)" Pack="true" PackagePath="" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
 </Project>
