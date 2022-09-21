@@ -5,12 +5,6 @@
     <BV_PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers"
                          PrivateAssets="All"
                          IncludeAssets="runtime; build; native; contentfiles; analyzers" />
-    <None Remove="PublicAPI.Shipped.txt" />
-    <None Remove="PublicAPI.Unshipped.txt" />
-    <AdditionalFiles Remove="PublicAPI.Shipped.txt" />
-    <AdditionalFiles Remove="PublicAPI.Unshipped.txt" />
-    <AdditionalFiles Include="PublicAPI.Shipped.txt" />
-    <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup>
 
 </Project>
