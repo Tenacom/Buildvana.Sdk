@@ -7,4 +7,15 @@
                          IncludeAssets="runtime; build; native; contentfiles; analyzers" />
   </ItemGroup>
 
+  <!--
+    TFM-specific public API files are not added automatically by the analyzers.
+    https://github.com/dotnet/roslyn-analyzers/blob/main/src/PublicApiAnalyzers/PublicApiAnalyzers.Help.md#conditional-api-differences
+  -->
+  <ItemGroup>
+    <None Remove="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Shipped.txt" />
+    <None Remove="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Unshipped.txt" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+
 </Project>
