@@ -11,15 +11,28 @@
     TFM-specific public API files are not added automatically by the analyzers.
     https://github.com/dotnet/roslyn-analyzers/blob/main/src/PublicApiAnalyzers/PublicApiAnalyzers.Help.md#conditional-api-differences
   -->
-  <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Shipped.txt" />
-    <None Include="$(MSBuildProjectDirectory)\PublicAPI\**\PublicAPI.Unshipped.txt" />
+  <PropertyGroup>
+    <UseTfmSpecificPublicApiFiles Condition="'$(UseTfmSpecificPublicApiFiles)' == '' And '$(TargetFrameworks)' == ''">false</UseTfmSpecificPublicApiFiles>
+    <UseTfmSpecificPublicApiFiles Condition="'$(UseTfmSpecificPublicApiFiles)' == '' And '$(TargetFrameworks)' != ''">true</UseTfmSpecificPublicApiFiles>
+    <UseTfmSpecificPublicApiFiles Condition="'$(UseTfmSpecificPublicApiFiles)' != 'true'">false</UseTfmSpecificPublicApiFiles>
+  </PropertyGroup>
+  <ItemGroup Condition="$(UseTfmSpecificPublicApiFiles)">
+    <None Remove="PublicAPI.Shipped.txt" />
+    <None Remove="PublicAPI.Unshipped.txt" />
+    <AdditionalFiles Remove="PublicAPI.Shipped.txt" />
+    <AdditionalFiles Remove="PublicAPI.Unshipped.txt" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' != ''">
-    <None Remove="$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Shipped.txt" />
-    <None Remove="$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Unshipped.txt" />
-    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Shipped.txt" />
-    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Unshipped.txt" />
+  <ItemGroup Condition="$(UseTfmSpecificPublicApiFiles) And '$(TargetFrameworks)' != ''">
+    <None Include="PublicAPI\*\PublicAPI.Shipped.txt" />
+    <None Include="PublicAPI\*\PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+  <ItemGroup Condition="$(UseTfmSpecificPublicApiFiles) And '$(TargetFramework)' != ''">
+    <None Remove="PublicAPI\$(TargetFramework)\PublicAPI.Shipped.txt" />
+    <None Remove="PublicAPI\$(TargetFramework)\PublicAPI.Unshipped.txt" />
+    <AdditionalFiles Condition="Exists('$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Shipped.txt')"
+                     Include="PublicAPI\$(TargetFramework)\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Condition="Exists('$(MSBuildProjectDirectory)\PublicAPI\$(TargetFramework)\PublicAPI.Unshipped.txt')"
+                     Include="PublicAPI\$(TargetFramework)\PublicAPI.Unshipped.txt" />
   </ItemGroup>
 
 </Project>
