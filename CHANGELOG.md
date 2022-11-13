@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Known problems introduced by this release
 
+## [1.0.0-alpha.23](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.23) (2022-11-13)
+
+### New features
+
+- TFM-specific public API files (`PublicAPI\$(TargetFramework)\PublicAPI.{Shipped|Unshipped}.txt`) can now be disabled for multi-target projects by setting the `UseTfmSpecificPublicApiFiles` property to `false`. They can also be enabled for non-multi-target files by setting the same property to `true`.
+
 ## [1.0.0-alpha.22](https://github.com/Buildvana/Buildvana.Sdk/releases/tag/1.0.0-alpha.22) (2022-09-22)
 
 ### New features
