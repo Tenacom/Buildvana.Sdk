@@ -29,7 +29,7 @@
   <ItemGroup>
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
-    <PackageVersion Include="PolyKit.Embedded" Version="1.0.16" />
+    <PackageVersion Include="PolyKit.Embedded" Version="2.0.24" />
   </ItemGroup>
 
 </Project>
