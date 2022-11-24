@@ -1,43 +1,48 @@
 <Project>
 
-  <!-- Branding, ownership, and licensing -->
-
+  <!-- Branding, ownership, licensing, project information -->
   <PropertyGroup>
     <Product>Buildvana.Sdk</Product>
-    <Authors>Riccardo De Agostini and Buildvana contributors</Authors>
-    <Owners>Buildvana</Owners>
-    <Company>The Buildvana team</Company>
-    <Copyright>Copyright (C) 2020-2022 Riccardo De Agostini and Buildvana contributors.</Copyright>
+    <Authors>Tenacom and contributors</Authors>
+    <Owners>Tenacom</Owners>
+    <Company>Tenacom</Company>
+    <Copyright>Copyright (c) $(Authors)</Copyright>
+    <Trademark />
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/Tenacom/Buildvana.Sdk</PackageProjectUrl>
+    <PackageReleaseNotes>See $(PackageProjectUrl)/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Tenacom/Buildvana.Sdk</RepositoryUrl>
+    <IconInPackage>true</IconInPackage>
+    <ReadmeFileInPackage>true</ReadmeFileInPackage>
+    <LicenseFileInPackage>true</LicenseFileInPackage>
+    <ThirdPartyNoticeInPackage>true</ThirdPartyNoticeInPackage>
   </PropertyGroup>
 
   <!-- Common build options -->
-
   <PropertyGroup>
-    <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
+    <ImplicitUsings>false</ImplicitUsings>
+    <Deterministic>true</Deterministic>
     <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <CLSCompliant>true</CLSCompliant>
     <ComVisible>false</ComVisible>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <!-- Automatic versioning -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
+  </ItemGroup>
 
   <!-- Solution-wide build options -->
-
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <XmlDocs>false</XmlDocs> <!--Do not generate XML documentation -->
     <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
-  </PropertyGroup>
-
-  <!-- Package Central Version Management -->
-
-  <PropertyGroup>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
 </Project>

@@ -2,10 +2,22 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "jetbrains.resharper.globaltools": {
-      "version": "2022.2.4",
+    "cake.tool": {
+      "version": "2.2.0",
       "commands": [
-        "jb"
+        "dotnet-cake"
+      ]
+    },
+    "nbgv": {
+      "version": "3.5.119",
+      "commands": [
+        "nbgv"
+      ]
+    },
+    "dotnet-reportgenerator-globaltool": {
+      "version": "5.1.12",
+      "commands": [
+        "reportgenerator"
       ]
     }
   }

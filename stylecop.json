@@ -21,7 +21,7 @@
 
     "namingRules": {
       "allowCommonHungarianPrefixes": true,
-      "allowedHungarianPrefixes": [],
+      "allowedHungarianPrefixes": ["db", "id", "x"],
       "allowedNamespaceComponents": [],
       "includeInferredTupleElementNames": false,
       "tupleElementNameCasing": "PascalCase"
@@ -38,13 +38,8 @@
     },
 
     "documentationRules": {
-      "companyName": "Riccardo De Agostini",
-      "copyrightText": "{decoration}\r\nCopyright (C) {companyName} and contributors. All rights reserved.\nLicensed under the {licenseName} license.\nSee the {licenseFile} file in the project root for full license information.\r\n\r\nPart of this file may be third-party code, distributed under a compatible license.\r\nSee the THIRD-PARTY-NOTICES file in the project root for third-party copyright notices.\r\n{decoration}",
-      "variables": {
-        "decoration": "---------------------------------------------------------------------------------------",
-        "licenseName": "MIT",
-        "licenseFile": "LICENSE"
-      },
+      "companyName": "Tenacom",
+      "copyrightText": "Copyright (C) {companyName} and Contributors. Licensed under the MIT license.\r\nSee the LICENSE file in the project root for full license information.",
       "xmlHeader": false,
       "documentInterfaces": true,
       "documentExposedElements": true,

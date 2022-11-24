@@ -10,26 +10,27 @@
       The minimum supported version of Roslyn.
       Used by the SDK to determine whether the compiler in use is supported.
     -->
-    <BV_MinRoslynVersion>4.3</BV_MinRoslynVersion>
+    <BV_MinRoslynVersion>4.4</BV_MinRoslynVersion>
 
     <!--
       A textual hint telling which toolchains contain a suupported version of Roslyn.
       Used by the SDK to construct a meaningful diagnostic message when an unsupported Roslyn version is detected.
     -->
-    <BV_MinRoslynVersionHint>.NET SDK v6.0.400+ / Visual Studio 2022 17.3+</BV_MinRoslynVersionHint>
+    <BV_MinRoslynVersionHint>.NET SDK v7.0.100+ / Visual Studio 2022 17.4+</BV_MinRoslynVersionHint>
 
     <!--
       The package folder, under analyzers/dotnet, where the source generators DLL is put when packing the SDK.
       Used by the SDK project when packing.
     -->
-    <BV_SourceGeneratorsPackageFolder>roslyn4.3</BV_SourceGeneratorsPackageFolder>
+    <BV_SourceGeneratorsPackageFolder>roslyn4.4</BV_SourceGeneratorsPackageFolder>
 
   </PropertyGroup>
 
   <ItemGroup>
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
-    <PackageVersion Include="PolyKit.Embedded" Version="1.0.16" />
+    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.5.119" />
+    <PackageVersion Include="PolyKit.Embedded" Version="2.0.30" />
   </ItemGroup>
 
 </Project>

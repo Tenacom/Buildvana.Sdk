@@ -1,15 +1,17 @@
-Buildvana SDK uses third-party material as listed below.
-The attached notices are provided for informational purposes only.
-
-This project uses and/or incorporates third-party libraries or other resources
+This project may use and/or incorporate third-party libraries or other resources
 that may be distributed under licenses different than this project.
 
 In the event that we accidentally failed to list a required notice, please
 bring it to our attention. Either post an issue, or email us:
 
-           info@buildvana.net
+           info@tenacom.it
 
-The attached notices are provided for informational purposes only.
+The attached notices are provided for information only.
+
+================================================================================================
+Third-party graphic elements (fonts, icons, etc.)
+------------------------------------------------------------------------------------------------
+Third-party copyright notices for graphic elements are in graphics/README.md
 
 ================================================================================================
 Nerdbank.MSBuildExtension - https://github.com/AArnott/Nerdbank.MSBuildExtension

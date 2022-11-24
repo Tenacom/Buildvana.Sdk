@@ -1,60 +1,39 @@
-area-core:
-  - "src/Buildvana.Sdk/Sdk/**/*"
+'area:code':
+  - '*.sln'
+  - 'src/**/*'
 
-area-assembly_signing:
-  - "src/Buildvana.Sdk/Modules/AssemblySigning/**/*"
-  - "src/Buildvana.Sdk/Tasks/AssemblySigning/**/*"
+'area:style':
+  - '**/.editorconfig'
+  - '**/.globalconfig'
+  - '**/stylecop.json'
+  - '**/*.DotSettings'
 
-area-jetbrains_annotations:
-  - "src/Buildvana.Sdk/Modules/JetBrainsAnnotations/**/*"
-  - "src/Buildvana.Sdk/Tasks/JetBrainsAnnotations/**/*"
+'area:build':
+  - '**/*.cake'
+  - 'build/**/*'
 
-area-literal_assembly_attributes:
-  - "src/Buildvana.Sdk/Modules/LiteralAssemblyAttributes/**/*"
-  - "src/Buildvana.Sdk/Tasks/LiteralAssemblyAttributes/**/*"
+'area:repo':
+  - '.github/*.yml'
+  - '.github/**/*.md'
+  - CODEOWNERS
+  - '.github/CODEOWNERS'
 
-area-nuget_pack:
-  - "src/Buildvana.Sdk/Modules/NuGetPack/**/*"
-  - "src/Buildvana.Sdk/Tasks/NuGetPack/**/*"
+'area:ci':
+  - '.github/workflows/**/*'
+  - 'lgtm.yml'
 
-area-standard_analyzers:
-  - "src/Buildvana.Sdk/Modules/StandardAnalyzers/**/*"
-  - "src/Buildvana.Sdk/Tasks/StandardAnalyzers/**/*"
-
-area-thisassembly_class:
-  - "src/Buildvana.Sdk/Modules/ThisAssemblyClass/**/*"
-  - "src/Buildvana.Sdk/Tasks/ThisAssemblyClass/**/*"
-
-area-version_file:
-  - "src/Buildvana.Sdk/Modules/VersionFile/**/*"
-  - "src/Buildvana.Sdk/Tasks/VersionFile/**/*"
-
-area-xml_documentation:
-  - "src/Buildvana.Sdk/Modules/XmlDocumentation/**/*"
-  - "src/Buildvana.Sdk/Tasks/XmlDocumentation/**/*"
-
-area-build:
-  - "**/*.sln"
-  - "**/*.csproj"
-  - "**/Common.props"
-  - "**/Common.targets"
-
-area-ci:
-  - ".github/workflows/**/*"
-  - "lgtm.yml"
-
-area-deps:
-  - "**/Directory.Packages.props"
+'area:deps':
+  - '**/Directory.Packages.props'
   - Directory.Build.props
   - Directory.Build.targets
-  - "src/Buildvana.Sdk/Sdk/PackageVersions.props"
+  - global.json
+  - .config/dotnet-tools.json
 
-area-docs:
-  - "docs/**/*"
-  - "**/LICENSE"
-  - "**/README.md"
-  - "**/THIRD-PARTY-NOTICES"
-
-area-repo:
-  - ".github/*.yml"
-  - ".github/**/*.md"
+'area:docs':
+  - 'docs/**/*'
+  - '.all-contributorsrc'
+  - '**/CHANGELOG.md'
+  - '**/LICENSE'
+  - '**/NuGet-README.md'
+  - '**/README.md'
+  - '**/THIRD-PARTY-NOTICES'
