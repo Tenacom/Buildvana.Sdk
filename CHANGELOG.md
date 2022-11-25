@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- The [`Nerdbank.GitVersioning`](https://github.com/dotnet/Nerdbank.GitVersioning) package is now automatically referenced if either a `version.json` or a `.version.json` file is found looking from the project directory up until `HomeDirectory`. To disable this behavior, set `UseNerdbankGitVersioning` to `false` either in your project file or in a `Common.props` file. To issue an error `BVSDK2000` if a version JSON file is _not_ found, set `UseNerdbankGitVersioning` to `true` either in your project file or in a `Common.props` file.
+
 ### Changes to existing features
 
 - Errors and warnings issued by Buildvana SDK are no longer prefixed differently: `BVSDK` is the new prefix for all diagnostics.

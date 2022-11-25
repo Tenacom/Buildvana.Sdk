@@ -94,3 +94,9 @@ Each module is assigned a contiguous range of 100 diagnostics, as listed below. 
 | Code | Severity | Message | Description |
 | -----| :------: | ------- | ----------- |
 | This module has no associated diagnostics. |  |  |  |
+
+## NerdbankGitVersioning module (2000-2099)
+
+| Code | Severity | Message | Description |
+| -----| :------: | ------- | ----------- |
+| BVSDK2000 | Error | Version specification JSON file not found. | A `version.json` or `.version.json` file for the project was not found within the repository root. |
