@@ -33,11 +33,6 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <!-- Automatic versioning -->
-  <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
-  </ItemGroup>
-
   <!-- Solution-wide build options -->
   <PropertyGroup>
     <IsPackable>false</IsPackable>
