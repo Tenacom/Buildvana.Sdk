@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Known problems introduced by this release
 
-## [1.0.6-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.6-preview) (2022-11-25)
+## [1.0.7-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.7-preview) (2022-11-25)
 
 ### New features
 
