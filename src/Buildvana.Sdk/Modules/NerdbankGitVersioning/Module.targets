@@ -5,7 +5,7 @@
     Coalesce any other value to empty.
   -->
   <PropertyGroup>
-    <UseNerdbankGitVersioning Condition="'$(UseNerdbankGitVersioning)' != 'true' And $(UseNerdbankGitVersioning)' != 'false'" />
+    <UseNerdbankGitVersioning Condition="'$(UseNerdbankGitVersioning)' != 'true' And '$(UseNerdbankGitVersioning)' != 'false'" />
   </PropertyGroup>
 
   <!--
