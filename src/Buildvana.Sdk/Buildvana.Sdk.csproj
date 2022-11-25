@@ -67,14 +67,15 @@
     <BeforePack>_GenerateSdkVersionProps;$(BeforePack)</BeforePack>
   </PropertyGroup>
 
-  <Target Name="_GenerateSdkVersionProps">
+  <Target Name="_GenerateSdkVersionProps"
+          DependsOnTargets="GetBuildVersion">
 
     <PropertyGroup>
       <_SdkVersionPropsPath>$(IntermediateOutputPath)SdkVersion.props</_SdkVersionPropsPath>
       <_SdkVersionPropsXml>
         <Project>
           <PropertyGroup>
-            <BuildvanaSdkVersion>$(Version)</BuildvanaSdkVersion>
+            <BuildvanaSdkVersion>$(NuGetPackageVersion)</BuildvanaSdkVersion>
             <BV_MinRoslynVersion>$(BV_MinRoslynVersion)</BV_MinRoslynVersion>
             <BV_MinRoslynVersionHint>$(BV_MinRoslynVersionHint)</BV_MinRoslynVersionHint>
           </PropertyGroup>
