@@ -120,8 +120,8 @@ Task("Release")
                 context.Information("Public API update skipped: not needed on prerelease.");
             }
 
-            // Update changelog only on non-prerelease
-            if (!data.IsPrerelease)
+            // Update changelog only on non-prerelease, unless forced
+            if (!data.IsPrerelease || context.GetOption<bool>("forceUpdateChangelog", false))
             {
                 if (context.GetOption<bool>("checkChangelog", true))
                 {
