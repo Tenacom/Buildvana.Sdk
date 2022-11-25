@@ -13,10 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
+### Known problems introduced by this release
+
+## [1.0.13-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.13-preview) (2022-11-25)
+
+### Bugs fixed in this release
+
 - Version 1.0.7-preview contained a syntax error in a `.targets` file.
 - When using version 1.0.7-preview, Restore failed because of a missing Buildvana.Sdk v1.0.0 package.
-
-### Known problems introduced by this release
 
 ## [1.0.7-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.7-preview) (2022-11-25) **_RETIRED_**
 
