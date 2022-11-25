@@ -13,9 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
+- Version 1.0.7-preview contained a syntax error in a `.targets` file.
+- When using version 1.0.7-preview, Restore failed because of a missing Buildvana.Sdk v1.0.0 package.
+
 ### Known problems introduced by this release
 
-## [1.0.7-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.7-preview) (2022-11-25)
+## [1.0.7-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.7-preview) (2022-11-25) **_RETIRED_**
 
 ### New features
 
@@ -24,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes to existing features
 
 - Errors and warnings issued by Buildvana SDK are no longer prefixed differently: `BVSDK` is the new prefix for all diagnostics.
+
+### Known problems introduced by this release
+
+- This version contains a syntax error in a `.targets` file that somehow slipped through to distribution.
+- Because of a weird interaction between the `Microsoft.Build.NoTargets` SDK and `Nerdbank.GitVersioning` when packing without building (which our CI workflows, as luck would have it, do) this version will try to reference version 1.0.0 of itself - which still doesn't exist - and restore will fail every time.
 
 ## [1.0.0-alpha.23](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.0-alpha.23) (2022-11-13)
 
