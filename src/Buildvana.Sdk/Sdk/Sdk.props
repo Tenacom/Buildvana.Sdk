@@ -1,4 +1,4 @@
-﻿<Project InitialTargets="BV_CheckSdkTargetsImport;BV_LogEvaluationErrors;BV_CreateArtifactsDirectory">
+<Project InitialTargets="BV_CheckSdkTargetsImport;BV_LogEvaluationErrors;BV_CreateArtifactsDirectory">
 
   <!-- Signal that Sdk.props has been imported. -->
   <PropertyGroup>
@@ -33,7 +33,7 @@
   <!-- Check that HomeDirectory has been configured. -->
   <ItemGroup>
     <EvaluationError Condition="'$(HomeDirectory)' == ''"
-                     Include="BVE1003"
+                     Include="BVSDK1003"
                      Text="Home directory not defined." />
   </ItemGroup>
 
@@ -43,7 +43,7 @@
     <BV_MSBuildVersionSupported Condition="'$(MSBuildVersion)' &gt;= '17.0'">true</BV_MSBuildVersionSupported>
   </PropertyGroup>
   <ItemGroup Condition="!$(BV_MSBuildVersionSupported)">
-    <EvaluationError Include="BVE1004"
+    <EvaluationError Include="BVSDK1004"
                      Text="Buildvana SDK requires at least MSBuild v17.0." />
   </ItemGroup>
 
@@ -104,7 +104,7 @@
 
     <ItemGroup>
       <EvaluationError Condition="'$(BV_SdkTargetsHasBeenImported)' != 'true'"
-                       Include="BVE1001"
+                       Include="BVSDK1001"
                        Text="Sdk.targets not imported." />
     </ItemGroup>
 

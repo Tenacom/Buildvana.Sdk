@@ -1,4 +1,4 @@
-﻿<Project InitialTargets="BV_CheckSdkPropsImport">
+<Project InitialTargets="BV_CheckSdkPropsImport">
 
   <!-- Signal that Sdk.targets has been imported. -->
   <PropertyGroup>
@@ -20,7 +20,7 @@
   -->
   <ItemGroup>
     <EvaluationError Condition="'$(BuildvanaSdkDirectory)' != '' And '$(BuildvanaSdkDirectory)' != '$(MSBuildThisFileDirectory)'"
-                     Include="BVE1002"
+                     Include="BVSDK1002"
                      Text="Sdk.props and Sdk.targets are in different directories." />
   </ItemGroup>
 
@@ -100,7 +100,7 @@
   <Target Name="BV_CheckSdkPropsImport">
 
     <Error Condition="'$(BV_SdkPropsHasBeenImported)' != 'true'"
-           Code="BVE1000"
+           Code="BVSDK1000"
            Text="Sdk.props not imported."
            File="$(MSBuildProjectFullPath)" />
 

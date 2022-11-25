@@ -30,7 +30,7 @@
       </PropertyGroup>
       <ItemGroup>
         <EvaluationError Condition="!Exists('$(PackageLicensePath)')"
-                         Include="BVE1500"
+                         Include="BVSDK1500"
                          Text="Specified license file '$(PackageLicensePath)' does not exist." />
       </ItemGroup>
     </When>
@@ -40,7 +40,7 @@
       </PropertyGroup>
       <ItemGroup>
         <EvaluationError Condition="'$(PackageLicensePath)' == ''"
-                         Include="BVE1501"
+                         Include="BVSDK1501"
                          Text="Specified license file '$(PackageLicenseFile)' was not found." />
       </ItemGroup>
     </When>
@@ -102,7 +102,7 @@
       <!-- Error if not found. -->
       <ItemGroup>
         <EvaluationError Condition="'$(PackageLicensePath)' == ''"
-                         Include="BVE1502"
+                         Include="BVSDK1502"
                          Text="No license file found." />
       </ItemGroup>
     </Otherwise>

@@ -28,7 +28,7 @@
       </PropertyGroup>
       <ItemGroup>
         <EvaluationError Condition="!Exists('$(PackageIconPath)')"
-                         Include="BVE1506"
+                         Include="BVSDK1506"
                          Text="Specified package icon file '$(PackageIconPath)' does not exist." />
       </ItemGroup>
     </When>
@@ -38,7 +38,7 @@
       </PropertyGroup>
       <ItemGroup>
         <EvaluationError Condition="'$(PackageIconPath)' == ''"
-                         Include="BVE1507"
+                         Include="BVSDK1507"
                          Text="Specified package icon file '$(PackageIcon)' was not found." />
       </ItemGroup>
     </When>
@@ -134,7 +134,7 @@
       <!-- Error if not found. -->
       <ItemGroup>
         <EvaluationError Condition="'$(PackageIconPath)' == ''"
-                         Include="BVE1508"
+                         Include="BVSDK1508"
                          Text="No package icon file found." />
       </ItemGroup>
     </Otherwise>

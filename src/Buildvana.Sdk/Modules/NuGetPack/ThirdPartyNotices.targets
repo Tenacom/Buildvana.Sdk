@@ -28,7 +28,7 @@
       </PropertyGroup>
       <ItemGroup>
         <EvaluationError Condition="!Exists('$(PackageThirdPartyNoticePath)')"
-                         Include="BVE1503"
+                         Include="BVSDK1503"
                          Text="Specified third-party notice file '$(PackageThirdPartyNoticePath)' does not exist." />
       </ItemGroup>
     </When>
@@ -38,7 +38,7 @@
       </PropertyGroup>
       <ItemGroup>
         <EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
-                         Include="BVE1504"
+                         Include="BVSDK1504"
                          Text="Specified third-party notice file '$(PackageThirdPartyNoticeFile)' was not found." />
       </ItemGroup>
     </When>
@@ -100,7 +100,7 @@
       <!-- Error if not found. -->
       <ItemGroup>
         <EvaluationError Condition="'$(PackageThirdPartyNoticePath)' == ''"
-                         Include="BVE1505"
+                         Include="BVSDK1505"
                          Text="No third-party notice file found." />
       </ItemGroup>
     </Otherwise>

@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- Errors and warnings issued by Buildvana SDK are no longer prefixed differently: `BVSDK` is the new prefix for all diagnostics.
+
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release

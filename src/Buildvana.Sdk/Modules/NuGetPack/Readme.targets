@@ -28,7 +28,7 @@
       </PropertyGroup>
       <ItemGroup>
         <EvaluationError Condition="!Exists('$(PackageReadmePath)')"
-                         Include="BVE1509"
+                         Include="BVSDK1509"
                          Text="Specified README file '$(PackageReadmePath)' does not exist." />
       </ItemGroup>
     </When>
@@ -38,7 +38,7 @@
       </PropertyGroup>
       <ItemGroup>
         <EvaluationError Condition="'$(PackageReadmePath)' == ''"
-                         Include="BVE1510"
+                         Include="BVSDK1510"
                          Text="Specified README file '$(PackageReadmeFile)' was not found." />
       </ItemGroup>
     </When>
@@ -95,7 +95,7 @@
       <!-- Error if not found. -->
       <ItemGroup>
         <EvaluationError Condition="'$(PackageReadmePath)' == ''"
-                         Include="BVE1511"
+                         Include="BVSDK1511"
                          Text="No README file found for package." />
       </ItemGroup>
     </Otherwise>
