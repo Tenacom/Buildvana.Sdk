@@ -16,6 +16,20 @@ using Octokit;
 using SysFile = System.IO.File;
 
 /*
+ * Summary : Asynchronously gets the visibility of the current repository.
+ * Params  : context - The Cake context.
+ *           data    - Build configuration data.
+ * Returns : A Task that represents the ongoing operation.
+ */
+static async Task<bool> IsPrivateRepositoryAsync(this ICakeContext context, BuildData data)
+{
+    context.Information("Fetching repository information...");
+    var client = context.CreateGitHubClient();
+    var repository = await client.Repository.Get(data.RepositoryOwner, data.RepositoryName).ConfigureAwait(false);
+    return repository.Private;
+}
+
+/*
  * Summary : Asynchronously creates a new draft release on the GitHub repository.
  * Params  : context - The Cake context.
  *           data    - Build configuration data.
