@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased changes
 
-This version just updates all dependencies, as well as build scripts.
-
 ### New features
 
 ### Changes to existing features
@@ -16,6 +14,10 @@ This version just updates all dependencies, as well as build scripts.
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
+
+## [1.0.26-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.26-preview) (2023-05-02)
+
+This version just updates all dependencies, as well as build scripts.
 
 ## [1.0.13-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.13-preview) (2022-11-25)
 
