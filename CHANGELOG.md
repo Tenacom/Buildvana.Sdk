@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- **BREAKING CHANGE:** The `UseAlternatePack` property is no longer recognized. Projects must instead set `AlternatePackMethod` to one of the following values:
+  * `None`: does nothing (useful to silence warnings in library projects using `Microsoft.Net.Sdk.Web`)
+  * `PublishToFolders`: publish to folders, no InnoSetup involved
+  * `InnoSetup`: publish to folders and generate setup (this is the value to use in projects that previously set `UseAlternatePack` to `true`)
+  
 ### Changes to existing features
 
 ### Bugs fixed in this release
