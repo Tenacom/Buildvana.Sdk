@@ -3,6 +3,7 @@
   <!-- Redefine Pack target-->
 
   <PropertyGroup>
+    <IsPackable>true</IsPackable>
     <ImportNuGetBuildTasksPackTargetsFromSdk>false</ImportNuGetBuildTasksPackTargetsFromSdk>
   </PropertyGroup>
 
