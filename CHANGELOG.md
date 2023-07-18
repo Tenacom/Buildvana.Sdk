@@ -9,17 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
-- **BREAKING CHANGE:** The `UseAlternatePack` property is no longer recognized. Projects must instead set `AlternatePackMethod` to one of the following values:
-  * `None`: does nothing (useful to silence warnings in library projects using `Microsoft.Net.Sdk.Web`)
-  * `PublishToFolders`: publish to folders, no InnoSetup involved
-  * `InnoSetup`: publish to folders and generate setup (this is the value to use in projects that previously set `UseAlternatePack` to `true`)
-  
 ### Changes to existing features
 
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
 
+## [1.0.41-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.41-preview) (2023-07-18)
+
+### New features
+
+- **BREAKING CHANGE:** The `UseAlternatePack` property is no longer recognized. Projects must instead set `AlternatePackMethod` to one of the following values:
+  * `None`: does nothing (useful to silence warnings in library projects using `Microsoft.Net.Sdk.Web`)
+  * `PublishToFolders`: publish to folders, no InnoSetup involved
+  * `InnoSetup`: publish to folders and generate setup (this is the value to use in projects that previously set `UseAlternatePack` to `true`)
+  
 ## [1.0.26-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.26-preview) (2023-05-02)
 
 This version just updates all dependencies, as well as build scripts.
