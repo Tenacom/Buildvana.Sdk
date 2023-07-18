@@ -1,26 +1,5 @@
 <Project>
 
-  <!-- Redefine Pack target-->
-
-  <PropertyGroup>
-    <IsPackable>true</IsPackable>
-    <ImportNuGetBuildTasksPackTargetsFromSdk>false</ImportNuGetBuildTasksPackTargetsFromSdk>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PackageId Condition="'$(PackageId)' == ''">$(AssemblyName)</PackageId>
-    <PackageVersion Condition="'$(PackageVersion)' == ''">$(Version)</PackageVersion>
-    <PackDependsOn>$(BeforePack);$(PackDependsOn)</PackDependsOn>
-    <IsInnerBuild Condition="'$(TargetFramework)' != '' AND '$(TargetFrameworks)' != ''">true</IsInnerBuild>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectCapability Include="Pack" />
-  </ItemGroup>
-
-  <Target Name="Pack"
-          DependsOnTargets="$(PackDependsOn)" />
-
   <!-- Invoke alternate pack methods -->
 
   <Import Project="Module.Core.PublishToFolders.targets"

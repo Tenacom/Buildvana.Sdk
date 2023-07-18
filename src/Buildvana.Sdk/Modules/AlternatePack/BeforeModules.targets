@@ -1,0 +1,30 @@
+<Project>
+
+  <PropertyGroup Condition="'$(AlternatePackMethod)' == 'None'">
+    <UsingAlternatePack>true</UsingAlternatePack>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(AlternatePackMethod)' == 'PublishToFolders'">
+    <UsingAlternatePack>true</UsingAlternatePack>
+    <BV_AlternatePackMethod_PublishToFolders>true</BV_AlternatePackMethod_PublishToFolders>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(AlternatePackMethod)' == 'InnoSetup'">
+    <UsingAlternatePack>true</UsingAlternatePack>
+    <BV_AlternatePackMethod_PublishToFolders>true</BV_AlternatePackMethod_PublishToFolders>
+    <BV_AlternatePackMethod_InnoSetup>true</BV_AlternatePackMethod_InnoSetup>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(UsingAlternatePack)' != 'true'">
+    <UsingAlternatePack>false</UsingAlternatePack>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(AlternatePackMethod)' != '' And !$(UsingAlternatePack)">
+    <EvaluationError Include="BVSDK1900"
+                     Text="Unknown alternate pack method '$(AlternatePackMethod)'." />
+  </ItemGroup>
+  
+  <Import Project="BeforeModules.Core.targets"
+          Condition="$(UsingAlternatePack)" />
+
+</Project>
