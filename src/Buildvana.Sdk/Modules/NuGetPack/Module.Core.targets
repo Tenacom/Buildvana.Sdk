@@ -1,30 +1,14 @@
 <Project>
 
-  <PropertyGroup>
-    <!-- Put packages in artifacts folder. -->
-    <PackageOutputPath>$(ArtifactsDirectory)$(Configuration)\</PackageOutputPath>
-    <!-- Make Owners default to Authors. -->
-    <Owners Condition="'$(Owners)' == ''">$(Authors)</Owners>
+  <!-- IsPackable default = true for libraries, otherwise false. -->
+  <PropertyGroup Condition="'$(IsPackable)' == ''">
+    <IsPackable Condition="'$(BV_IsLibraryProject)' == 'true'">true</IsPackable>
   </PropertyGroup>
-
-  <Import Project="Readme.targets" />
-  <Import Project="License.targets" />
-  <Import Project="ThirdPartyNotices.targets" />
-  <Import Project="PackageIcon.targets" />
-
-  <!-- Coalesce PackageRequireLicenseAcceptance to a boolean value. Default is false. -->
-  <PropertyGroup>
-    <PackageRequireLicenseAcceptance Condition="'$(LicensePackageExpression)' == '' And !$(LicenseFileInPackage)">false</PackageRequireLicenseAcceptance>
-    <PackageRequireLicenseAcceptance Condition="'$(PackageRequireLicenseAcceptance)' != 'true'">false</PackageRequireLicenseAcceptance>
+  <PropertyGroup Condition="'$(IsPackable)' != 'true'">
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <!-- Coalesce other properties. -->
-  <PropertyGroup>
-    <DevelopmentDependency Condition="'$(DevelopmentDependency)' != 'true'">false</DevelopmentDependency>
-    <PackageType Condition="'$(PackageType)' == ''">Dependency</PackageType>
-    <Serviceable Condition="'$(Serviceable)' != 'false'">true</Serviceable>
-  </PropertyGroup>
-
-  <Import Project="NuspecFile.targets" />
+  
+  <Import Project="$(MSBuildThisFileDirectory)Module.Core.PackableProject.targets"
+          Condition="$(IsPackable)" />
 
 </Project>
