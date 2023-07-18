@@ -93,7 +93,7 @@ Each module is assigned a contiguous range of 100 diagnostics, as listed below. 
 
 | Code | Severity | Message | Description |
 | -----| :------: | ------- | ----------- |
-| This module has no associated diagnostics. |  |  |  |
+| BVSDK1900 | Error | Unknown alternate pack method '...'. | The `AlternatePackMethod` property was set to an unrecognized value. |
 
 ## NerdbankGitVersioning module (2000-2099)
 

@@ -1,0 +1,50 @@
+<Project>
+
+  <!-- Alternate pack method: publish to folders -->
+
+  <Target Name="CompletePublishFolderMetadata">
+
+    <ItemGroup>
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="'%(PublishFolder.SetupIncludeFile)' == ''"
+                     InnoSetupIncludePath="$(BaseIntermediateOutputPath)$(Configuration)\%(PublishFolder.Identity).iss" />
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="'%(PublishFolder.PublishDir)' == ''"
+                     PublishDir="$(ArtifactsDirectory)$(Configuration)\$(MSBuildProjectName)\%(PublishFolder.Identity)\" />
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="'%(PublishFolder.Temporary)' != 'true'"
+                     Temporary="false" />
+    </ItemGroup>
+
+  </Target>
+
+  <PropertyGroup>
+    <PackDependsOn>$(PackDependsOn);PublishInPublishFolders</PackDependsOn>
+  </PropertyGroup>
+
+  <Target Name="PublishInPublishFolders"
+          DependsOnTargets="CompletePublishFolderMetadata"
+          Condition="@(PublishFolder->Count()) > 0">
+
+    <MSBuild Projects="$(MSBuildProjectFile)"
+             Targets="Publish"
+             Properties="PublishingFolder=%(PublishFolder.Identity);
+                         PublishProtocol=FileSystem;
+                         PublishDir=%(PublishFolder.PublishDir);
+                         TargetFramework=%(PublishFolder.TargetFramework);
+                         RuntimeIdentifier=%(PublishFolder.RuntimeIdentifier);
+                         %(PublishFolder.Properties)" />
+
+  </Target>
+
+  <Target Name="RemoveTemporaryPublishFolders"
+          AfterTargets="Pack"
+          DependsOnTargets="CompletePublishFolderMetadata"
+          Condition="@(PublishFolder->Count()) > 0">
+
+    <RemoveDir Directories="%(PublishFolder.PublishDir)"
+               Condition="'%(PublishFolder.Temporary)' == 'true'" />
+
+  </Target>
+
+</Project>
