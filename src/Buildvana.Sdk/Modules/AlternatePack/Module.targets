@@ -1,5 +1,9 @@
 <Project>
 
+  <PropertyGroup Condition="'$(AlternatePackMethod)' == 'None'">
+    <BV_UseAlternatePack>true</BV_UseAlternatePack>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(AlternatePackMethod)' == 'PublishToFolders'">
     <BV_UseAlternatePack>true</BV_UseAlternatePack>
     <BV_AlternatePackMethod_PublishToFolders>true</BV_AlternatePackMethod_PublishToFolders>
