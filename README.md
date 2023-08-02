@@ -10,9 +10,11 @@
 
 ![Repobeats analytics image](https://repobeats.axiom.co/api/embed/733fff6e0c96c981b6229b450fdf4df3e1b4e584.svg "Repobeats analytics image")
 
-| Latest packages | NuGet | MyGet |
-|-----------------|-------|-------|
-| Buildvana.Sdk | [![Buildvana.Sdk @ NuGet](https://badgen.net/nuget/v/Buildvana.Sdk?icon=nuget&label=)](https://nuget.org/packages/Buildvana.Sdk) | [![Buildvana.Sdk @ MyGet](https://img.shields.io/myget/tenacom-preview/vpre/Buildvana.Sdk?label=&color=orange)](https://www.myget.org/feed/tenacom-preview/package/nuget/Buildvana.Sdk) |
+| Latest packages | NuGet | Feedz.io |
+|-----------------|-------|----------|
+| Buildvana.Sdk | [![Buildvana.Sdk @ NuGet](https://badgen.net/nuget/v/Buildvana.Sdk?icon=nuget&label=)](https://nuget.org/packages/Buildvana.Sdk) | ![Buildvana.Sdk @ Feedz](https://img.shields.io/feedz/vpre/tenacom/preview/Buildvana.Sdk?label=&color=orange) |
+
+**You can get preview packages of Buildvana SDK from our preview feed on [Feedz.io](https://feedz.io). The NuGet v3 URL is `https://f.feedz.io/tenacom/preview/nuget/index.json`.**
 
 ---
 
