@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 #addin nuget:?package=Cake.Http&version=3.0.2
-#addin nuget:?package=Octokit&version=7.0.1
+#addin nuget:?package=Octokit&version=7.1.0
 
 #nullable enable
 
