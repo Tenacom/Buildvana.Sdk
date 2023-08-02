@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- The minimum supported version of Roslyn is now 4.6
+- The minimum supported version of Visual Studio is now VS2022 17.6
+- The minimum supported version of the .NET SDK is now 7.0.306
+- The following automatically added dependencies have been updated:
+  - `Jetbrains.Annotations` to version 2023.2.0
+  - `Nerdbank.GitVersioning` to version 3.6.133
+  - `StyleCop.Analyzers` to version 1.2.0-beta.507
+
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
