@@ -202,7 +202,8 @@
   <ItemGroup>
     <None Include="..\Buildvana.Sdk.SourceGenerators\$(OutputPath)\Buildvana.Sdk.SourceGenerators.dll"
           Pack="true"
-          PackagePath="analyzers/dotnet/$(BV_SourceGeneratorsPackageFolder)" />
+          PackagePath="analyzers/dotnet/$(BV_SourceGeneratorsPackageFolder)"
+          Visible="false" />
   </ItemGroup>
 
 </Project>
