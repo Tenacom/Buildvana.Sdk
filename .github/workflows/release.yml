@@ -51,10 +51,17 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
       DOTNET_CLI_UI_LANGUAGE: 'en-US'
       GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-      PRERELEASE_NUGET_SOURCE: 'https://www.myget.org/F/tenacom-preview/api/v3/index.json'
-      PRERELEASE_NUGET_KEY: ${{ secrets.MYGET_DEPLOYMENT_KEY }}
+
+      # Deploy non-prerelease public packages on NuGet
       RELEASE_NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
       RELEASE_NUGET_KEY: ${{ secrets.NUGET_DEPLOYMENT_KEY }}
+      # Deploy prerelease public packages on a public Feedz.io feed
+      PRERELEASE_NUGET_SOURCE: 'https://f.feedz.io/tenacom/preview/nuget/index.json'
+      PRERELEASE_NUGET_KEY: ${{ secrets.FEEDZ_IO_PRIVATE_TOKEN }}
+      # Deploy all private packages on a private Feedz.io feed
+      PRIVATE_NUGET_SOURCE: 'https://f.feedz.io/tenacom/private/nuget/index.json'
+      PRIVATE_NUGET_KEY: ${{ secrets.FEEDZ_IO_PRIVATE_TOKEN }}
+
       VERSION_SPEC_CHANGE: ${{ inputs.versionSpecChange }}
       CHECK_PUBLIC_API: ${{ inputs.checkPublicApi }}
       FORCE_UPDATE_CHANGELOG: ${{ inputs.forceUpdateChangelog }}
