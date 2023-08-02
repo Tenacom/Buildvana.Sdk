@@ -57,12 +57,12 @@ However, Buildvana SDK has already been used successfully in production, for bot
 - :heart: Libraries
 - :heart: Console apps
 - :heart: Windows Forms
+- :heart: ASP.NET
 - :heart: Projects using `Microsoft.Build.NoTargets` SDK
 - :heart: [Avalonia UI](https://avaloniaui.net) (still experimenting, but no problems so far)
 - :question: WPF (testers welcome)
 - :question: [UNO Platform](https://platform.uno) (testers welcome)
-- :question: MAUI (testers welcome)
-- :question: All kinds of Web projects (testers welcome)
+- :question: .NET MAUI (testers welcome)
 - :thumbsdown: Legacy (non-SDK) projects
 
 #### Programming languages
