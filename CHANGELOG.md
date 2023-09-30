@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
+- An item group called `InnoSetupIncludeLine`, used internally by the `AlternatePack` module when the `AlternatePackMethod` property is set to `InnoSetup`, was meant to be cleared after use to free up some memory, but wasn't actually cleared. This has been fixed.
+
 ### Known problems introduced by this release
 
 ## [1.0.51-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.51-preview) (2023-08-02)

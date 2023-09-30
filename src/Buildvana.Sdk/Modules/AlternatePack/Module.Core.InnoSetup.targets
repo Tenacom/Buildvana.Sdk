@@ -50,7 +50,7 @@
                       Overwrite="true" />
 
     <ItemGroup>
-      <InnoSetupIncludeLines Remove="@(InnoSetupIncludeLines)" />
+      <InnoSetupIncludeLine Remove="@(InnoSetupIncludeLine)" />
     </ItemGroup>
 
   </Target>
