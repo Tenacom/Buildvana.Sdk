@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The minimum supported version of Visual Studio is now VS2022 17.7
 - The minimum supported version of the .NET SDK is now 7.0.401
 - When not using `Nerdbank.GitVersioning`, a stub `GetBuildVersion` target is added to the project. This allows other targets to depend on `GetBuildVersion`. Care should be exercised, however, to check that version-related properties have actually being set.
+- The `GetBuildVersion` target is always invoked before packing when using any alternate pack method. This ensures that properties such as `BuildVersion`, `InformationalVersion`, etc. are available to packing sub-modules, at least when using Nerdbank.GitVersioning.
 
 ### Bugs fixed in this release
 

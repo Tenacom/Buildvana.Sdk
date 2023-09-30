@@ -10,7 +10,7 @@
   <PropertyGroup>
     <PackageId Condition="'$(PackageId)' == ''">$(AssemblyName)</PackageId>
     <PackageVersion Condition="'$(PackageVersion)' == ''">$(Version)</PackageVersion>
-    <PackDependsOn>$(BeforePack);$(PackDependsOn)</PackDependsOn>
+    <PackDependsOn>GetBuildVersion;$(BeforePack);$(PackDependsOn)</PackDependsOn>
     <IsInnerBuild Condition="'$(TargetFramework)' != '' AND '$(TargetFrameworks)' != ''">true</IsInnerBuild>
   </PropertyGroup>
 
