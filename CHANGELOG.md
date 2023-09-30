@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The minimum supported version of Roslyn is now 4.7
 - The minimum supported version of Visual Studio is now VS2022 17.7
 - The minimum supported version of the .NET SDK is now 7.0.401
+- When not using `Nerdbank.GitVersioning`, a stub `GetBuildVersion` target is added to the project. This allows other targets to depend on `GetBuildVersion`. Care should be exercised, however, to check that version-related properties have actually being set.
 
 ### Bugs fixed in this release
 

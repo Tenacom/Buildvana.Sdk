@@ -1,58 +1,16 @@
 <Project>
 
   <!--
-    UseNerdbankGitVersioning may be 'true', 'false', or not specified (empty).
-    Coalesce any other value to empty.
-  -->
-  <PropertyGroup>
-    <UseNerdbankGitVersioning Condition="'$(UseNerdbankGitVersioning)' != 'true' And '$(UseNerdbankGitVersioning)' != 'false'" />
-  </PropertyGroup>
-
-  <!--
-    Unless explicitly told not to, look for a version file (either version.json or .version.json).
-    Files found outside repository are ignored.
-  -->
-  <PropertyGroup Condition="'$(UseNerdbankGitVersioning)' != 'false'">
-    <BV_VersionJsonPath>$([MSBuild]::GetPathOfFileAbove('version.json', '$(MSBuildProjectDirectory)'))</BV_VersionJsonPath>
-    <BV_VersionJsonPath Condition="'$(BV_VersionJsonPath)' == ''">$([MSBuild]::GetPathOfFileAbove('.version.json', '$(MSBuildProjectDirectory)'))</BV_VersionJsonPath>
-    <BV_VersionJsonPath Condition="'$(BV_VersionJsonPath)' != '' And !$(BV_VersionJsonPath.StartsWith('$(HomeDirectory)'))" />
-  </PropertyGroup>
-
-  <!--
-    If UseNerdbankGitVersioning was not specified as 'true' or 'false':
-      - if a version file was found, set UseNerdbankGitVersioning to 'true';
-      - otherwise, set UseNerdbankGitVersioning to 'false'.
-  -->
-  <PropertyGroup Condition="'$(UseNerdbankGitVersioning)' == ''">
-    <UseNerdbankGitVersioning>false</UseNerdbankGitVersioning>
-    <UseNerdbankGitVersioning Condition="'$(BV_VersionJsonPath)' != ''">true</UseNerdbankGitVersioning>
-  </PropertyGroup>
-
-  <!--
-    If a version file was found and is going to be used, configure Nerdbank.GitVersioning
-    to use its containing directory as the base for Git height computations.
-  -->
-  <PropertyGroup Condition="$(UseNerdbankGitVersioning) And '$(BV_VersionJsonPath)' != ''">
-    <GitVersionBaseDirectory>$([System.IO.Path]::GetDirectoryName('$(BV_VersionJsonPath)'))</GitVersionBaseDirectory>
-  </PropertyGroup>
-
-  <!--
-    Issue an error if UseNerdbankGitVersioning is 'true' and no version file was found within HomeDirectory.
-    Note that this can only happen if UseNerdbankGitVersioning was *explicitly* set to 'true'.
-  -->
-  <ItemGroup Condition="'$(BV_VersionJsonPath)' == ''">
-    <EvaluationError Condition="$(UseNerdbankGitVersioning)"
-                     Include="BVSDK2000"
-                     Text="Version specification JSON file not found." />
-  </ItemGroup>
-
-  <!--
     Add a reference to Nerdbank.GitVersioning if needed.
     Do not add the reference if a version file was not found;
     if there is a reachable version file outside HomeDirectory, NB.GV may erroneously use it.
   -->
-  <ItemGroup Condition="$(UseNerdbankGitVersioning) And '$(BV_VersionJsonPath)' != ''">
+  <ItemGroup Condition="$(UseNerdbankGitVersioning)">
     <BV_PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="All" />
   </ItemGroup>
+
+  <!-- Import stub targets if NB.GV is not used. -->
+  <Import Project="Module.Stubs.targets"
+          Condition="!$(UseNerdbankGitVersioning)" />
 
 </Project>
