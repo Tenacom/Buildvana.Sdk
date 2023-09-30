@@ -2,12 +2,10 @@
 
   <!-- Alternate pack method: publish to folders -->
 
-  <Target Name="CompletePublishFolderMetadata">
+  <Target Name="CompletePublishFolderMetadata"
+          DependsOnTargets="$(CompletePublishFolderMetadataDependsOn)">
 
     <ItemGroup>
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="'%(PublishFolder.SetupIncludeFile)' == ''"
-                     InnoSetupIncludePath="$(BaseIntermediateOutputPath)$(Configuration)\%(PublishFolder.Identity).iss" />
       <PublishFolder Update="%(PublishFolder.Identity)"
                      Condition="'%(PublishFolder.PublishDir)' == ''"
                      PublishDir="$(ArtifactsDirectory)$(Configuration)\$(MSBuildProjectName)\%(PublishFolder.Identity)\" />

@@ -2,6 +2,23 @@
 
   <!-- Alternate pack method: use Inno Setup -->
 
+  <PropertyGroup>
+    <CompletePublishFolderMetadataDependsOn>$(CompletePublishFolderMetadataDependsOn);CompletePublishFolderMetadataForInnoSetup</CompletePublishFolderMetadataDependsOn>
+  </PropertyGroup>
+
+  <Target Name="CompletePublishFolderMetadataForInnoSetup">
+
+    <ItemGroup>
+
+      <!-- The default InnoSetupIncludePath is obj\{Configuration}\{Name of publish folder}.iss -->
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="'%(PublishFolder.SetupIncludeFile)' == ''"
+                     InnoSetupIncludePath="$(BaseIntermediateOutputPath)$(Configuration)\%(PublishFolder.Identity).iss" />
+
+    </ItemGroup>
+
+  </Target>
+
   <Target Name="GenerateSetupIncludeFile"
           AfterTargets="Publish"
           DependsOnTargets="CompletePublishFolderMetadata"
