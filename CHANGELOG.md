@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### New features
 
 - A new property `CompletePublishFolderMetadataDependsOn` has been added. The `CompletePublishFolderMetadata` target will depend on targets listed in this property. This is useful to separate concerns among alternate pack methods.
+- New metadata in `PublishFolder` items allow for zipping a published folder:
+  - `CreateZipFile` (boolean) enables the creation of a ZIP file with the contents of the published folder;
+  - `ZipFileName` (string) is the name (complete with extension) of the created ZIP file;
+  - ZIP files are created in the artifacts directory `$(ArtifactsDirectory)$(Configuration)`;
+  - the same publish folder can be zipped _and_ used by InnoSetup, if needed;
+  - if `Temporary` is set to `true` on a publish folder, it will be deleted after zipping (and after running InnoSetup if required);
+  - `CreateZipFile` defaults to `true` if `ZipFileName` is set, `false` otherwise;
+  - if `CreateZipFile` is `true` and `ZipFileName` is not set, the latter defaults to:
+    - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(BuildVersion).zip` if the `BuildVersion` property is set (such as when using Nerdbank.GitVersioning);
+    - `$(MSBuildProjectName)-%(PublishFolder.Identity).zip` otherwise.
+
 
 ### Changes to existing features
 

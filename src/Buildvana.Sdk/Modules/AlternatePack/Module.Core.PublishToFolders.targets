@@ -6,18 +6,33 @@
           DependsOnTargets="$(CompletePublishFolderMetadataDependsOn)">
 
     <ItemGroup>
+
+      <!-- Default publish directory -->
       <PublishFolder Update="%(PublishFolder.Identity)"
                      Condition="'%(PublishFolder.PublishDir)' == ''"
                      PublishDir="$(ArtifactsDirectory)$(Configuration)\$(MSBuildProjectName)\%(PublishFolder.Identity)\" />
+
+      <!--Default value for Temporary metadata -->
       <PublishFolder Update="%(PublishFolder.Identity)"
                      Condition="'%(PublishFolder.Temporary)' != 'true'"
                      Temporary="false" />
+
+      <!-- CreateZipFile is true if ZipFileName is specified -->
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="'%(PublishFolder.ZipFileName)' != ''"
+                     CreateZipFile="true" />
+
+      <!-- CreateZipFile is otherwise false by default -->
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="'%(PublishFolder.CreateZipFile)' != 'true'"
+                     CreateZipFile="false" />
+
     </ItemGroup>
 
   </Target>
 
   <PropertyGroup>
-    <PackDependsOn>$(PackDependsOn);PublishInPublishFolders</PackDependsOn>
+    <PackDependsOn>$(PackDependsOn);PublishInPublishFolders;ZipPublishFolders</PackDependsOn>
   </PropertyGroup>
 
   <Target Name="PublishInPublishFolders"
@@ -32,6 +47,40 @@
                          TargetFramework=%(PublishFolder.TargetFramework);
                          RuntimeIdentifier=%(PublishFolder.RuntimeIdentifier);
                          %(PublishFolder.Properties)" />
+
+  </Target>
+
+  <PropertyGroup>
+    <GenerateReleaseAssetListDependsOn>$(GenerateReleaseAssetListDependsOn);ZipPublishFolders</GenerateReleaseAssetListDependsOn>
+  </PropertyGroup>
+
+  <Target Name="ZipPublishFolders"
+          DependsOnTargets="CompletePublishFolderMetadata;PublishInPublishFolders"
+          Condition="@(PublishFolder->Count()) > 0">
+
+    <ItemGroup>
+
+      <!-- When BuildVersion is defined (usually when using Nerdbank.GitVersioning), the default for ZipFileName is {project name}-{publish folder}_{build version}.zip -->
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="%(PublishFolder.CreateZipFile) And '%(PublishFolder.ZipFileName)' == '' And '$(BuildVersion)' != ''"
+                     ZipFileName="$(MSBuildProjectName)-%(PublishFolder.Identity)_$(BuildVersion).zip" />
+
+      <!-- Otherwise, the default for ZipFileName is {project name}-{publish folder}.zip -->
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="%(PublishFolder.CreateZipFile) And '%(PublishFolder.ZipFileName)' == ''"
+                     ZipFileName="$(MSBuildProjectName)-%(PublishFolder.Identity).zip" />
+
+      <!--Put zipped publish folders in the configuration directory under artifacts -->
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="%(PublishFolder.CreateZipFile)"
+                     ZipFilePath="$([MSBuild]::NormalizePath('$(ArtifactsDirectory)$(Configuration)', '%(PublishFolder.ZipFileName)'))" />
+    </ItemGroup>
+
+    <!-- Create zip files for publish folders when configured to do so -->
+    <ZipDirectory Condition="%(PublishFolder.CreateZipFile)"
+                  SourceDirectory="%(PublishFolder.PublishDir)"
+                  DestinationFile="%(PublishFolder.ZipFilePath)"
+                  Overwrite="true" />
 
   </Target>
 
