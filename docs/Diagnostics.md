@@ -12,6 +12,7 @@
 - [XmlDocumentation module (1800-1899)](#xmldocumentation-module-1800-1899)
 - [AlternatePack module (1900-1999)](#alternatepack-module-1900-1999)
 - [NerdbankGitVersioning module (2000-2099)](#nerdbankgitversioning-module-2000-2099)
+- [ReleaseAssetList module (2100-2199)](#releaseassetlist-module-2100-2199)
 
 ## Overview
 
@@ -100,3 +101,9 @@ Each module is assigned a contiguous range of 100 diagnostics, as listed below. 
 | Code | Severity | Message | Description |
 | -----| :------: | ------- | ----------- |
 | BVSDK2000 | Error | Version specification JSON file not found. | A `version.json` or `.version.json` file for the project was not found within the repository root. |
+
+## ReleaseAssetList module (2100-2199)
+
+| Code | Severity | Message | Description |
+| -----| :------: | ------- | ----------- |
+| This module has no associated diagnostics. |  |  |  |

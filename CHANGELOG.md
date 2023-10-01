@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### New features
 
 - A new property `CompletePublishFolderMetadataDependsOn` has been added. The `CompletePublishFolderMetadata` target will depend on targets listed in this property. This is useful to separate concerns among alternate pack methods.
+- The new `ReleaseAssetList` module allows for creation of lists of assets to associate with a release, useful when releases are created externally (GitHub, etc.) and associated assets are the only way to retrieve published artifacts.
+  - release asset list generation is enabled by the `GenerateReleaseAssetList` boolean property, defaulting to `true` except in libraries and test projects;
+  - to include a file in the release asset list for a project, just add one or more `ReleaseAsset` items;
+  - the `Description` metadata of `ReleaseAsset` items can be used to add a textual description of each asset, for CI systems that can use it;
+  - release assets without a `Description` metadata are given a default description according to the `DefaultReleaseAssetDescription` property, whose default value is "(no description given)";
+  - release asset lists are UTF-8 text files;
+    - each row of a release asset list contains the full path of an asset, a tab character (Unicode U+0009), and the asset's description;
+    - rows are separated by the build system's line separator (CR+LF on Windows, LF otherwise);
+  - each project in a solution generates its own release asset list, whose name can be set via the `ReleaseAssetListFileName` property, defaulting to `$(MSBuildProjectName).assets.txt`;
+  - all release asset lists for a solution are placed in the artifacts directory, `$(ArtifactsDirectory)$(Configuration)`.
 - New metadata in `PublishFolder` items allow for zipping a published folder:
   - `CreateZipFile` (boolean) enables the creation of a ZIP file with the contents of the published folder;
   - `ZipFileName` (string) is the name (complete with extension) of the created ZIP file;
@@ -20,7 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - if `CreateZipFile` is `true` and `ZipFileName` is not set, the latter defaults to:
     - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(BuildVersion).zip` if the `BuildVersion` property is set (such as when using Nerdbank.GitVersioning);
     - `$(MSBuildProjectName)-%(PublishFolder.Identity).zip` otherwise.
-
 
 ### Changes to existing features
 

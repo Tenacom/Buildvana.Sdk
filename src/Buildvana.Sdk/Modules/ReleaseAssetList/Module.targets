@@ -1,0 +1,17 @@
+<Project>
+  
+  <!-- The default for GenerateReleaseAssetList is true, except for libraries and test projects -->
+  <PropertyGroup Condition="'$(GenerateReleaseAssetList)' == ''">
+    <GenerateReleaseAssetList>true</GenerateReleaseAssetList>
+    <GenerateReleaseAssetList Condition="$(BV_IsLibraryProject) Or $(BV_IsTestProject)">false</GenerateReleaseAssetList>
+  </PropertyGroup>
+
+  <!-- Coalesce GenerateReleaseAssetList to a boolean value, defaulting to false -->
+  <PropertyGroup Condition="'$(GenerateReleaseAssetList)' != 'true'">
+    <GenerateReleaseAssetList>false</GenerateReleaseAssetList>
+  </PropertyGroup>
+
+  <Import Project="Module.Core.targets"
+          Condition="$(GenerateReleaseAssetList)" />
+
+</Project>

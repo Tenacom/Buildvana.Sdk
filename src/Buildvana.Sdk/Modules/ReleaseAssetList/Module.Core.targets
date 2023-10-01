@@ -1,0 +1,50 @@
+<Project>
+
+  <Target Name="PrepareReleaseAssetList"
+          AfterTargets="Pack"
+          DependsOnTargets="$(WriteReleaseAssetListDependsOn)"
+          Condition="$(GenerateReleaseAssetList)">
+
+    <PropertyGroup Condition="'$(ReleaseAssetDefaultDescription)' == ''">
+      <ReleaseAssetDefaultDescription>(no description given)</ReleaseAssetDefaultDescription>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ReleaseAsset Update="%(ReleaseAsset.Identity)"
+                    Description="$([System.String]::Copy('%(ReleaseAsset.Description)').Trim())" />
+      <ReleaseAsset Update="%(ReleaseAsset.Identity)"
+                    Condition="'%(ReleaseAsset.Description)' == ''"
+                    Description="$(ReleaseAssetDefaultDescription)" />
+    </ItemGroup>
+
+  </Target>
+
+  <Target Name="WriteReleaseAssetList"
+          AfterTargets="Pack"
+          DependsOnTargets="$(WriteReleaseAssetListDependsOn);PrepareReleaseAssetList"
+          Condition="$(GenerateReleaseAssetList)">
+
+    <ItemGroup>
+      <BV_ReleaseAssetText Include="%(ReleaseAsset.FullPath)&#09;%(Description)" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <ReleaseAssetListFileName Condition="'$(ReleaseAssetListFileName)' == ''">$(MSBuildProjectName).assets.txt</ReleaseAssetListFileName>
+      <ReleaseAssetListPath Condition="'$(ReleaseAssetListPath)' == ''">$(ArtifactsDirectory)$(Configuration)\$(ReleaseAssetListFileName)</ReleaseAssetListPath>
+    </PropertyGroup>
+
+    <WriteLinesToFile Condition="@(ReleaseAsset->Count()) > 0"
+                      File="$(ReleaseAssetListPath)"
+                      Lines="@(BV_ReleaseAssetText)"
+                      Overwrite="true" />
+
+    <Delete Condition="@(ReleaseAsset->Count()) == 0"
+            Files="$(ReleaseAssetListPath)" />
+
+    <ItemGroup>
+      <BV_ReleaseAssetText Remove="@(BV_ReleaseAssetText)" />
+    </ItemGroup>
+
+  </Target>
+
+</Project>
