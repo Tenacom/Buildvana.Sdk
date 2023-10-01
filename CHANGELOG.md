@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### New features
 
 - `ReleaseAsset` items can now have their MIME type specified via the `MimeType` metadata. When not specified, the MIME type of an asset defaults to `application/octet-stream`.
+- Zipped publish folders may now have a `ReleaseAssetMimeType` metadata specifying their MIME type when uploaded as a release asset. The default value is `application/zip`.
 
 ### Changes to existing features
 

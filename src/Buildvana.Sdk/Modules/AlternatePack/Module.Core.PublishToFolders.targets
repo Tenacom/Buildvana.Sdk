@@ -35,6 +35,11 @@
                      Condition="!%(PublishFolder.CreateZipFile)"
                      IsReleaseAsset="false" />
 
+      <!-- ReleaseAssetMimeType defaults to application/zip -->
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="%(PublishFolder.IsReleaseAsset) And '%(PublishFolder.ReleaseAssetMimeType)' == ''"
+                     ReleaseAssetMimeType="application/zip" />
+
     </ItemGroup>
 
   </Target>
@@ -94,6 +99,7 @@
     <ItemGroup Condition="'$(GenerateReleaseAssetList)' == 'true'">
       <ReleaseAsset Include="%(PublishFolder.ZipFilePath)"
                     Condition="%(PublishFolder.IsReleaseAsset)"
+                    MimeType="%(PublishFolder.ReleaseAssetMimeType)"
                     Description="%(PublishFolder.ReleaseAssetDescription)" />
     </ItemGroup>
 
