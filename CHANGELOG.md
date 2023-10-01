@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- `ReleaseAsset` items can now have their MIME type specified via the `MimeType` metadata. When not specified, the MIME type of an asset defaults to `application/octet-stream`.
+
 ### Changes to existing features
+
+- **BREAKING CHANGE:** The format of release asset lists has changed: each line now contains the full path of an asset, its MIME type, and its description, separated (like before) by tab characters (Unicode U+0009).
 
 ### Bugs fixed in this release
 

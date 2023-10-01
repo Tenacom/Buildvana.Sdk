@@ -5,11 +5,20 @@
           DependsOnTargets="$(WriteReleaseAssetListDependsOn)"
           Condition="$(GenerateReleaseAssetList)">
 
+    <PropertyGroup Condition="'$(ReleaseAssetDefaultMimeType)' == ''">
+      <ReleaseAssetDefaultMimeType>application/octet-stream</ReleaseAssetDefaultMimeType>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(ReleaseAssetDefaultDescription)' == ''">
       <ReleaseAssetDefaultDescription>(no description given)</ReleaseAssetDefaultDescription>
     </PropertyGroup>
 
     <ItemGroup>
+      <ReleaseAsset Update="%(ReleaseAsset.Identity)"
+                    MimeType="$([System.String]::Copy('%(ReleaseAsset.MimeType)').Trim())" />
+      <ReleaseAsset Update="%(ReleaseAsset.Identity)"
+                    Condition="'%(ReleaseAsset.MimeType)' == ''"
+                    MimeType="$(ReleaseAssetDefaultMimeType)" />
       <ReleaseAsset Update="%(ReleaseAsset.Identity)"
                     Description="$([System.String]::Copy('%(ReleaseAsset.Description)').Trim())" />
       <ReleaseAsset Update="%(ReleaseAsset.Identity)"
@@ -25,7 +34,7 @@
           Condition="$(GenerateReleaseAssetList)">
 
     <ItemGroup>
-      <BV_ReleaseAssetText Include="%(ReleaseAsset.FullPath)&#09;%(Description)" />
+      <BV_ReleaseAssetText Include="%(ReleaseAsset.FullPath)&#09;%(MimeType)&#09;%(Description)" />
     </ItemGroup>
 
     <PropertyGroup>
