@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - ZIP files are created in the artifacts directory `$(ArtifactsDirectory)$(Configuration)`;
   - the same publish folder can be zipped _and_ used by InnoSetup, if needed;
   - if `Temporary` is set to `true` on a publish folder, it will be deleted after zipping (and after running InnoSetup if required);
+  - zipped publish folders are added to the release asset list for the project by default, unless their `IsReleaseAsset` metadata is set to `false`;
+  - `ReleaseAssetDescription` metadata can be set to the textual description for the zipped folder in the release asset list;
   - `CreateZipFile` defaults to `true` if `ZipFileName` is set, `false` otherwise;
   - if `CreateZipFile` is `true` and `ZipFileName` is not set, the latter defaults to:
     - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(BuildVersion).zip` if the `BuildVersion` property is set (such as when using Nerdbank.GitVersioning);

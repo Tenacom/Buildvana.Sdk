@@ -27,6 +27,14 @@
                      Condition="'%(PublishFolder.CreateZipFile)' != 'true'"
                      CreateZipFile="false" />
 
+      <!-- IsReleaseAsset is true by default for zipped folders, always false otherwise -->
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="%(PublishFolder.CreateZipFile) And '%(PublishFolder.IsReleaseAsset)' != 'false'"
+                     IsReleaseAsset="true" />
+      <PublishFolder Update="%(PublishFolder.Identity)"
+                     Condition="!%(PublishFolder.CreateZipFile)"
+                     IsReleaseAsset="false" />
+
     </ItemGroup>
 
   </Target>
@@ -81,6 +89,13 @@
                   SourceDirectory="%(PublishFolder.PublishDir)"
                   DestinationFile="%(PublishFolder.ZipFilePath)"
                   Overwrite="true" />
+
+    <!-- Add created zip files to the release asset list-->
+    <ItemGroup Condition="'$(GenerateReleaseAssetList)' == 'true'">
+      <ReleaseAsset Include="%(PublishFolder.ZipFilePath)"
+                    Condition="%(PublishFolder.IsReleaseAsset)"
+                    Description="%(PublishFolder.ReleaseAssetDescription)" />
+    </ItemGroup>
 
   </Target>
 
