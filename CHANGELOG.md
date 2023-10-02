@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+  - If the `CreateZipFile` metadata of a `PublishFolder` item is `true` and its `ZipFileName` metadata is not set, the latter defaults to:
+    - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(AssemblyInformationalVersion).zip` if the `AssemblyInformationalVersion` property is set  
+    (note that the `BuildVersion` property was previously used instead of `AssemblyInformationalVersion`);
+    - `$(MSBuildProjectName)-%(PublishFolder.Identity).zip` otherwise  
+    (this has not changed).
+
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
