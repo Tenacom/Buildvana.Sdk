@@ -9,16 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+### Changes to existing features
+
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.69-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.69-preview) (2023-10-02)
+
+### New features
+
 - `ReleaseAsset` items can now have their MIME type specified via the `MimeType` metadata. When not specified, the MIME type of an asset defaults to `application/octet-stream`.
 - Zipped publish folders may now have a `ReleaseAssetMimeType` metadata specifying their MIME type when uploaded as a release asset. The default value is `application/zip`.
 
 ### Changes to existing features
 
 - **BREAKING CHANGE:** The format of release asset lists has changed: each line now contains the full path of an asset, its MIME type, and its description, separated (like before) by tab characters (Unicode U+0009).
-
-### Bugs fixed in this release
-
-### Known problems introduced by this release
 
 ## [1.0.66-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.66-preview) (2023-10-01)
 
