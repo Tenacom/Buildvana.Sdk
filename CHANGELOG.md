@@ -11,15 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.72-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.72-preview) (2023-10-02)
+
+### Changes to existing features
+
   - If the `CreateZipFile` metadata of a `PublishFolder` item is `true` and its `ZipFileName` metadata is not set, the latter defaults to:
     - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(AssemblyInformationalVersion).zip` if the `AssemblyInformationalVersion` property is set  
     (note that the `BuildVersion` property was previously used instead of `AssemblyInformationalVersion`);
     - `$(MSBuildProjectName)-%(PublishFolder.Identity).zip` otherwise  
     (this has not changed).
-
-### Bugs fixed in this release
-
-### Known problems introduced by this release
 
 ## [1.0.69-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.69-preview) (2023-10-02)
 
