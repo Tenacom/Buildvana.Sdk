@@ -73,10 +73,10 @@
 
     <ItemGroup>
 
-      <!-- When BuildVersion is defined (usually when using Nerdbank.GitVersioning), the default for ZipFileName is {project name}-{publish folder}_{build version}.zip -->
+      <!-- When BuildVersion is defined (usually when using Nerdbank.GitVersioning), the default for ZipFileName is {project name}-{publish folder}_{package version}.zip -->
       <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="%(PublishFolder.CreateZipFile) And '%(PublishFolder.ZipFileName)' == '' And '$(AssemblyInformationalVersion)' != ''"
-                     ZipFileName="$(MSBuildProjectName)-%(PublishFolder.Identity)_$(AssemblyInformationalVersion).zip" />
+                     Condition="%(PublishFolder.CreateZipFile) And '%(PublishFolder.ZipFileName)' == '' And '$(PackageVersion)' != ''"
+                     ZipFileName="$(MSBuildProjectName)-%(PublishFolder.Identity)_$(PackageVersion).zip" />
 
       <!-- Otherwise, the default for ZipFileName is {project name}-{publish folder}.zip -->
       <PublishFolder Update="%(PublishFolder.Identity)"
