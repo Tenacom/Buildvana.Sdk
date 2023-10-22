@@ -103,6 +103,7 @@
     <CreateItem Include="@(InnoSetupScript)"
                 AdditionalMetadata="PFIdentity=%(PublishFolder.Identity);
                                     TargetFramework=%(PublishFolder.TargetFramework);
+                                    RuntimeIdentifier=%(PublishFolder.RuntimeIdentifier);
                                     SourceDir=%(PublishFolder.PublishDir);
                                     IncludePath=$([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '%(PublishFolder.InnoSetupIncludePath)'))">
       <Output ItemName="_Temp" TaskParameter="Include" />
@@ -139,6 +140,7 @@
     <MSBuild Projects="$(MSBuildProjectFile)"
              Targets="GenerateSetup"
              Properties="TargetFramework=%(InnoSetupScript.TargetFramework);
+                         RuntimeIdentifier=%(InnoSetupScript.RuntimeIdentifier);
                          InnoSetupScriptFullPath=%(InnoSetupScript.FullPath);
                          InnoSetupIncludePath=%(InnoSetupScript.IncludePath)" />
 

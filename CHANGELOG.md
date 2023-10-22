@@ -13,27 +13,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
+- It was not possible to run InnoSetup scripts for more than one runtime identifier with the same target framework. For example, given two `PublishFolder`s, both with `TargetFramework` set to `net7.0`, whose `RuntimeIdentifier`s were `win10-x86` and `win10-x64` respectively, a setup was generated only for the first of the two. This has been fixed.
+
 ### Known problems introduced by this release
 
 ## [1.0.75-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.75-preview) (2023-10-03)
 
 ### Changes to existing features
 
-  - If the `CreateZipFile` metadata of a `PublishFolder` item is `true` and its `ZipFileName` metadata is not set, the latter defaults to:
-    - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(PackageVersion).zip` if the `PackageVersion` property is set  
-    (note that the `BuildVersion` and `AssemblyInformationalVersion` properties were previously used instead of `PackageVersion`);
-    - `$(MSBuildProjectName)-%(PublishFolder.Identity).zip` otherwise  
-    (this has not changed).
+- If the `CreateZipFile` metadata of a `PublishFolder` item is `true` and its `ZipFileName` metadata is not set, the latter defaults to:
+  - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(PackageVersion).zip` if the `PackageVersion` property is set  
+  (note that the `BuildVersion` and `AssemblyInformationalVersion` properties were previously used instead of `PackageVersion`);
+  - `$(MSBuildProjectName)-%(PublishFolder.Identity).zip` otherwise  
+  (this has not changed).
 
 ## [1.0.72-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.72-preview) (2023-10-02)
 
 ### Changes to existing features
 
-  - If the `CreateZipFile` metadata of a `PublishFolder` item is `true` and its `ZipFileName` metadata is not set, the latter defaults to:
-    - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(AssemblyInformationalVersion).zip` if the `AssemblyInformationalVersion` property is set  
-    (note that the `BuildVersion` property was previously used instead of `AssemblyInformationalVersion`);
-    - `$(MSBuildProjectName)-%(PublishFolder.Identity).zip` otherwise  
-    (this has not changed).
+- If the `CreateZipFile` metadata of a `PublishFolder` item is `true` and its `ZipFileName` metadata is not set, the latter defaults to:
+  - `$(MSBuildProjectName)-%(PublishFolder.Identity)_$(AssemblyInformationalVersion).zip` if the `AssemblyInformationalVersion` property is set  
+  (note that the `BuildVersion` property was previously used instead of `AssemblyInformationalVersion`);
+  - `$(MSBuildProjectName)-%(PublishFolder.Identity).zip` otherwise  
+  (this has not changed).
 
 ## [1.0.69-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.69-preview) (2023-10-02)
 
