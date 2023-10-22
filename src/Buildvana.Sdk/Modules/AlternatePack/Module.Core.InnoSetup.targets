@@ -88,6 +88,19 @@
   <Target Name="CompleteInnoSetupScriptMetadata"
           DependsOnTargets="CompletePublishFolderMetadata">
 
+    <!--
+      Add to InnoSetupScript items some metadata that depends on the metadata of its corresponding PublishFolder item.
+
+      The only known method to combine two item groups A and B is to first do a complete cross-join, then remove from the result
+      all items that did NOT result from matching an A item with its corresponding B item.
+
+      If e.g. there are 5 PublishFolder items and 4 InnoSetupScript items, we end up with 20 _Temp items,
+      of which only 4 are correct; namely, those where an InnoSetupScript item has been combined with the
+      PublishFolder item corresponding to its UsePublishFolder metadata.
+
+      In order to be able to tell matching items in the resulting item group, copy the identity of PublishFolder items
+      to a PFIdentity metadata.
+    -->
     <CreateItem Include="@(InnoSetupScript)"
                 AdditionalMetadata="PFIdentity=%(PublishFolder.Identity);
                                     TargetFramework=%(PublishFolder.TargetFramework);
@@ -97,14 +110,20 @@
     </CreateItem>
 
     <ItemGroup>
+
+      <!--
+        Remove all _Temp items whose PFIdentity metadata doesn't match their UsePublishFolder metadata.
+        The remaining _Temp items are our resulting InnoSetupScript items with updated metadata.
+      -->
       <_Temp Remove="%(_Temp.Identity)"
              Condition="'%(_Temp.PFIdentity)' != '%(_Temp.UsePublishFolder)'" />
-    </ItemGroup>
 
-    <ItemGroup>
+      <!-- Replace the InnoSetupScript item group with the result, excluding the PFIdentity metadata that is now useless. -->
       <InnoSetupScript Remove="@(InnoSetupScript)" />
       <InnoSetupScript Include="@(_Temp)"
                        RemoveMetadata="PFIdentity" />
+
+      <!-- Delete the _Temp item group to free up some memory. -->
       <_Temp Remove="@(_Temp)" />
     </ItemGroup>
 
