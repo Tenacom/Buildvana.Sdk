@@ -33,7 +33,7 @@ static bool ChangelogHasUnreleasedChanges(this ICakeContext context, FilePath ch
             line = reader.ReadLine();
         } while (line != null && !sectionHeadingRegex.IsMatch(line));
 
-        Ensure(line != null, $"{changelogPath.GetFilename()} contains no sections.");
+        context.Ensure(line != null, $"{changelogPath.GetFilename()} contains no sections.");
         for (; ;)
         {
             line = reader.ReadLine();
@@ -86,7 +86,7 @@ static void PrepareChangelogForRelease(this ICakeContext context, BuildData data
             switch (state)
             {
                 case ReadingFileHeader:
-                    Ensure(line != null, $"{data.ChangelogPath.GetFilename()} contains no sections.");
+                    context.Ensure(line != null, $"{data.ChangelogPath.GetFilename()} contains no sections.");
 
                     // Copy everything up to an including the first section heading (which we assume is "Unreleased changes")
                     writer.WriteLine(line);
@@ -134,7 +134,7 @@ static void PrepareChangelogForRelease(this ICakeContext context, BuildData data
                     writer.WriteLine(line);
                     break;
                 default:
-                    Fail($"Internal error: reading state corrupted ({state}).");
+                    context.Fail($"Internal error: reading state corrupted ({state}).");
                     throw null;
             }
         }
@@ -221,7 +221,7 @@ static void UpdateChangelogNewSectionTitle(this ICakeContext context, BuildData 
             switch (state)
             {
                 case ReadingFileHeader:
-                    Ensure(line != null, $"{data.ChangelogPath.GetFilename()} contains no sections.");
+                    context.Ensure(line != null, $"{data.ChangelogPath.GetFilename()} contains no sections.");
                     writer.WriteLine(line);
                     if (sectionHeadingRegex.IsMatch(line))
                     {
@@ -230,7 +230,7 @@ static void UpdateChangelogNewSectionTitle(this ICakeContext context, BuildData 
 
                     break;
                 case ReadingUnreleasedChangesSection:
-                    Ensure(line != null, $"{data.ChangelogPath.GetFilename()} contains only one section.");
+                    context.Ensure(line != null, $"{data.ChangelogPath.GetFilename()} contains only one section.");
                     if (sectionHeadingRegex.IsMatch(line))
                     {
                         // Replace header of second section
@@ -251,7 +251,7 @@ static void UpdateChangelogNewSectionTitle(this ICakeContext context, BuildData 
                     writer.WriteLine(line);
                     break;
                 default:
-                    Fail($"Internal error: reading state corrupted ({state}).");
+                    context.Fail($"Internal error: reading state corrupted ({state}).");
                     throw null;
             }
         }

@@ -23,6 +23,7 @@
 using System;
 using System.Text;
 
+using SysDirectory = System.IO.Directory;
 using SysFile = System.IO.File;
 using SysPath = System.IO.Path;
 
@@ -71,21 +72,32 @@ Task("Release")
     .Does<BuildData>(async (context, data) => {
 
         // Perform some preliminary checks
-        Ensure(data.IsCI, "The Release target cannot run on a local system.");
-        Ensure(data.IsPublicRelease, "Cannot create a release from the current branch.");
+        context.Ensure(data.IsCI, "The Release target cannot run on a local system.");
+        context.Ensure(data.IsPublicRelease, "Cannot create a release from the current branch.");
 
-        // Compute the version spec change to apply, if any
-        // This implies more checks and possibly throws, so do it as early as possible
+        // Perform an initial versioning consistency check.
+        // This is a tad more relaxed than the final check, as it takes into account that we may still increment the current version
+        // (for example by updating the changelog).
+        context.CheckVersioningConsistency(
+            currentVersion: data.Version,
+            latestVersion: data.LatestVersion,
+            latestStableVersion: data.LatestStableVersion,
+            isFinalCheck: false);
+
+        // Compute the version spec change to apply, if any.
+        // This implies more checks and possibly throws, so do it as early as possible.
         var versionSpecChange = context.ComputeVersionSpecChange(
             currentVersion: data.Version,
+            latestVersion: data.LatestVersion,
+            latestStableVersion: data.LatestStableVersion,
             requestedChange: context.GetOption<VersionSpecChange>("versionSpecChange", VersionSpecChange.None),
             checkPublicApi: context.GetOption<bool>("checkPublicApi", true));
 
-        // Identify Git user for later push if needed
+        // Identify Git user for later possible push
         context.GitSetUserIdentity("Buildvana", "buildvana@tenacom.it");
 
         // Create the release as a draft first, so if the token has no permissions we can bail out early
-        var releaseId = await context.CreateDraftReleaseAsync(data);
+        var release = await context.CreateDraftReleaseAsync(data);
         var dupeTagChecked = false;
         var committed = false;
         try
@@ -93,7 +105,7 @@ Task("Release")
             // Modify version if required.
             if (versionSpecChange != VersionSpecChange.None)
             {
-                var versionFile = VersionFile.Load();
+                var versionFile = VersionFile.Load(context);
                 if (versionFile.ApplyVersionSpecChange(context, versionSpecChange))
                 {
                     versionFile.Save();
@@ -126,7 +138,7 @@ Task("Release")
             {
                 if (context.GetOption<bool>("checkChangelog", true))
                 {
-                    Ensure(
+                    context.Ensure(
                         context.ChangelogHasUnreleasedChanges(data.ChangelogPath),
                         $"Changelog check failed: the \"Unreleased changes\" section is empty or only contains sub-section headings.");
 
@@ -148,10 +160,18 @@ Task("Release")
                 context.Information("Changelog update skipped: not needed on prerelease.");
             }
 
+            // At this point we know what the actual published version will be.
+            // Time for a final consistency check.
+            context.CheckVersioningConsistency(
+                currentVersion: data.Version,
+                latestVersion: data.LatestVersion,
+                latestStableVersion: data.LatestStableVersion,
+                isFinalCheck: true);
+
             // Ensure that the release tag doesn't already exist.
             // This assumes that full repo history has been checked out;
             // however, that is already a prerequisite for using Nerdbank.GitVersioning.
-            Ensure(!context.GitTagExists(data.VersionStr), $"Tag {data.VersionStr} already exists in repository.");
+            context.Ensure(!context.GitTagExists(data.VersionStr), $"Tag {data.VersionStr} already exists in repository.");
             dupeTagChecked = true;
 
             context.RestoreSolution(data);
@@ -209,8 +229,26 @@ Task("Release")
                 await context.DispatchWorkflow(data, SysPath.GetFileName(pagesDeploymentWorkflow.FullPath), "main");
             }
 
+            // Read release asset lists and upload assets
+            var assets = await GetReleaseAssetsAsync().ConfigureAwait(false);
+            var assetCount = assets.Count;
+            if (assetCount > 0)
+            {
+                var i = 0;
+                foreach (var asset in assets)
+                {
+                    i++;
+                    context.Information($"Uploading asset {i} of {assetCount}: {SysPath.GetFileName(asset.Path)} ({asset.Description})...");
+                    await context.UploadReleaseAssetAsync(data, release, asset.Path, asset.MimeType, asset.Description).ConfigureAwait(false);
+                }
+            }
+            else
+            {
+                context.Information("Asset upload skipped: no release assets defined.");
+            }
+
             // Last but not least, publish the release.
-            await context.PublishReleaseAsync(data, releaseId);
+            await context.PublishReleaseAsync(data, release);
 
             // Set outputs for subsequent steps in GitHub Actions
             if (data.IsGitHubAction)
@@ -221,7 +259,7 @@ Task("Release")
         catch (Exception e)
         {
             context.Error(e is CakeException ? e.Message : $"{e.GetType().Name}: {e.Message}");
-            await context.DeleteReleaseAsync(data, releaseId, dupeTagChecked ? data.VersionStr : null);
+            await context.DeleteReleaseAsync(data, release, dupeTagChecked ? data.VersionStr : null);
             throw;
         }
 
@@ -260,6 +298,46 @@ Task("Release")
                     .AppendQuoted($"Prepare release {data.VersionStr} [skip ci]"));
 
             committed = true;
+        }
+        
+        async Task<IReadOnlyList<(string Path, string MimeType, string Description)>> GetReleaseAssetsAsync()
+        {
+            const string assetListMask = "*.assets.txt";
+            
+            var result = new List<(string Path, string MimeType, string Description)>();
+            if (!SysDirectory.EnumerateFiles(data.ArtifactsPath.FullPath, assetListMask).Any())
+            {
+                context.Information("Skipping asset upload: no release asset lists.");
+                return result;
+            }
+
+            context.Information("Reading release asset lists...");
+            var assetLists = SysPath.Combine(data.ArtifactsPath.FullPath, assetListMask);
+            foreach (var path in context.GetFiles(assetLists).Select(x => x.FullPath))
+            {
+                context.Verbose("Reading release asset list {path}...");
+                var i = 0;
+                await foreach (var line in SysFile.ReadLinesAsync(path))
+                {
+                    i++;
+                    var parts = line.Split('\t');
+                    if (parts.Length != 3)
+                    {
+                        context.Warning($"Release asset list {path}, line #{i}: invalid line '{line}'");
+                        continue;
+                    }
+                    
+                    if (!SysFile.Exists(parts[0]))
+                    {
+                        context.Warning($"Release asset list {path}, line #{i}: asset not found '{parts[0]}'");
+                        continue;
+                    }
+
+                    result.Add((parts[0], parts[1], parts[2]));
+                }
+            }
+
+            return result;
         }
     });
 
