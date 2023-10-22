@@ -29,7 +29,6 @@
       <CompanyFullName Condition="'$(CompanyFullName)' == ''">$(Company)</CompanyFullName>
       <AppShortName Condition="'$(AppShortName)' == ''">$(AssemblyName)</AppShortName>
       <AppFullName Condition="'$(AppFullName)' == ''">$(Title)</AppFullName>
-      <AppFullName Condition="'$(AppFullName)' == ''">$(AppShortName)</AppFullName>
       <AppCopyright Condition="'$(AppCopyright)' == ''">$(Copyright)</AppCopyright>
       <AppDescription Condition="'$(AppDescription)' == ''">$(Description)</AppDescription>
       <AppMinWindowsVersion Condition="'$(AppMinWindowsVersion)' == ''">10.0.10240</AppMinWindowsVersion> <!-- Default to Windows 10 / 11 only -->
