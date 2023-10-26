@@ -18,7 +18,7 @@
 
 All diagnostics issued by Buildvana SDK have a `BVSDK` prefix. All numbers start from 1000, so there are no leading zeros.
 
-Each module is assigned a contiguous range of 100 diagnostics, as listed below. The first range are reserved for the SDK itself and for source generators.
+Each module is assigned a contiguous range of 100 diagnostics, as listed below. The first ranges are reserved for the SDK itself and for source generators.
 
 ## Buildvana SDK core (1000-1099)
 
@@ -53,7 +53,7 @@ Each module is assigned a contiguous range of 100 diagnostics, as listed below. 
 
 | Code | Severity | Message | Description |
 | -----| :------: | ------- | ----------- |
-| BVSDK1400 | Warning | Additional assembly info generation is not supported for language '...'. | Property `GenerateAdditionalAssemblyInfo` was set to `true` in a project in a language that is neither C# nor Visual Basic. Additional assembly info will not be generated. |
+| BVSDK1400 | Warning | Additional assembly info generation is not supported for language '...'. | Property `GenerateAdditionalAssemblyInfo` was set to `true` in a project whose language is neither C# nor Visual Basic. Additional assembly info will not be generated. |
 
 ## NuGetPack module (1500-1599)
 
