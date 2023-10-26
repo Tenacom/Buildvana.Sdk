@@ -1,61 +1,131 @@
 <Project>
 
-  <!-- Alternate pack method: publish to folders -->
+  <!--
+    ********************************************
+     Alternate pack phase 1: publish to folders
+    ********************************************
+  -->
 
-  <Target Name="CompletePublishFolderMetadata"
-          DependsOnTargets="$(CompletePublishFolderMetadataDependsOn)">
+  <!-- Call PublishInPublishFolders target as part of alternate pack.-->
+  <PropertyGroup>
+    <PackDependsOn>$(PackDependsOn);PublishInPublishFolders</PackDependsOn>
+  </PropertyGroup>
 
+  <!--
+    ======================================================================
+     Publish project in publish folders according to PublishFolder items.
+    ======================================================================
+  -->
+  <Target Name="PublishInPublishFolders"
+          Condition="@(PublishFolder->Count()) > 0"
+          DependsOnTargets="$(PublishInPublishFoldersDependsOn);
+                            ProcessPublishFoldersMetadata;
+                            InvokePublishTargetForPublishFolders;
+                            ZipPublishFolders" />
+
+  <!--
+    ==============================================================
+     Validate metadata of PublishFolder items and apply defaults.
+    ==============================================================
+  -->
+  <Target Name="ProcessPublishFoldersMetadata"
+          Outputs="%(PublishFolder.Identity)">
+
+    <!-- Copy metadata from the current item to properties. -->
+    <PropertyGroup>
+      <_Identity_>%(PublishFolder.Identity)</_Identity_>
+      <_PublishDir_>%(PublishFolder.PublishDir)</_PublishDir_>
+      <_Temporary_>%(PublishFolder.PublishDir)</_Temporary_>
+      <_CreateZipFile_>%(PublishFolder.CreateZipFile)</_CreateZipFile_>
+      <_ZipFileName_>%(PublishFolder.ZipFileName)</_ZipFileName_>
+      <_UniqueZipFileName_>%(PublishFolder.UniqueZipFileName)</_UniqueZipFileName_>
+      <_IsReleaseAsset_>%(PublishFolder.IsReleaseAsset)</_IsReleaseAsset_>
+      <_ReleaseAssetMimeType_>%(PublishFolder.ReleaseAssetMimeType)</_ReleaseAssetMimeType_>
+    </PropertyGroup>
+
+    <PropertyGroup>
+
+      <!-- PublishDir defaults to {artifacts directory}\{configuration}\{project name}\{publish folder}. -->
+      <_PublishDir_ Condition="'$(_PublishDir_)' == ''">$(ArtifactsDirectory)$(Configuration)\$(MSBuildProjectName)\$(_Identity_)\</_PublishDir_>
+
+      <!-- Temporary defaults to false. -->
+      <_Temporary_ Condition="'$(_Temporary_)' != 'true'">false</_Temporary_>
+
+      <!-- CreateZipFile is true if ZipFileName is specified. -->
+      <_CreateZipFile_ Condition="'$(_ZipFileName_)' != ''">true</_CreateZipFile_>
+
+      <!-- CreateZipFile is otherwise false by default. -->
+      <_CreateZipFile_ Condition="'$(_CreateZipFile_)' != 'true'">false</_CreateZipFile_>
+
+      <!-- UniqueZipFileName defaults to false. -->
+      <_UniqueZipFileName_ Condition="$(_CreateZipFile_) And '$(_UniqueZipFileName_)' != 'true'">false</_UniqueZipFileName_>
+
+    </PropertyGroup>
+
+    <!-- Default ZipFileName depends upon UniqueZipFileName and the presence of AssemblyInformationalVersion. -->
+    <PropertyGroup Condition="$(_CreateZipFile_) And '$(_ZipFileName_)' == ''">
+      <_ZipFileName_>$(MSBuildProjectName)</_ZipFileName_>
+      <_ZipFileName_ Condition="$(_UniqueZipFileName_)">$(_ZipFileName_)-$(_Identity_)</_ZipFileName_>
+      <_ZipFileName_ Condition="'$(AssemblyInformationalVersion)' != ''">$(_ZipFileName_)_$(AssemblyInformationalVersion)</_ZipFileName_>
+      <_ZipFileName_>$(_ZipFileName_).zip</_ZipFileName_>
+    </PropertyGroup>
+
+    <!--Put zipped publish folders in the configuration directory under artifacts -->
+    <PropertyGroup Condition="$(_CreateZipFile_)">
+      <_ZipFilePath_>$([MSBuild]::NormalizePath('$(ArtifactsDirectory)$(Configuration)', '$(_ZipFileName_)'))</_ZipFilePath_>
+    </PropertyGroup>
+
+    <PropertyGroup>
+
+      <!-- IsReleaseAsset is true by default for zipped folders, always false otherwise. -->
+      <_IsReleaseAsset_ Condition="$(_CreateZipFile_) And '$(_IsReleaseAsset_)' != 'false'">true</_IsReleaseAsset_>
+      <_IsReleaseAsset_ Condition="!$(_CreateZipFile_)">false</_IsReleaseAsset_>
+
+      <!-- ReleaseAssetMimeType defaults to application/zip. -->
+      <_ReleaseAssetMimeType_ Condition="$(_IsReleaseAsset_) And '$(_ReleaseAssetMimeType_)' == ''">application/zip</_ReleaseAssetMimeType_>
+
+      <!-- No need for a default ReleaseAssetDescription: it is taken care of in ReleaseAssetList module. -->
+    </PropertyGroup>
+
+    <!-- Update metadata. -->
     <ItemGroup>
-
-      <!-- Default publish directory -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="'%(PublishFolder.PublishDir)' == ''"
-                     PublishDir="$(ArtifactsDirectory)$(Configuration)\$(MSBuildProjectName)\%(PublishFolder.Identity)\" />
-
-      <!--Default value for Temporary metadata -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="'%(PublishFolder.Temporary)' != 'true'"
-                     Temporary="false" />
-
-      <!-- CreateZipFile is true if ZipFileName is specified -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="'%(PublishFolder.ZipFileName)' != ''"
-                     CreateZipFile="true" />
-
-      <!-- CreateZipFile is otherwise false by default -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="'%(PublishFolder.CreateZipFile)' != 'true'"
-                     CreateZipFile="false" />
-
-      <!-- IsReleaseAsset is true by default for zipped folders, always false otherwise -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="%(PublishFolder.CreateZipFile) And '%(PublishFolder.IsReleaseAsset)' != 'false'"
-                     IsReleaseAsset="true" />
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="!%(PublishFolder.CreateZipFile)"
-                     IsReleaseAsset="false" />
-
-      <!-- ReleaseAssetMimeType defaults to application/zip -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="%(PublishFolder.IsReleaseAsset) And '%(PublishFolder.ReleaseAssetMimeType)' == ''"
-                     ReleaseAssetMimeType="application/zip" />
-
+      <PublishFolder Update="$(_Identity_)"
+                     PublishDir="$(_PublishDir_)"
+                     Temporary="$(_Temporary_)"
+                     CreateZipFile="$(_CreateZipFile_)"
+                     ZipFileName="$(_ZipFileName_)"
+                     UniqueZipFileName="$(_UniqueZipFileName_)"
+                     ZipFilePath="$(_ZipFilePath_)"
+                     IsReleaseAsset="$(_IsReleaseAsset_)"
+                     ReleaseAssetMimeType="$(_ReleaseAssetMimeType_)" />
     </ItemGroup>
+
+    <!-- Don't leave stray properties around. -->
+    <PropertyGroup>
+      <_Identity_ />
+      <_PublishDir_ />
+      <_Temporary_ />
+      <_CreateZipFile_ />
+      <_ZipFileName_ />
+      <_UniqueZipFileName_ />
+      <_ZipFilePath_ />
+      <_IsReleaseAsset_ />
+      <_ReleaseAssetMimeType_ />
+    </PropertyGroup>
 
   </Target>
 
-  <PropertyGroup>
-    <PackDependsOn>$(PackDependsOn);PublishInPublishFolders;ZipPublishFolders</PackDependsOn>
-  </PropertyGroup>
-
-  <Target Name="PublishInPublishFolders"
-          DependsOnTargets="CompletePublishFolderMetadata"
-          Condition="@(PublishFolder->Count()) > 0">
+  <!--
+    ======================================================================
+     Publish project in publish folders according to PublishFolder items.
+    ======================================================================
+  -->
+  <Target Name="InvokePublishTargetForPublishFolders">
 
     <MSBuild Projects="$(MSBuildProjectFile)"
              Targets="Publish"
-             Properties="PublishingFolder=%(PublishFolder.Identity);
-                         PublishProtocol=FileSystem;
+             Properties="PublishProtocol=FileSystem;
+                         PublishingFolder=%(PublishFolder.Identity);
                          PublishDir=%(PublishFolder.PublishDir);
                          TargetFramework=%(PublishFolder.TargetFramework);
                          RuntimeIdentifier=%(PublishFolder.RuntimeIdentifier);
@@ -63,31 +133,12 @@
 
   </Target>
 
-  <PropertyGroup>
-    <GenerateReleaseAssetListDependsOn>$(GenerateReleaseAssetListDependsOn);ZipPublishFolders</GenerateReleaseAssetListDependsOn>
-  </PropertyGroup>
-
-  <Target Name="ZipPublishFolders"
-          DependsOnTargets="CompletePublishFolderMetadata;PublishInPublishFolders"
-          Condition="@(PublishFolder->Count()) > 0">
-
-    <ItemGroup>
-
-      <!-- When PackageVersion is defined (usually when using Nerdbank.GitVersioning), the default for ZipFileName is {project name}-{publish folder}_{package version}.zip -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="%(PublishFolder.CreateZipFile) And '%(PublishFolder.ZipFileName)' == '' And '$(PackageVersion)' != ''"
-                     ZipFileName="$(MSBuildProjectName)-%(PublishFolder.Identity)_$(PackageVersion).zip" />
-
-      <!-- Otherwise, the default for ZipFileName is {project name}-{publish folder}.zip -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="%(PublishFolder.CreateZipFile) And '%(PublishFolder.ZipFileName)' == ''"
-                     ZipFileName="$(MSBuildProjectName)-%(PublishFolder.Identity).zip" />
-
-      <!--Put zipped publish folders in the configuration directory under artifacts -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="%(PublishFolder.CreateZipFile)"
-                     ZipFilePath="$([MSBuild]::NormalizePath('$(ArtifactsDirectory)$(Configuration)', '%(PublishFolder.ZipFileName)'))" />
-    </ItemGroup>
+  <!--
+    ==========================================
+     Generate zip files from publish folders.
+    ==========================================
+  -->
+  <Target Name="ZipPublishFolders">
 
     <!-- Create zip files for publish folders when configured to do so -->
     <ZipDirectory Condition="%(PublishFolder.CreateZipFile)"
@@ -105,9 +156,13 @@
 
   </Target>
 
+  <!--
+    =================================================================
+     Remove temporary publish folders after the Pack target is done.
+    =================================================================
+  -->
   <Target Name="RemoveTemporaryPublishFolders"
           AfterTargets="Pack"
-          DependsOnTargets="CompletePublishFolderMetadata"
           Condition="@(PublishFolder->Count()) > 0">
 
     <RemoveDir Directories="%(PublishFolder.PublishDir)"

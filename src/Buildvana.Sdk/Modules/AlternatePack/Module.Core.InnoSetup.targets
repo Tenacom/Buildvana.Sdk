@@ -1,79 +1,13 @@
 <Project>
 
-  <!-- Alternate pack method: use Inno Setup -->
+  <!--
+    ******************************************************************
+     Alternate pack phase 2: generate setup programs using Inno Setup
+    ******************************************************************
+  -->
 
-  <PropertyGroup>
-    <CompletePublishFolderMetadataDependsOn>$(CompletePublishFolderMetadataDependsOn);CompletePublishFolderMetadataForInnoSetup</CompletePublishFolderMetadataDependsOn>
-  </PropertyGroup>
-
-  <Target Name="CompletePublishFolderMetadataForInnoSetup">
-
-    <ItemGroup>
-
-      <!-- The default InnoSetupIncludePath is obj\{Configuration}\{Name of publish folder}.iss -->
-      <PublishFolder Update="%(PublishFolder.Identity)"
-                     Condition="'%(PublishFolder.SetupIncludeFile)' == ''"
-                     InnoSetupIncludePath="$(BaseIntermediateOutputPath)$(Configuration)\%(PublishFolder.Identity).iss" />
-
-    </ItemGroup>
-
-  </Target>
-
-  <Target Name="GenerateSetupIncludeFile"
-          AfterTargets="Publish"
-          DependsOnTargets="CompletePublishFolderMetadata"
-          Condition="'$(PublishingFolder)' != ''">
-
-    <PropertyGroup>
-      <CompanyShortName Condition="'$(CompanyShortName)' == ''">$(Company)</CompanyShortName>
-      <CompanyFullName Condition="'$(CompanyFullName)' == ''">$(Company)</CompanyFullName>
-      <AppShortName Condition="'$(AppShortName)' == ''">$(AssemblyName)</AppShortName>
-      <AppFullName Condition="'$(AppFullName)' == ''">$(Title)</AppFullName>
-      <AppCopyright Condition="'$(AppCopyright)' == ''">$(Copyright)</AppCopyright>
-      <AppDescription Condition="'$(AppDescription)' == ''">$(Description)</AppDescription>
-      <AppMinWindowsVersion Condition="'$(AppMinWindowsVersion)' == ''">10.0.10240</AppMinWindowsVersion> <!-- Default to Windows 10 / 11 only -->
-    </PropertyGroup>
-
-    <PropertyGroup>
-      <InnoSetupIncludePath Condition="'%(PublishFolder.Identity)' == '$(PublishingFolder)'">%(PublishFolder.InnoSetupIncludePath)</InnoSetupIncludePath>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <InnoSetupConstant Include="COMPANY_SHORTNAME" Value="$(CompanyShortName)" />
-      <InnoSetupConstant Include="COMPANY_FULLNAME" Value="$(CompanyFullName)" />
-      <InnoSetupConstant Include="COMPANY_WEBSITE" Value="$(CompanyWebSite)" />
-      <InnoSetupConstant Include="COMPANY_SUPPORTPHONE" Value="$(CompanySupportPhone)" />
-      <InnoSetupConstant Include="APP_EXENAME" Value="$(AssemblyName)" />
-      <InnoSetupConstant Include="APP_SHORTNAME" Value="$(AssemblyName)" />
-      <InnoSetupConstant Include="APP_FULLNAME" Value="$(AssemblyName)" />
-      <InnoSetupConstant Include="APP_COMMENTS" Value="$(AppComments)" />
-      <InnoSetupConstant Include="APP_CONTACT" Value="$(AppContact)" />
-      <InnoSetupConstant Include="APP_COPYRIGHT" Value="$(AppCopyright)" />
-      <InnoSetupConstant Include="APP_DESCRIPTION" Value="$(AppDescription)" />
-      <InnoSetupConstant Include="APP_VERSION" Value="$(VersionPrefix)" />
-      <InnoSetupConstant Include="APP_SEMANTIC_VERSION" Value="$(AssemblyInformationalVersion)" />
-      <InnoSetupConstant Include="APP_MINWINDOWSVERSION" Value="$(AppMinWindowsVersion)" />
-      <InnoSetupConstant Include="SOURCE_DIR" Value="$(PublishDir)" />
-      <InnoSetupConstant Include="SETUP_DIR" Value="$(ArtifactsDirectory)$(Configuration)\$(MSBuildProjectName)" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <InnoSetupIncludeLine Include="#define %(InnoSetupConstant.Identity) '$([System.String]::new(&quot;%(InnoSetupConstant.Value)&quot;).Replace(&quot;'&quot;, &quot;''&quot;))'" />
-    </ItemGroup>
-
-    <WriteLinesToFile File="$(InnoSetupIncludePath)"
-                      Lines="@(InnoSetupIncludeLine)"
-                      Overwrite="true" />
-
-    <ItemGroup>
-      <InnoSetupIncludeLine Remove="@(InnoSetupIncludeLine)" />
-    </ItemGroup>
-
-  </Target>
-
-  <!-- Generate setup -->
-
-  <ItemGroup>
+  <!-- Add references to necessary dependencies. -->
+  <ItemGroup Condition="@(InnoSetup->Count()) > 0">
     <BV_PackageReference Include="Tools.InnoSetup"
                          IncludeAssets="build"
                          ExcludeAssets="runtime"
@@ -84,77 +18,503 @@
                          PrivateAssets="all" />
   </ItemGroup>
 
-  <Target Name="CompleteInnoSetupScriptMetadata"
-          DependsOnTargets="CompletePublishFolderMetadata">
+  <!-- Call UseInnoSetup target as part of alternate pack.-->
+  <PropertyGroup>
+    <PackDependsOn>$(PackDependsOn);UseInnoSetup</PackDependsOn>
+  </PropertyGroup>
 
-    <!--
-      Add to InnoSetupScript items some metadata that depends on the metadata of its corresponding PublishFolder item.
+  <!--
+    =================================================
+     Generate installation programs using InnoSetup.
+    =================================================
+  -->
+  <Target Name="UseInnoSetup"
+          Condition="@(InnoSetup->Count()) > 0"
+          DependsOnTargets="$(UseInnoSetupDependsOn);
+                            CheckInnoSetupScripts;
+                            InitializeInnoSetupProperties;
+                            InitializeInnoSetupMetadata;
+                            CopyInnoSetupMetadataFromPublishFolders;
+                            CheckForIncorrectInnoSetupPublishFolderReferences;
+                            CompleteInnoSetupMetadata;
+                            IncludeInnoSetupOutputsInReleaseAssetList;
+                            WriteInnoSetupIncludeFiles;
+                            ExecuteInnoSetup" />
 
-      The only known method to combine two item groups A and B is to first do a complete cross-join, then remove from the result
-      all items that did NOT result from matching an A item with its corresponding B item.
+  <!--
+    =======================================================
+     Check that InnoSetup scripts are specified and exist.
+    =======================================================
+  -->
+  <Target Name="CheckInnoSetupScripts">
 
-      If e.g. there are 5 PublishFolder items and 4 InnoSetupScript items, we end up with 20 _Temp items,
-      of which only 4 are correct; namely, those where an InnoSetupScript item has been combined with the
-      PublishFolder item corresponding to its UsePublishFolder metadata.
+    <!-- Check that all InnoSetup items have a Script metadata. -->
+    <Error Condition="'%(InnoSetup.Script)' == ''"
+           Code="BVSDK1900"
+           Text="InnoSetup item '%(InnoSetup.Identity)' does not specify a script." />
 
-      In order to be able to tell matching items in the resulting item group, copy the identity of PublishFolder items
-      to a PFIdentity metadata.
-    -->
-    <CreateItem Include="@(InnoSetupScript)"
-                AdditionalMetadata="PFIdentity=%(PublishFolder.Identity);
-                                    TargetFramework=%(PublishFolder.TargetFramework);
-                                    RuntimeIdentifier=%(PublishFolder.RuntimeIdentifier);
-                                    SourceDir=%(PublishFolder.PublishDir);
-                                    IncludePath=$([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '%(PublishFolder.InnoSetupIncludePath)'))">
-      <Output ItemName="_Temp" TaskParameter="Include" />
-    </CreateItem>
-
+    <!-- Script paths are relative to the project directory. -->
     <ItemGroup>
+      <InnoSetup Update="%(InnoSetup.Identity)"
+                 Condition="'%(InnoSetup.Script)' != ''"
+                 ScriptFullPath="$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '%(InnoSetup.Script)'))" />
+    </ItemGroup>
 
-      <!--
-        Remove all _Temp items whose PFIdentity metadata doesn't match their UsePublishFolder metadata.
-        The remaining _Temp items are our resulting InnoSetupScript items with updated metadata.
-      -->
-      <_Temp Remove="%(_Temp.Identity)"
-             Condition="'%(_Temp.PFIdentity)' != '%(_Temp.UsePublishFolder)'" />
+    <!-- Scripts must exist. -->
+    <Error Condition="'%(InnoSetup.Script)' != '' And !Exists('%(InnoSetup.ScriptFullPath)')"
+           Code="BVSDK1901"
+           Text="InnoSetup script '%(InnoSetup.ScriptFullPath)' referenced by '%(InnoSetup.Identity)' does not exist." />
 
-      <!-- Replace the InnoSetupScript item group with the result, excluding the PFIdentity metadata that is now useless. -->
-      <InnoSetupScript Remove="@(InnoSetupScript)" />
-      <InnoSetupScript Include="@(_Temp)"
-                       RemoveMetadata="PFIdentity" />
+  </Target>
 
-      <!-- Delete the _Temp item group to free up some memory. -->
-      <_Temp Remove="@(_Temp)" />
+  <!--
+    =================================================================
+     Initialize properties used to generate InnoSetup include files.
+    =================================================================
+  -->
+  <Target Name="InitializeInnoSetupProperties">
+
+    <!-- Establish defaults for properties used by InnoSetup scripts. -->
+    <PropertyGroup>
+      <CompanyShortName Condition="'$(CompanyShortName)' == ''">$(Company)</CompanyShortName>
+      <CompanyFullName Condition="'$(CompanyFullName)' == ''">$(Company)</CompanyFullName>
+      <AppShortName Condition="'$(AppShortName)' == ''">$(AssemblyName)</AppShortName>
+      <AppFullName Condition="'$(AppFullName)' == ''">$(Title)</AppFullName>
+      <AppCopyright Condition="'$(AppCopyright)' == ''">$(Copyright)</AppCopyright>
+      <AppDescription Condition="'$(AppDescription)' == ''">$(Description)</AppDescription>
+      <AppVersion Condition="'$(AppVersion)' == ''">$(VersionPrefix)</AppVersion>
+      <AppSemanticVersion Condition="'$(AppSemanticVersion)' == ''">$(AssemblyInformationalVersion)</AppSemanticVersion>
+      <AppMinWindowsVersion Condition="'$(AppMinWindowsVersion)' == ''">10.0.10240</AppMinWindowsVersion> <!-- Default to Windows 10 / 11 only -->
+    </PropertyGroup>
+
+    <!-- Standard constants can be customized via corresponding properties. -->
+    <ItemGroup>
+      <_StandardConstant_ Include="COMPANY_SHORTNAME" Value="$(CompanyShortName)" />
+      <_StandardConstant_ Include="COMPANY_FULLNAME" Value="$(CompanyFullName)" />
+      <_StandardConstant_ Include="COMPANY_WEBSITE" Value="$(CompanyWebSite)" />
+      <_StandardConstant_ Include="COMPANY_SUPPORTPHONE" Value="$(CompanySupportPhone)" />
+      <_StandardConstant_ Include="APP_EXENAME" Value="$(AssemblyName)" />
+      <_StandardConstant_ Include="APP_SHORTNAME" Value="$(AssemblyName)" />
+      <_StandardConstant_ Include="APP_FULLNAME" Value="$(AssemblyName)" />
+      <_StandardConstant_ Include="APP_COMMENTS" Value="$(AppComments)" />
+      <_StandardConstant_ Include="APP_CONTACT" Value="$(AppContact)" />
+      <_StandardConstant_ Include="APP_COPYRIGHT" Value="$(AppCopyright)" />
+      <_StandardConstant_ Include="APP_DESCRIPTION" Value="$(AppDescription)" />
+      <_StandardConstant_ Include="APP_VERSION" Value="$(AppVersion)" />
+      <_StandardConstant_ Include="APP_SEMANTIC_VERSION" Value="$(AppSemanticVersion)" />
+      <_StandardConstant_ Include="APP_MINWINDOWSVERSION" Value="$(AppMinWindowsVersion)" />
+      <InnoSetupConstant Remove="@(_StandardConstant_)" />
+      <InnoSetupConstant Include="@(_StandardConstant_)" />
+      <_StandardConstant_ Remove="@(_StandardConstant_)" />
     </ItemGroup>
 
   </Target>
 
-  <PropertyGroup>
-    <PackDependsOn>$(PackDependsOn);ProcessInnoSetupScripts</PackDependsOn>
-  </PropertyGroup>
+  <!--
+    ==================================================
+     Prepare InnoSetup items for metadata completion.
+    ==================================================
+  -->
+  <Target Name="InitializeInnoSetupMetadata">
 
-  <Target Name="ProcessInnoSetupScripts"
-          DependsOnTargets="PublishInPublishFolders;CompleteInnoSetupScriptMetadata"
-          Condition="@(InnoSetupScript->Count()) > 0">
-
-    <MSBuild Projects="$(MSBuildProjectFile)"
-             Targets="GenerateSetup"
-             Properties="TargetFramework=%(InnoSetupScript.TargetFramework);
-                         RuntimeIdentifier=%(InnoSetupScript.RuntimeIdentifier);
-                         InnoSetupScriptFullPath=%(InnoSetupScript.FullPath);
-                         InnoSetupIncludePath=%(InnoSetupScript.IncludePath)" />
+    <!--
+      Initially set SourcePublishFolderFound to false for every item that has a SourcePublishFolder metadata.
+      This allows for later detection of incorrect references.
+    -->
+    <ItemGroup>
+      <InnoSetup Update="%(InnoSetup.Identity)"
+                 Condition="'%(InnoSetup.SourcePublishFolder)' != ''"
+                 SourcePublishFolderFound="false" />
+    </ItemGroup>
 
   </Target>
 
-  <Target Name="GenerateSetup">
+  <!--
+    ============================================================================================================
+    Copy metadata from SourcePublishFolder items to InnoSetup items that refer to them via SourcePublishFolder.
 
+    This target uses batching to loop through PublishFolder items.
+    ============================================================================================================
+  -->
+  <Target Name="CopyInnoSetupMetadataFromPublishFolders"
+          Outputs="%(PublishFolder.Identity)">
+
+    <!-- Copy metadata from the current item to properties. -->
     <PropertyGroup>
-      <InnoSetupCommandLine>&quot;$(InnoSetupCompiler)&quot; &quot;/I$(InnoDownloadPluginDir)&quot; &quot;/J$(InnoSetupIncludePath)&quot; &quot;$(InnoSetupScriptFullPath)&quot;</InnoSetupCommandLine>
+      <_Identity_>%(PublishFolder.Identity)</_Identity_>
+      <_PublishDir_>%(PublishFolder.PublishDir)</_PublishDir_>
     </PropertyGroup>
 
-    <Message Importance="High" Text="&gt;&gt;&gt;&gt;$(InnoSetupCommandLine)&lt;&lt;&lt;&lt;" />
+    <!--
+      Use task batching to loop through InnoSetup items and copy metadata from the above properties
+      to items that have a SourcePublishFolder metadata equal to the identity of the current PublishFolder item.
+    -->
+    <ItemGroup>
 
-    <Exec Command="$(InnoSetupCommandLine)" />
+      <!--
+        Set SourcePublishFolderFound to true for all InnoSetup items that reference the current PublishFolder item.
+      -->
+      <InnoSetup Update="%(InnoSetup.Identity)"
+                 Condition="'%(InnoSetup.SourcePublishFolder)' == '$(_Identity_)'"
+                 SourcePublishFolderFound="true" />
+
+      <!--
+        Copy SourceDir from the publish folder's PublishDir.
+        Setting SourceDir directly takes precedence over this.
+      -->
+      <InnoSetup Update="%(InnoSetup.Identity)"
+                 Condition="'%(InnoSetup.SourceDir)' == '' And '%(InnoSetup.SourcePublishFolder)' == '$(_Identity_)'"
+                 SourceDir="$(_PublishDir_)" />
+
+    </ItemGroup>
+
+    <!-- Don't leave stray properties around. -->
+    <PropertyGroup>
+      <_Identity_ />
+      <_PublishDir_ />
+    </PropertyGroup>
+
+  </Target>
+
+  <!--
+    ========================================================================
+     Check for incorrect SourcePublishFolder references in InnoSetup items.
+    ========================================================================
+  -->
+  <Target Name="CheckForIncorrectInnoSetupPublishFolderReferences">
+
+    <!--
+      Check that all InnoSetup items that have a SourcePublishFolder metadata have been processed.
+
+      Use task batching here, instead of target batching, so all errors can be issued at once.
+    -->
+    <Error Condition="'%(InnoSetup.Identity)' != '' And '%(InnoSetup.SourcePublishFolder)' != '' And '%(InnoSetup.SourcePublishFolderFound)' != 'true'"
+           Code="BVSDK1902"
+           Text="InnoSetup item '%(InnoSetup.Identity)' refers to non-existent PublishFolder '%(InnoSetup.SourcePublishFolder)'." />
+
+  </Target>
+
+  <!--
+    ================================================
+     Complete initialization of InnoSetup metadata.
+    ================================================
+  -->
+  <Target Name="CompleteInnoSetupMetadata"
+          Outputs="%(InnoSetup.Identity)">
+
+    <!-- Copy metadata from the current item to properties. -->
+    <PropertyGroup>
+      <_Identity_>%(InnoSetup.Identity)</_Identity_>
+      <_Script_>%(InnoSetup.Script)</_Script_>
+      <_SourceDir_>%(InnoSetup.SourceDir)</_SourceDir_>
+      <_SourcePublishFolder_>%(InnoSetup.SourcePublishFolder)</_SourcePublishFolder_>
+      <_TargetFramework_>%(InnoSetup.TargetFramework)</_TargetFramework_>
+      <_RuntimeIdentifier_>%(InnoSetup.RuntimeIdentifier)</_RuntimeIdentifier_>
+      <_OutputDir_>%(InnoSetup.OutputDir)</_OutputDir_>
+      <_OutputName_>%(InnoSetup.OutputName)</_OutputName_>
+      <_UniqueOutputName_>%(InnoSetup.UniqueOutputName)</_UniqueOutputName_>
+      <_IsReleaseAsset_>%(InnoSetup.IsReleaseAsset)</_IsReleaseAsset_>
+      <_ReleaseAssetDescription_>%(InnoSetup.ReleaseAssetDescription)</_ReleaseAssetDescription_>
+    </PropertyGroup>
+
+    <!-- UniqueOutputName defaults to false if there is only 1 InnoSetup item, true otherwise. -->
+    <ItemGroup Condition="@(InnoSetup->Count()) &lt; 2">
+      <InnoSetup Update="$(_Identity_)"
+                     Condition="'$(_UniqueOutputName_)' == ''"
+                     UniqueOutputName="false" />
+    </ItemGroup>
+    <ItemGroup Condition="@(InnoSetup->Count()) &gt; 1">
+      <InnoSetup Update="$(_Identity_)"
+                 Condition="'$(_UniqueOutputName_)' == ''"
+                 UniqueOutputName="true" />
+    </ItemGroup>
+
+    <!-- The default for OutputName depends upon UniqueOutputName. -->
+    <ItemGroup>
+      <InnoSetup Update="$(_Identity_)"
+                 Condition="'$(_OutputName_)' == '' And '$(_UniqueOutputName_)' == 'false'"
+                 OutputName="$(AppShortName)-$(AssemblyInformationalVersion)" />
+      <InnoSetup Update="$(_Identity_)"
+                 Condition="'$(_OutputName_)' == '' And '$(_UniqueOutputName_)' != 'false'"
+                 OutputName="$(AppShortName)-$(_Identity_)-$(AssemblyInformationalVersion)" />
+    </ItemGroup>
+
+    <!-- OutputDir is taken as relative to the artifacts subdirectory. -->
+    <ItemGroup>
+      <InnoSetup Update="$(_Identity_)"
+                 OutputDir="$([MSBuild]::NormalizeDirectory('$(ArtifactsDirectory)$(Configuration)', '$(_OutputDir_)'))" />
+    </ItemGroup>
+
+    <!--
+      IsReleaseAsset defaults to true.
+      Note that there is no need for a default ReleaseAssetDescription here, as it is provided by the ReleaseAssetList module.
+    -->
+    <ItemGroup>
+      <InnoSetup Update="$(_Identity_)"
+                 Condition="'$(_IsReleaseAsset_)' != 'false'"
+                 IsReleaseAsset="true" />
+    </ItemGroup>
+
+    <!-- Don't leave stray properties around. -->
+    <PropertyGroup>
+      <_Identity_ />
+      <_SourceDir_ />
+      <_SourcePublishFolder_ />
+      <_TargetFramework_ />
+      <_RuntimeIdentifier_ />
+      <_OutputDir_ />
+      <_OutputName_ />
+      <_UniqueOutputName_ />
+      <_IsReleaseAsset_ />
+    </PropertyGroup>
+
+  </Target>
+
+  <!--
+    =============================================================
+     Include generated setup programs in the release asset list.
+    =============================================================
+  -->
+  <Target Name="IncludeInnoSetupOutputsInReleaseAssetList"
+          Outputs="%(InnoSetup.Identity)">
+
+    <!-- Copy metadata from the current item to properties. -->
+    <PropertyGroup>
+      <_Identity_>%(InnoSetup.Identity)</_Identity_>
+      <_OutputDir_>%(InnoSetup.OutputDir)</_OutputDir_>
+      <_OutputName_>%(InnoSetup.OutputName)</_OutputName_>
+      <_IsReleaseAsset_>%(InnoSetup.IsReleaseAsset)</_IsReleaseAsset_>
+      <_ReleaseAssetDecsription_>%(InnoSetup.ReleaseAssetDecsription)</_ReleaseAssetDecsription_>
+    </PropertyGroup>
+
+    <!-- Add the generated setup to the release asset list. -->
+    <ItemGroup Condition="'$(GenerateReleaseAssetList)' == 'true'">
+      <ReleaseAsset Include="$(_OutputDir_)$(_OutputName_).exe" 
+                    Condition="'$(_IsReleaseAsset_)' == 'true'"
+                    MimeType="application/octet-stream"
+                    Description="$(_ReleaseAssetDescription_)" />
+    </ItemGroup>
+    <ItemGroup Condition="@(InnoSetup->Count()) &gt; 1">
+      <InnoSetup Update="$(_Identity_)"
+                 Condition="'$(_UniqueOutputName_)' == ''"
+                 UniqueOutputName="true" />
+    </ItemGroup>
+
+    <!-- The default for OutputName depends upon UniqueOutputName. -->
+    <ItemGroup>
+      <InnoSetup Update="$(_Identity_)"
+                 Condition="'$(_OutputName_)' == '' And '$(_UniqueOutputName_)' == 'false'"
+                 OutputName="$(AppShortName)-$(AssemblyInformationalVersion)" />
+      <InnoSetup Update="$(_Identity_)"
+                 Condition="'$(_OutputName_)' == '' And '$(_UniqueOutputName_)' != 'false'"
+                 OutputName="$(AppShortName)-$(_Identity_)-$(AssemblyInformationalVersion)" />
+    </ItemGroup>
+
+    <!-- OutputDir is taken as relative to the artifacts subdirectory. -->
+    <ItemGroup>
+      <InnoSetup Update="$(_Identity_)"
+                 OutputDir="$([MSBuild]::NormalizeDirectory('$(ArtifactsDirectory)$(Configuration)', '$(_OutputDir_)'))" />
+    </ItemGroup>
+
+    <!-- Don't leave stray properties around. -->
+    <PropertyGroup>
+      <_Identity_ />
+      <_OutputDir_ />
+      <_OutputName_ />
+      <_IsReleaseAsset_ />
+      <_ReleaseAssetDecsription_ />
+    </PropertyGroup>
+
+  </Target>
+
+  <!--
+    ================================
+     Write InnoSetup include files.
+    ================================
+  -->
+  <Target Name="WriteInnoSetupIncludeFiles"
+          Outputs="%(InnoSetup.Identity)">
+
+    <!-- Copy metadata from the current item to properties. -->
+    <PropertyGroup>
+      <_Identity_>%(InnoSetup.Identity)</_Identity_>
+      <_SourceDir_>%(InnoSetup.SourceDir)</_SourceDir_>
+      <_SourcePublishFolder_>%(InnoSetup.SourcePublishFolder)</_SourcePublishFolder_>
+      <_TargetFramework_>%(InnoSetup.TargetFramework)</_TargetFramework_>
+      <_RuntimeIdentifier_>%(InnoSetup.RuntimeIdentifier)</_RuntimeIdentifier_>
+      <_OutputDir_>%(InnoSetup.OutputDir)</_OutputDir_>
+      <_OutputName_>%(InnoSetup.OutputName)</_OutputName_>
+    </PropertyGroup>
+
+    <!-- Define some additional constants -->
+    <ItemGroup>
+      <_Constant_ Include="SETUP_IDENTITY" Value="$(_Identity_)" />
+      <_Constant_ Include="SETUP_PUBLISHFOLDER" Value="$(_SourcePublishFolder_)" Condition="'$(_SourcePublishFolder_)' != ''" />
+      <_Constant_ Include="SETUP_TARGETFRAMEWORK" Value="$(_TargetFramework_)" Condition="'$(_TargetFramework_)' != ''" />
+      <_Constant_ Include="SETUP_RUNTIMEIDENTIFIER" Value="$(_RuntimeIdentifier_)" Condition="'$(_RuntimeIdentifier_)' != ''" />
+      <_Constant_ Include="@(InnoSetupConstant)" Exclude="@(_Constant_)"/>
+    </ItemGroup>
+
+    <!-- Define some [Setup] directives if they have been given values. -->
+    <ItemGroup>
+      <_SetupDirective_ Include="SourceDir" Value="$(_SourceDir_)" Condition="'$(_SourceDir_)' != ''" />
+      <_SetupDirective_ Include="OutputDir" Value="$(_OutputDir_)" Condition="'$(_OutputDir_)' != ''" />
+      <_SetupDirective_ Include="OutputBaseFilename" Value="$(_OutputName_)" Condition="'$(_OutputName_)' != ''" />
+    </ItemGroup>
+
+    <!-- Generate the contents of the include file. -->
+    <ItemGroup>
+      <_IncludeLine_ Include="#define %(_Constant_.Identity) '$([System.String]::new(&quot;%(_Constant_.Value)&quot;).Replace(&quot;'&quot;, &quot;''&quot;))'" />
+    </ItemGroup>
+    <ItemGroup Condition="@(_SetupDirective_->Count()) &gt; 0">
+      <_IncludeLine_ Include="[Setup]" />
+      <_IncludeLine_ Include="%(_SetupDirective_.Identity)=%(_SetupDirective_.Value)" />
+    </ItemGroup>
+
+    <!-- Put include files in obj folder. -->
+    <PropertyGroup>
+      <BV_InnoSetupIncludePath>$(BaseIntermediateOutputPath)$(Configuration)\$(_Identity_).iss</BV_InnoSetupIncludePath>
+    </PropertyGroup>
+
+    <!-- Write the include file. -->
+    <WriteLinesToFile File="$(InnoSetupIncludePath)"
+                      Lines="@(_IncludeLine_)"
+                      Overwrite="true" />
+
+    <!-- Free up some memory. -->
+    <ItemGroup>
+      <_Constant_ Remove="@(_Constant_)" />
+      <_SetupDirective_ Remove="@(_SetupDirective_)" />
+      <_IncludeLine_ Remove="@(_IncludeLine_)" />
+    </ItemGroup>
+
+    <!-- Don't leave stray properties around. -->
+    <PropertyGroup>
+      <_Identity_ />
+      <_SourceDir_ />
+      <_SourcePublishFolder_ />
+      <_TargetFramework_ />
+      <_RuntimeIdentifier_ />
+      <_OutputDir_ />
+      <_OutputName_ />
+    </PropertyGroup>
+
+  </Target>
+
+  <!--
+    ====================================
+     Write include files for InnoSetup.
+    ====================================
+  -->
+  <Target Name="WriteInnoSetupIncludeFiles"
+          Outputs="%(InnoSetup.Identity)">
+
+    <!-- Copy metadata from the current item to properties. -->
+    <PropertyGroup>
+      <_Identity_>%(InnoSetup.Identity)</_Identity_>
+      <_SourceDir_>%(InnoSetup.SourceDir)</_SourceDir_>
+      <_SourcePublishFolder_>%(InnoSetup.SourcePublishFolder)</_SourcePublishFolder_>
+      <_TargetFramework_>%(InnoSetup.TargetFramework)</_TargetFramework_>
+      <_RuntimeIdentifier_>%(InnoSetup.RuntimeIdentifier)</_RuntimeIdentifier_>
+      <_OutputDir_>%(InnoSetup.OutputDir)</_OutputDir_>
+      <_OutputName_>%(InnoSetup.OutputName)</_OutputName_>
+    </PropertyGroup>
+
+    <!-- Define some additional constants -->
+    <ItemGroup>
+      <_Constant_ Include="SETUP_IDENTITY" Value="$(_Identity_)" />
+      <_Constant_ Include="SETUP_PUBLISHFOLDER" Value="$(_SourcePublishFolder_)" Condition="'$(_SourcePublishFolder_)' != ''" />
+      <_Constant_ Include="SETUP_TARGETFRAMEWORK" Value="$(_TargetFramework_)" Condition="'$(_TargetFramework_)' != ''" />
+      <_Constant_ Include="SETUP_RUNTIMEIDENTIFIER" Value="$(_RuntimeIdentifier_)" Condition="'$(_RuntimeIdentifier_)' != ''" />
+      <_Constant_ Include="SETUP_SOURCEDIR" Value="$(_SourceDir_)" Condition="'$(_SourceDir_)' != ''" />
+      <_Constant_ Include="SETUP_OUTPUTDIR" Value="$(_OutputDir_)" Condition="'$(_OutputDir_)' != ''" />
+      <_Constant_ Include="SETUP_OUTPUTNAME" Value="$(_OutputName_)" Condition="'$(_OutputName_)' != ''" />
+      <_Constant_ Include="@(InnoSetupConstant)" Exclude="@(_Constant_)"/>
+    </ItemGroup>
+
+    <!-- Define some [Setup] directives if they have been given values. -->
+    <ItemGroup>
+      <_SetupDirective_ Include="SourceDir" Value="$(_SourceDir_)" Condition="'$(_SourceDir_)' != ''" />
+      <_SetupDirective_ Include="OutputDir" Value="$(_OutputDir_)" Condition="'$(_OutputDir_)' != ''" />
+      <_SetupDirective_ Include="OutputBaseFilename" Value="$(_OutputName_)" Condition="'$(_OutputName_)' != ''" />
+    </ItemGroup>
+
+    <!-- Generate the contents of the include file. -->
+    <ItemGroup>
+      <_IncludeLine_ Include="#define %(_Constant_.Identity) '$([System.String]::new(&quot;%(_Constant_.Value)&quot;).Replace(&quot;'&quot;, &quot;''&quot;))'" />
+    </ItemGroup>
+    <ItemGroup Condition="@(_SetupDirective_->Count()) &gt; 0">
+      <_IncludeLine_ Include="[Setup]" />
+      <_IncludeLine_ Include="%(_SetupDirective_.Identity)=%(_SetupDirective_.Value)" />
+    </ItemGroup>
+
+    <!-- Put include files in obj folder. -->
+    <PropertyGroup>
+      <_IncludeFileFullPath_>$(BaseIntermediateOutputPath)$(Configuration)\$(_Identity_).iss</_IncludeFileFullPath_>
+    </PropertyGroup>
+
+    <!-- Write the include file. -->
+    <WriteLinesToFile File="$(_IncludeFileFullPath_)"
+                      Lines="@(_IncludeLine_)"
+                      Overwrite="true" />
+
+    <!-- Save full path of include file in InnoSetup metadata. -->
+    <ItemGroup>
+      <InnoSetup Update="$(_Identity_)"
+                 IncludeFileFullPath="$(_IncludeFileFullPath_)" />
+    </ItemGroup>
+
+    <!-- Free up some memory. -->
+    <ItemGroup>
+      <_Constant_ Remove="@(_Constant_)" />
+      <_SetupDirective_ Remove="@(_SetupDirective_)" />
+      <_IncludeLine_ Remove="@(_IncludeLine_)" />
+    </ItemGroup>
+
+    <!-- Don't leave stray properties around. -->
+    <PropertyGroup>
+      <_Identity_ />
+      <_SourceDir_ />
+      <_SourcePublishFolder_ />
+      <_TargetFramework_ />
+      <_RuntimeIdentifier_ />
+      <_OutputDir_ />
+      <_OutputName_ />
+      <_IncludeFileFullPath_ />
+    </PropertyGroup>
+
+  </Target>
+
+  <!--
+    ====================
+     Execute InnoSetup.
+    ====================
+  -->
+  <Target Name="ExecuteInnoSetup"
+          Outputs="%(InnoSetup.Identity)">
+
+    <!-- Copy metadata from the current item to properties. -->
+    <PropertyGroup>
+      <_Identity_>%(InnoSetup.Identity)</_Identity_>
+      <_ScriptFullPath_>%(InnoSetup.ScriptFullPath)</_ScriptFullPath_>
+      <_IncludeFileFullPath_>%(InnoSetup.IncludeFileFullPath)</_IncludeFileFullPath_>
+    </PropertyGroup>
+
+    <!-- Build the command line for InnoSetup. -->
+    <PropertyGroup>
+      <_CommandLine_>&quot;$(InnoSetupCompiler)&quot; &quot;/I$(InnoDownloadPluginDir)&quot; &quot;/J$(_IncludeFileFullPath_)&quot; &quot;$(_ScriptFullPath_)&quot;</_CommandLine_>
+    </PropertyGroup>
+
+    <!-- Execute InnoSetup. -->
+    <Exec Command="$(_CommandLine_)" />
+
+    <!-- Don't leave stray properties around. -->
+    <PropertyGroup>
+      <_Identity_ />
+      <_ScriptFullPath_ />
+      <_IncludeFileFullPath_ />
+      <_CommandLine_ />
+    </PropertyGroup>
 
   </Target>
 

@@ -94,7 +94,9 @@ Each module is assigned a contiguous range of 100 diagnostics, as listed below. 
 
 | Code | Severity | Message | Description |
 | -----| :------: | ------- | ----------- |
-| BVSDK1900 | Error | Unknown alternate pack method '...'. | The `AlternatePackMethod` property was set to an unrecognized value. |
+| BVSDK1900 | Error | InnoSetup item '...' does not specify a script. | An `InnoSetup` item has no `Script` metadata. |
+| BVSDK1901 | Error | InnoSetup script '...' referenced by '...' does not exist. | An `InnoSetup` item's `Script` metadata refers to a non-existing file. |
+| BVSDK1902 | Error | InnoSetup item '...' refers to non-existent PublishFolder '...'. | An `InnoSetup` item has a `SourcePublishFolder` metadata, but no `PublishFolder` item exists with the specified name. |
 
 ## NerdbankGitVersioning module (2000-2099)
 

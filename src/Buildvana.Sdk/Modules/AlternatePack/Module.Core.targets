@@ -1,11 +1,7 @@
 <Project>
 
   <!-- Invoke alternate pack methods -->
-
-  <Import Project="Module.Core.PublishToFolders.targets"
-          Condition="'$(BV_AlternatePackMethod_PublishToFolders)' != ''" />
-
-  <Import Project="Module.Core.InnoSetup.targets"
-          Condition="'$(BV_AlternatePackMethod_InnoSetup)' != ''" />
+  <Import Project="Module.Core.PublishToFolders.targets" />
+  <Import Project="Module.Core.InnoSetup.targets" />
 
 </Project>

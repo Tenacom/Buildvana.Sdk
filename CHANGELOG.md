@@ -10,7 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### New features
 
 - NuGet-related features provided by the `NuGetPack` module can now be disabled altogether by setting the `IncludeNuGetPackSupport` property to `false`. The default value is `true`, which behaves like previous versions.
+
 ### Changes to existing features
+
+- **BREAKING CHANGE:** Alternate pack methods can now be used independently of one another. Therefore the `AlternatePackMethod` property has been discontinued; to enable alternate pack, just set `UseAlternatePack` to `true`, as in versions prior to 1.0.41-preview where `AlternatePackMethod` was introduced.
+- **BREAKING CHANGE:** InnoSetup support has been completely rewritten. Main features include the following:
+  - Creation of an InnoSetup installations is no longer bound to a `PublishFolder`.
+  - An `InnoSetup` item must be created for every installation program to create.
+  - Source files for an installation can come from a publish folders, or from a custom location.
+  - Installation programs can be automatically added to the release asset list.
+- The default name for a zipped publish folder is now suffixed with the complete informational version (the `AssemblyInformationalVersion` property) when available, including semantic versioning metadata. This allows for clearer distinction between, for example, zip files created locally and on a continuous integration server.
 
 ### Bugs fixed in this release
 
