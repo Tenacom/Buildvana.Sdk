@@ -1,6 +1,10 @@
 <Project>
   
-  <Import Project="$(MSBuildThisFileDirectory)Module.Core.targets"
-          Condition="!$(UsingAlternatePack)" />
+  <PropertyGroup>
+    <IncludeNuGetPackSupport Condition="'$(IncludeNuGetPackSupport)' != 'false'">true</IncludeNuGetPackSupport>
+  </PropertyGroup>
+  
+  <Import Project="Module.Core.targets"
+          Condition="$(IncludeNuGetPackSupport)" />
 
 </Project>

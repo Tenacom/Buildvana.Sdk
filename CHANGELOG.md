@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+- NuGet-related features provided by the `NuGetPack` module can now be disabled altogether by setting the `IncludeNuGetPackSupport` property to `false`. The default value is `true`, which behaves like previous versions.
 ### Changes to existing features
 
 ### Bugs fixed in this release
