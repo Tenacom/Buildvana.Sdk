@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+### Changes to existing features
+
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.88-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.88-preview) (2023-10-26)
+
+### New features
+
 - NuGet-related features provided by the `NuGetPack` module can now be disabled altogether by setting the `IncludeNuGetPackSupport` property to `false`. The default value is `true`, which behaves like previous versions.
 
 ### Changes to existing features
@@ -24,8 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bugs fixed in this release
 
 - It was not possible to run InnoSetup scripts for more than one runtime identifier with the same target framework. For example, given two `PublishFolder`s, both with `TargetFramework` set to `net7.0`, whose `RuntimeIdentifier`s were `win10-x86` and `win10-x64` respectively, a setup was generated only for the first of the two. This has been fixed.
-
-### Known problems introduced by this release
 
 ## [1.0.75-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.75-preview) (2023-10-03)
 
