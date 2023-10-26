@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 #load "./build/BuildData.cake"
-#load "./build/changelog.cake"
+#load "./build/Changelog.cake"
 #load "./build/dotnet.cake"
 #load "./build/environment.cake"
 #load "./build/fail.cake"
@@ -133,26 +133,31 @@ Task("Release")
             }
 
             // Update changelog only on non-prerelease, unless forced
+            var changelog = new Changelog(context, data);
             var changelogUpdated = false;
-            if (!data.IsPrerelease || context.GetOption<bool>("forceUpdateChangelog", false))
+            if (!changelog.Exists)
+            {
+                context.Information($"Changelog update skipped: {Changelog.FileName} not found.");
+            }
+            else if (!data.IsPrerelease || context.GetOption<bool>("forceUpdateChangelog", false))
             {
                 if (context.GetOption<bool>("checkChangelog", true))
                 {
                     context.Ensure(
-                        context.ChangelogHasUnreleasedChanges(data.ChangelogPath),
-                        $"Changelog check failed: the \"Unreleased changes\" section is empty or only contains sub-section headings.");
+                        changelog.HasUnreleasedChanges(),
+                        "Changelog check failed: the \"Unreleased changes\" section is empty or only contains sub-section headings.");
 
-                    context.Information($"Changelog check successful: the \"Unreleased changes\" section is not empty.");
+                    context.Information("Changelog check successful: the \"Unreleased changes\" section is not empty.");
                 }
                 else
                 {
-                    context.Information($"Changelog check skipped: option 'checkChangelog' is false.");
+                    context.Information("Changelog check skipped: option 'checkChangelog' is false.");
                 }
 
                 // Update the changelog and commit the change before building.
                 // This ensures that the Git height is up to date when computing a version for the build artifacts.
-                context.PrepareChangelogForRelease(data);
-                UpdateRepo(data.ChangelogPath);
+                changelog.PrepareForRelease();
+                UpdateRepo(changelog.Path);
                 changelogUpdated = true;
             }
             else
@@ -182,8 +187,8 @@ Task("Release")
             if (changelogUpdated)
             {
                 // Change the new section's title in the changelog to reflect the actual version.
-                context.UpdateChangelogNewSectionTitle(data);
-                UpdateRepo(data.ChangelogPath);
+                changelog.UpdateNewSectionTitle();
+                UpdateRepo(changelog.Path);
             }
             else
             {

@@ -21,7 +21,6 @@ sealed class BuildData
     public BuildData(ICakeContext context)
     {
         context.Ensure(context.TryGetRepositoryInfo(out var repository), 255, "Cannot determine repository owner and name.");
-        var changelogPath = new FilePath("CHANGELOG.md");
         var solutionPath = context.GetFiles("*.sln").FirstOrDefault() ?? context.Fail<FilePath>(255, "Cannot find a solution file.");
         var solution = context.ParseSolution(solutionPath);
         var configuration = context.Argument("configuration", "Release");
@@ -58,7 +57,6 @@ sealed class BuildData
         Branch = branch;
         ArtifactsPath = artifactsPath;
         TestResultsPath = testResultsPath;
-        ChangelogPath = changelogPath;
         SolutionPath = solutionPath;
         Solution = solution;
         Configuration = configuration;
@@ -124,11 +122,6 @@ sealed class BuildData
      * Summary : Gets the path of the directory where test results and coverage reports are stored.
      */
     public DirectoryPath TestResultsPath { get; }
-
-    /*
-     * Summary : Gets the path of the CHANGELOG.md file.
-     */
-    public FilePath ChangelogPath { get; }
 
     /*
      * Summary : Gets the path of the solution file.
