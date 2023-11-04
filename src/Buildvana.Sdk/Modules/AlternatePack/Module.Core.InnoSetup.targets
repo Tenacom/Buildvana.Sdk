@@ -374,9 +374,10 @@
       <_IncludeLine_ Include="%(_SetupDirective_.Identity)=%(_SetupDirective_.Value)" />
     </ItemGroup>
 
-    <!-- Put include files in obj folder. -->
+    <!-- Put include files in obj folder. Make sure to specify the full path. -->
     <PropertyGroup>
       <_IncludeFileFullPath_>$(BaseIntermediateOutputPath)$(Configuration)\$(_Identity_).iss</_IncludeFileFullPath_>
+      <_IncludeFileFullPath_>$([MSBuild]::NormalizePath('$(_IncludeFileFullPath_)'))</_IncludeFileFullPath_>
     </PropertyGroup>
 
     <!-- Write the include file. -->
