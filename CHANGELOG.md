@@ -13,9 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
-- InnoSetup would fail if the script specified in the `Script` metadata of an `InnoSetup` item was not in the same folder as the project.
-
 ### Known problems introduced by this release
+
+## [1.0.94-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.94-preview) (2023-11-04)
+
+### Bugs fixed in this release
+
+- InnoSetup would fail if the script specified in the `Script` metadata of an `InnoSetup` item was not in the same folder as the project.
 
 ## [1.0.88-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.88-preview) (2023-10-26)
 
