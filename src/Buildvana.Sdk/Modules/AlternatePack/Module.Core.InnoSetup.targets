@@ -233,10 +233,10 @@
     <ItemGroup>
       <InnoSetup Update="$(_Identity_)"
                  Condition="'$(_OutputName_)' == '' And '$(_UniqueOutputName_)' == 'false'"
-                 OutputName="$(AppShortName)-$(AssemblyInformationalVersion)" />
+                 OutputName="$(AppShortName)_$(AssemblyInformationalVersion)" />
       <InnoSetup Update="$(_Identity_)"
                  Condition="'$(_OutputName_)' == '' And '$(_UniqueOutputName_)' != 'false'"
-                 OutputName="$(AppShortName)-$(_Identity_)-$(AssemblyInformationalVersion)" />
+                 OutputName="$(AppShortName)-$(_Identity_)_$(AssemblyInformationalVersion)" />
     </ItemGroup>
 
     <!-- OutputDir is taken as relative to the artifacts subdirectory. -->
@@ -304,10 +304,10 @@
     <ItemGroup>
       <InnoSetup Update="$(_Identity_)"
                  Condition="'$(_OutputName_)' == '' And '$(_UniqueOutputName_)' == 'false'"
-                 OutputName="$(AppShortName)-$(AssemblyInformationalVersion)" />
+                 OutputName="$(AppShortName)_$(AssemblyInformationalVersion)" />
       <InnoSetup Update="$(_Identity_)"
                  Condition="'$(_OutputName_)' == '' And '$(_UniqueOutputName_)' != 'false'"
-                 OutputName="$(AppShortName)-$(_Identity_)-$(AssemblyInformationalVersion)" />
+                 OutputName="$(AppShortName)-$(_Identity_)_$(AssemblyInformationalVersion)" />
     </ItemGroup>
 
     <!-- OutputDir is taken as relative to the artifacts subdirectory. -->
