@@ -13,9 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
-- The separator character used in default InnoSetup output names before the program version was a minus sign `-` instead of its intended value of underscore `_`.
-
 ### Known problems introduced by this release
+
+## [1.0.99-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.99-preview) (2023-11-08)
+
+### Bugs fixed in this release
+
+- The separator character used in default InnoSetup output names before the program version was a minus sign `-` instead of its intended value of underscore `_`.
 
 ## [1.0.94-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.94-preview) (2023-11-04)
 
