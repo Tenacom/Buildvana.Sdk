@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- When using either NuGet Pack support or alternate pack, the `Title` property is now used as a default for `AssemblyTitle`.
+
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
