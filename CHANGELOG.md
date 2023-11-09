@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The change in version 1.0.106-preview, whereas the `Title` property was used  as a default for `AssemblyTitle`, has been reversed. It turns out that the order in which MSBuild loads Buildvana.Sdk in relation to Microsoft.NET.Sdk makes the change ineffective.
 - The default value for property `AppFullName`, used as a constant passed to InnoSetup, is now `$(AssemblyTitle)` instead of `$(Title)`.
+- **BREAKING CHANGE**: The property used as NuGet package title is now `PackageTitle` instead of `Title`. If left unset, it defaults to `$(AssemblyTitle)`.
 
 ### Bugs fixed in this release
 

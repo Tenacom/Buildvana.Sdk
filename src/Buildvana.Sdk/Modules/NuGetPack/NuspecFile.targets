@@ -28,11 +28,16 @@
       <SourceRevisionId Condition="'$(SourceRevisionId)' == ''">0</SourceRevisionId>
     </PropertyGroup>
 
+    <!-- PackageTitle defaults to AssemblyTitle -->
+    <PropertyGroup>
+      <PackageTitle Condition="'$(PackageTitle)' == ''">$(AssemblyTitle)</PackageTitle>
+    </PropertyGroup>
+
     <PropertyGroup>
       <NuspecProperties>
         minClientVersion=$(MinClientVersion);
         id=$(PackageId);
-        title=$(Title);
+        title=$(PackageTitle);
         version=$(PackageVersion);
         summary=$(Summary);
         description=$(Description);
