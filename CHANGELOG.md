@@ -11,11 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
-- When using either NuGet Pack support or alternate pack, the `Title` property is now used as a default for `AssemblyTitle`.
-
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
+
+## [1.0.106-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.106-preview) (2023-11-09)
+
+### Changes to existing features
+
+- When using either NuGet Pack support or alternate pack, the `Title` property is now used as a default for `AssemblyTitle`.
 
 ## [1.0.102-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.102-preview) (2023-11-09)
 
