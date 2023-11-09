@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- The change in version 1.0.106-preview, whereas the `Title` property was used  as a default for `AssemblyTitle`, has been reversed. It turns out that the order in which MSBuild loads Buildvana.Sdk in relation to Microsoft.NET.Sdk makes the change ineffective.
+
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release

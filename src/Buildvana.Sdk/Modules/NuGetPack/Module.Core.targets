@@ -1,12 +1,5 @@
 <Project>
 
-  <!--
-    Use the Title property (used for package title in packable projects) as default for AssemblyTitle.
-  -->
-  <PropertyGroup>
-    <AssemblyTitle Condition="'$(AssemblyTitle)' == ''">$(Title)</AssemblyTitle>
-  </PropertyGroup>
-
   <!-- IsPackable default = true for libraries, otherwise false. -->
   <PropertyGroup Condition="'$(IsPackable)' == ''">
     <IsPackable Condition="'$(BV_IsLibraryProject)' == 'true'">true</IsPackable>
