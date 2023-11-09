@@ -1,13 +1,7 @@
 <Project>
 
-  <!--
-    Add a reference to Nerdbank.GitVersioning if needed.
-    Do not add the reference if a version file was not found;
-    if there is a reachable version file outside HomeDirectory, NB.GV may erroneously use it.
-  -->
-  <ItemGroup Condition="$(UseNerdbankGitVersioning)">
-    <BV_PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="All" />
-  </ItemGroup>
+  <Import Project="Module.Core.targets"
+          Condition="$(UseNerdbankGitVersioning)" />
 
   <!-- Import stub targets if NB.GV is not used. -->
   <Import Project="Module.Stubs.targets"

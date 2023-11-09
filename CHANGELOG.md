@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- When using NerdBack.GitVersioning, the value of `AssemblyInformationalVersion` is now changed to not include metadata (Git commit SHA) when building a public version (i.e. from `main` or other branches identified in `version.json`).  
+This change also affects the default names of zipped publish folders and InnoSetup-generated setup programs, as they use `AssemblyInformationalVersion` as a suffix.
+
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
