@@ -1,5 +1,12 @@
 <Project>
 
+  <!--
+    Use the Title property (used for package title by module NuGetPack) as default for AssemblyTitle.
+  -->
+  <PropertyGroup>
+    <AssemblyTitle Condition="'$(AssemblyTitle)' == ''">$(Title)</AssemblyTitle>
+  </PropertyGroup>
+
   <!-- Redefine Pack target-->
 
   <PropertyGroup>
