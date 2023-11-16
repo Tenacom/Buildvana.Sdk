@@ -79,10 +79,10 @@ However, Buildvana SDK has already been used successfully in production, for bot
 
 #### Toolchain
 
-- :heart: MSBuild v17.6 or newer (`msbuild`) running under .NET Framework 4.7.2 or newer / .NET 7.0 or newer
-- :heart: Visual Studio 2022 v17.6 or newer (building from IDE)
-- :heart: .NET SDK 7.0.306 or newer (`dotnet build`, `dotnet msbuild`, etc.)
-- :question: Visual Studio for Mac (_should_ work, but we need confirmation by someone with a Mac)
+- :heart: MSBuild v17.8 or newer (`msbuild`) running under .NET Framework 4.7.2 or newer / .NET 8.0 or newer
+- :heart: Visual Studio 2022 v17.8 or newer (building from IDE)
+- :heart: .NET SDK 8.0.100 or newer (`dotnet build`, `dotnet msbuild`, etc.)
+- :question: JetBrains Rider (not tested)
 
 ## Quick start
 
