@@ -15,6 +15,7 @@
 #load "./build/process.cake"
 #load "./build/public-api.cake"
 #load "./build/setup-teardown.cake"
+#load "./build/utilities.cake"
 #load "./build/versioning.cake"
 #load "./build/workspace.cake"
 

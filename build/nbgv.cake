@@ -34,7 +34,7 @@ static (string VersionStr, string Ref, bool IsPublicRelease, bool IsPrerelease) 
 
     var json = context.ParseJsonObject(nbgvOutput.ToString(), "The output of nbgv");
     return (
-        VersionStr: context.GetJsonPropertyValue<string>(json, "NuGetPackageVersion", "the output of nbgv"),
+        VersionStr: context.GetJsonPropertyValue<string>(json, "SemVer2", "the output of nbgv"),
         Ref: context.GetJsonPropertyValue<string>(json, "BuildingRef", "the output of nbgv"),
         IsPublicRelease: context.GetJsonPropertyValue<bool>(json, "PublicRelease", "the output of nbgv"),
         IsPrerelease: !string.IsNullOrEmpty(context.GetJsonPropertyValue<string>(json, "PrereleaseVersion", "the output of nbgv")));

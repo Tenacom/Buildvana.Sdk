@@ -337,7 +337,7 @@ static VersionSpecChange ComputeVersionSpecChange(
     bool checkPublicApi)
 {
     // Determine how we are currently already incrementing version
-    var currentVersionIncrement = latestStableVersion == null ? VersionIncrement.Major
+    var currentVersionIncrement = latestStableVersion == null ? VersionIncrement.None
                                 : currentVersion.Major > latestStableVersion.Major ? VersionIncrement.Major
                                 : currentVersion.Minor > latestStableVersion.Minor ? VersionIncrement.Minor
                                 : VersionIncrement.None;
@@ -348,10 +348,12 @@ static VersionSpecChange ComputeVersionSpecChange(
     context.Information($"Public API change kind: {publicApiChangeKind}{(checkPublicApi ? null : " (not checked)")}");
 
     // Determine the version increment required by SemVer rules
-    var isInitialDevelopmentPhase = latestStableVersion == null || latestStableVersion.Major == 0;
+    // When the major version is 0, "anything MAY change" according to SemVer;
+    // by convention, we increment the minor version for breaking changes (0.x -> 0.(x+1))
+    var isMajorVersionZero = latestStableVersion is { Major: 0 };
     var semanticVersionIncrement = publicApiChangeKind switch {
-        ApiChangeKind.Breaking => isInitialDevelopmentPhase ? VersionIncrement.Minor : VersionIncrement.Major,
-        ApiChangeKind.Additive => isInitialDevelopmentPhase ? VersionIncrement.None : VersionIncrement.Minor,
+        ApiChangeKind.Breaking => isMajorVersionZero ? VersionIncrement.Minor : VersionIncrement.Major,
+        ApiChangeKind.Additive => isMajorVersionZero ? VersionIncrement.None : VersionIncrement.Minor,
         _ => VersionIncrement.None,
     };
     context.Information($"Required version increment according to Semantic Versioning rules: {semanticVersionIncrement}");
