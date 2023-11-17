@@ -11,13 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
-- The minimum supported version of Roslyn is now 4.8
-- The minimum supported version of Visual Studio is now VS2022 17.8
-- The minimum supported version of the .NET SDK is now 8.0.100
-
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
+
+## [1.0.116-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.116-preview) (2023-11-17)
+
+### Changes to existing features
+
+- The minimum supported version of Roslyn is now 4.8
+- The minimum supported version of Visual Studio is now VS2022 17.8
+- The minimum supported version of the .NET SDK is now 8.0.100
 
 ## [1.0.110-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.110-preview) (2023-11-09)
 
