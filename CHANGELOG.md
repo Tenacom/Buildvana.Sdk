@@ -13,9 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bugs fixed in this release
 
-- Although the minimum supported Roslyn version was 4.8, version 1.0.116-preview still depended on version 4.7 of `Microsoft.CodeAnalysis.CSharp`. The dependency version has now been properly updated.
-
 ### Known problems introduced by this release
+
+## [1.0.122-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.122-preview) (2023-11-22)
+
+### Bugs fixed in this release
+
+- Although the minimum supported Roslyn version was 4.8, version 1.0.116-preview still depended on version 4.7 of `Microsoft.CodeAnalysis.CSharp`. The dependency version has now been properly updated.
 
 ## [1.0.116-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.116-preview) (2023-11-17)
 
