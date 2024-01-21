@@ -425,5 +425,6 @@ dotnet_diagnostic.SA1651.severity = warning # Do not use placeholder elements
 # Suppress some annoying IDE messages
 dotnet_diagnostic.IDE0040.severity = none # Accessibility modifiers required - has confusing rules and is a dupe of SA1400.
 dotnet_diagnostic.IDE0079.severity = none # Remove unnecessary suppression - apparently VS (as of v17.3.0) deems way too much stuff "unnecessary".
+dotnet_diagnostic.IDE0290.severity = none # Use primary constructor - No. Just no.
 
 # Solution-specific overrides
