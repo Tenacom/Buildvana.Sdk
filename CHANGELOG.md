@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased changes
 
-This release just updates some dependencies to their latest versions, the most notable of them being `StyleCop.Analyzers`, brought up to 1.2.0-beta.556.
-
 ### New features
 
 ### Changes to existing features
@@ -16,6 +14,10 @@ This release just updates some dependencies to their latest versions, the most n
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
+
+## [1.0.131-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.131-preview) (2024-01-21)
+
+This release just updates some dependencies to their latest versions, the most notable of them being `StyleCop.Analyzers`, brought up to 1.2.0-beta.556.
 
 ## [1.0.122-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.122-preview) (2023-11-22)
 
