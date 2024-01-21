@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased changes
 
+This release just updates some dependencies to their latest versions, the most notable of them being `StyleCop.Analyzers`, brought up to 1.2.0-beta.556.
+
 ### New features
 
 ### Changes to existing features
