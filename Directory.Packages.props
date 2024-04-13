@@ -10,13 +10,13 @@
       The minimum supported version of Roslyn.
       Used by the SDK to determine whether the compiler in use is supported.
     -->
-    <BV_MinRoslynVersion>4.8</BV_MinRoslynVersion>
+    <BV_MinRoslynVersion>4.9</BV_MinRoslynVersion>
 
     <!--
       A textual hint telling which toolchains contain a suupported version of Roslyn.
       Used by the SDK to construct a meaningful diagnostic message when an unsupported Roslyn version is detected.
     -->
-    <BV_MinRoslynVersionHint>.NET SDK v8.0.100+ / Visual Studio 2022 17.8+</BV_MinRoslynVersionHint>
+    <BV_MinRoslynVersionHint>.NET SDK v8.0.200+ / Visual Studio 2022 17.9+</BV_MinRoslynVersionHint>
 
     <!--
       The package folder, under analyzers/dotnet, where the source generators DLL is put when packing the SDK.
