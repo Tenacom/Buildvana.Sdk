@@ -7,22 +7,14 @@
 // Setup and Teardown, common to all scripts
 // =============================================================================================
 
-Setup<BuildData>(context =>
-{
-    var data = new BuildData(context);
-    if (data.IsCI && !data.IsGitHubAction)
-    {
-        throw new CakeException(255, "This script can only run locally or in a GitHub Actions workflow.");
-    }
-
-    return data;
-});
+Setup<BuildData>(context => new BuildData(context));
 
 Teardown<BuildData>((context, data) =>
 {
     // For some reason, DotNetBuildServerShutdown hangs in a GitHub Actions runner;
-    // it is still useful on a local machine though
-    if (!data.IsCI)
+    // it is still useful on a local machine though.
+    // TODO: Test whether it can be enabled in e.g. GitLab CI.
+    if (data.CIPlatform is CIPlatform.None)
     {
         context.DotNetBuildServerShutdown(new DotNetBuildServerShutdownSettings
         {

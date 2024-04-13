@@ -45,7 +45,7 @@ Task("CleanAll")
 
 Task("LocalCleanAll")
     .Description("Like CleanAll, but only runs on a local machine")
-    .WithCriteria<BuildData>(data => !data.IsCI)
+    .WithCriteria<BuildData>(data => data.CIPlatform is CIPlatform.None)
     .Does<BuildData>((context, data) => context.CleanAll(data));
 
 Task("Restore")
@@ -73,7 +73,7 @@ Task("Release")
     .Does<BuildData>(async (context, data) => {
 
         // Perform some preliminary checks
-        context.Ensure(data.IsCI, "The Release target cannot run on a local system.");
+        context.Ensure(data.CIPlatform is not CIPlatform.None, "The Release target cannot run on a local system.");
         context.Ensure(data.IsPublicRelease, "Cannot create a release from the current branch.");
 
         // Perform an initial versioning consistency check.
@@ -257,7 +257,7 @@ Task("Release")
             await context.PublishReleaseAsync(data, release);
 
             // Set outputs for subsequent steps in GitHub Actions
-            if (data.IsGitHubAction)
+            if (data.CIPlatform is CIPlatform.GitHub)
             {
                 context.SetActionsStepOutput("version", data.VersionStr);
             }

@@ -1,8 +1,8 @@
 // Copyright (C) Tenacom and contributors. Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
-#addin nuget:?package=Cake.Http&version=3.0.2
-#addin nuget:?package=Octokit&version=8.0.1
+#addin nuget:?package=Cake.Http&version=4.0.0
+#addin nuget:?package=Octokit&version=9.1.2
 
 #nullable enable
 

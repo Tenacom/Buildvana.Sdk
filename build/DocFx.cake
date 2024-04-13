@@ -69,9 +69,9 @@ sealed class DocFx
      */
     public void Serve()
     {
-        if (BuildData.IsCI)
+        if (BuildData.CIPlatform is not CIPlatform.None)
         {
-            Context.Information("DocFX web server not suitable for cloud builds, skipping.");
+            Context.Information("DocFX web server not suitable for CI builds, skipping.");
             return;
         }
 
