@@ -3,7 +3,7 @@
 [![License](https://badgen.net/badge/license/MIT/blue)](https://github.com/Tenacom/Buildvana.Sdk/blob/main/LICENSE)
 [![Latest release](https://badgen.net/github/release/Tenacom/Buildvana.Sdk?label=latest)](https://github.com/Tenacom/Buildvana.Sdk/releases)
 [![Latest stable release](https://badgen.net/github/release/Tenacom/Buildvana.Sdk/stable?label=stable)](https://github.com/Tenacom/Buildvana.Sdk/releases)
-[![Changelog](https://badgen.net/badge/changelog/Keep%20a%20Changelog%20v1.0.0/orange)](https://github.com/Tenacom/Buildvana.Sdk/blob/main/CHANGELOG.md)
+[![Changelog](https://badgen.net/badge/changelog/Keep%20a%20Changelog%20v1.1.0/orange)](https://github.com/Tenacom/Buildvana.Sdk/blob/main/CHANGELOG.md)
 
 [![Build, test, and pack](https://github.com/Tenacom/Buildvana.Sdk/actions/workflows/build-test-pack.yml/badge.svg)](https://github.com/Tenacom/Buildvana.Sdk/actions/workflows/build-test-pack.yml)
 [![CodeQL](https://github.com/Tenacom/Buildvana.Sdk/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Tenacom/Buildvana.Sdk/actions/workflows/codeql-analysis.yml)
