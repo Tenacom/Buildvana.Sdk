@@ -8,7 +8,7 @@ logs/
 tools/
 
 # Testing
-TestResults/
+**/TestResults/
 
 # Visual Studio
 **/bin/
