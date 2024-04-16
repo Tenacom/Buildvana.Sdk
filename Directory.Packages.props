@@ -22,7 +22,7 @@
       The package folder, under analyzers/dotnet, where the source generators DLL is put when packing the SDK.
       Used by the SDK project when packing.
     -->
-    <BV_SourceGeneratorsPackageFolder>roslyn4.8</BV_SourceGeneratorsPackageFolder>
+    <BV_SourceGeneratorsPackageFolder>roslyn4.9</BV_SourceGeneratorsPackageFolder>
 
   </PropertyGroup>
 
