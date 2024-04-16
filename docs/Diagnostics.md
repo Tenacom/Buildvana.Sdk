@@ -1,7 +1,8 @@
 # Diagnostics
 
 - [Overview](#overview)
-- [Buildvana SDK core (1000-1099)](#buildvana-sdk-core-1000-1099)
+- [Buildvana SDK core (1000-1049)](#buildvana-sdk-core-1000-1049)
+- [Buildvana SDK tasks (1050-1099)](#buildvana-sdk-tasks-1050-1099)
 - [Source generators (1100-1199)](#source-generators-1100-1199)
 - [AssemblySigning module (1200-1299)](#assemblysigning-module-1200-1299)
 - [JetBrainsAnnotations module (1300-1399)](#jetbrainsannotations-module-1300-1399)
@@ -20,7 +21,7 @@ All diagnostics issued by Buildvana SDK have a `BVSDK` prefix. All numbers start
 
 Each module is assigned a contiguous range of 100 diagnostics, as listed below. The first ranges are reserved for the SDK itself and for source generators.
 
-## Buildvana SDK core (1000-1099)
+## Buildvana SDK core (1000-1049)
 
 | Code | Severity | Message | Description |
 | -----| :------: | ------- | ----------- |
@@ -30,24 +31,31 @@ Each module is assigned a contiguous range of 100 diagnostics, as listed below. 
 | BVESDK003 | Error | Home directory not defined. | No suitable value for the `HomeDirectory` property has been found. |
 | BVSDK1004 | Error | Buildvana SDK requires at least MSBuild v... | You are trying to use Buildvana SDK with an unsupported version of MSBuild. See [here](../README.md#toolchain) for a list of supported MSBuild versions. |
 
-## Source generators (1100-1199)
+## Buildvana SDK tasks (1050-1099)
+
+The following are generic diagnostics that might be issued by any task in `Buildvana.Sdk.Tasks.dll`.  
+More task-specific diagnostics (if any) are listed under relevant modules.
 
 | Code | Severity | Message | Description |
 | -----| :------: | ------- | ----------- |
-| This module has no associated diagnostics. |  |  |  |
+| BVSDK1050 | Error | Parameter '...' is missing or empty. | Something went wrong with a Buildvana SDK module. Please [open an issue](https://github.com/Tenacom/Buildvana.Sdk/issues/new/choose). |
+| BVSDK1051 | Error | The file '...' could not be created. | There was an error trying to write to a file. Try cleaning the project and rebuilding it. If the problem arises again, please [open an issue](https://github.com/Tenacom/Buildvana.Sdk/issues/new/choose). |
+
+## Source generators (1100-1199)
+
+This module has no associated diagnostics.
 
 ## AssemblySigning module (1200-1299)
 
 | Code | Severity | Message | Description |
 | -----| :------: | ------- | ----------- |
-| BVSDK1200 | Error | Cannot extract key from '...'. | Either the specified `.pfx` file is missing, ot the wrong password (or no password) was given. |
-| BVSDK1201 | Error | '...' does not contain a RSA private key. | The specified `.pfx` file does not contain a RSA private key to export. |
+| BVSDK1200 | Error | Certificate file '...' not found. | The `.pfx` certificate file specified by the `AssemblyOriginatorKeyFile` property is missing. |
+| BVSDK1201 | Error | Cannot extract certificate from '...'. | The `.pfx` certificate file specified by the `AssemblyOriginatorKeyFile` property is invalid, or the wrong password (or no password) was given in the `AssemblyOriginatorKeyPassword` property. |
+| BVSDK1202 | Error | '...' does not contain an exportable RSA private key. | The `.pfx` certificate file specified by the `AssemblyOriginatorKeyFile` property does not contain an RSA private key that can be exported to a `.snk` file. |
 
 ## JetBrainsAnnotations module (1300-1399)
 
-| Code | Severity | Message | Description |
-| -----| :------: | ------- | ----------- |
-| This module has no associated diagnostics. |  |  |  |
+This module has no associated diagnostics.
 
 ## AdditionalAssemblyInfo module (1400-1499)
 
@@ -74,21 +82,15 @@ Each module is assigned a contiguous range of 100 diagnostics, as listed below. 
 
 ## ReferenceAssemblies module (1600-1699)
 
-| Code | Severity | Message | Description |
-| -----| :------: | ------- | ----------- |
-| This module has no associated diagnostics. |  |  |  |
+This module has no associated diagnostics.
 
 ## StandardAnalyzers module (1700-1799)
 
-| Code | Severity | Message | Description |
-| -----| :------: | ------- | ----------- |
-| This module has no associated diagnostics. |  |  |  |
+This module has no associated diagnostics.
 
 ## XmlDocumentation module (1800-1899)
 
-| Code | Severity | Message | Description |
-| -----| :------: | ------- | ----------- |
-| This module has no associated diagnostics. |  |  |  |
+This module has no associated diagnostics.
 
 ## AlternatePack module (1900-1999)
 
@@ -106,6 +108,4 @@ Each module is assigned a contiguous range of 100 diagnostics, as listed below. 
 
 ## ReleaseAssetList module (2100-2199)
 
-| Code | Severity | Message | Description |
-| -----| :------: | ------- | ----------- |
-| This module has no associated diagnostics. |  |  |  |
+This module has no associated diagnostics.

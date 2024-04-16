@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Buildvana SDK will be documented in this file.
+All notable changes to Buildvana SDK will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -24,13 +24,19 @@ Assuming default positions for directories and a user name of John (Windows) / j
 | C:\\Users\\John\\AppData\\Roaming\\buildvana | /Users/john/.config/buildvana | /home/john/.config/buildvana |
 | C:\\Users\\John\\AppData\\Local\\buildvana | /Users/john/.local/share/buildvana | /home/john/.local/share/buildvana |
 
+- A `.pfx` file used to sign an assembly through the `AssemblySigning` module can now have no password. Previous versions issued an error if the `PfxPassword` property was empty or not defined.  
+(Please note that the `PfxPassword` property has also been renamed to `AssemblyOriginatorKeyPassword`, as noted below in the "Changes to existing features" section.)
+
 ### Changes to existing features
 
 - The minimum supported version of Roslyn is now 4.9
 - The minimum supported version of Visual Studio is now VS2022 17.9
 - The minimum supported version of the .NET SDK is now 8.0.200
+- The `AssemblySigning` module now expects the password to use for the `.pfx` file in the `AssemblyOriginatorKeyPassword` (as opposed to `PfxPassword`) property.
 
 ### Bugs fixed in this release
+
+- The `AssemblySigning` module did not work any more, due to the removal of `Buildvana.Sdk.Tasks.dll` in version 1.0.0-alpha.21. The compiled tasks have been brought back and are now compiled for .NET Standard 2.0, so that the same DLL can be used for both Visual Studio and the .NET SDK.
 
 ### Known problems introduced by this release
 

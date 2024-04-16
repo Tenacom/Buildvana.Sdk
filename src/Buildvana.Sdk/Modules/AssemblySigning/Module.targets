@@ -1,36 +1,17 @@
 <Project>
 
-  <!-- Coalesce ConvertPfxToSnk to a boolean value. -->
   <PropertyGroup>
     <BV_ConvertPfxToSnk>false</BV_ConvertPfxToSnk>
     <BV_ConvertPfxToSnk Condition="$(AssemblyOriginatorKeyFile.EndsWith('.pfx'))">true</BV_ConvertPfxToSnk>
   </PropertyGroup>
 
-  <!-- Define the temporary SNK path. -->
-  <PropertyGroup>
-    <BV_TempSnkPath>$(IntermediateOutputPath)BuildvanaTemp.snk</BV_TempSnkPath>
-  </PropertyGroup>
+  <ItemGroup Condition="$(BV_ConvertPfxToSnk)">
+    <EvaluationError Condition="!Exists('$(AssemblyOriginatorKeyFile)')"
+                     Include="BVSDK1200"
+                     Text="Certificate file '$(AssemblyOriginatorKeyFile)' not found." />
+  </ItemGroup>
 
-  <Target Name="BV_DeleteTempSnkBeforeClean"
-          BeforeTargets="Clean">
-
-    <Delete Condition="Exists($(BV_TempSnkPath))"
-            Files="$(BV_TempSnkPath)" />
-
-  </Target>
-
-  <Target Name="BV_ConvertPfxToSnkBeforeBuild"
-          BeforeTargets="Build"
-          Condition="$(BV_ConvertPfxToSnk)">
-
-    <ConvertPfxToSnk PfxPath="$(AssemblyOriginatorKeyFile)"
-                     PfxPassword="$(PfxPassword)"
-                     OutputPath="$(BV_TempSnkPath)" />
-
-    <PropertyGroup>
-      <AssemblyOriginatorKeyFile>$(BV_TempSnkPath)</AssemblyOriginatorKeyFile>
-    </PropertyGroup>
-
-  </Target>
+  <Import Project="Module.Core.targets"
+          Condition="$(BV_ConvertPfxToSnk)" />
 
 </Project>

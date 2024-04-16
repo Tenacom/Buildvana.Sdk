@@ -22,6 +22,8 @@
     <DevelopmentDependency>true</DevelopmentDependency>
     <Serviceable>true</Serviceable>
     <MinClientVersion>4.3</MinClientVersion> <!-- Minimum NuGet client version supporting SemVer 2.0 -->
+    <NoWarn>$(NoWarn);NU5100</NoWarn> <!-- The assembly '...' is not inside the 'lib' folder and hence it won't be added as a reference. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn> <!-- Some target frameworks [...] do not have exact matches [in the lib folder]. -->
     <!-- Remove the <dependencies> tag from .nupkg, because it makes the package "depend" on our TargetPlatform. -->
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 
@@ -67,8 +69,7 @@
     <BeforePack>_GenerateSdkVersionProps;$(BeforePack)</BeforePack>
   </PropertyGroup>
 
-  <Target Name="_GenerateSdkVersionProps"
-          DependsOnTargets="GetBuildVersion">
+  <Target Name="_GenerateSdkVersionProps" DependsOnTargets="GetBuildVersion">
 
     <PropertyGroup>
       <_SdkVersionPropsPath>$(IntermediateOutputPath)SdkVersion.props</_SdkVersionPropsPath>
@@ -83,7 +84,10 @@
       </_SdkVersionPropsXml>
     </PropertyGroup>
 
-    <WriteLinesToFile File="$(_SdkVersionPropsPath)" Lines="$(_SdkVersionPropsXml)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <WriteLinesToFile File="$(_SdkVersionPropsPath)"
+                      Lines="$(_SdkVersionPropsXml)"
+                      Overwrite="true"
+                      WriteOnlyWhenDifferent="true" />
 
     <ItemGroup>
       <Content Include="$(_SdkVersionPropsPath)" Visible="false" PackagePath="Sdk" />
@@ -146,17 +150,23 @@
 
   <!-- Create an intermediate folder with aliased content. Folder layout must mimic package layout. -->
 
-  <Target Name="_CopyAliasedContentToIntermediateDirectory" DependsOnTargets="_ComputeAliasedContentPaths" Inputs="@(_AliasedContentSource)" Outputs="@(_AliasedContentDestination)">
+  <Target Name="_CopyAliasedContentToIntermediateDirectory"
+          DependsOnTargets="_ComputeAliasedContentPaths"
+          Inputs="@(_AliasedContentSource)"
+          Outputs="@(_AliasedContentDestination)">
 
     <MakeDir Directories="$(_IntermediateAliasedContentDir)" />
 
-    <Copy SourceFiles="%(_AliasedContent.Source)" DestinationFiles="$([System.IO.Path]::Combine('$(_IntermediateAliasedContentDir)', '%(_AliasedContent.Identity)'))" />
+    <Copy SourceFiles="%(_AliasedContent.Source)"
+          DestinationFiles="$([System.IO.Path]::Combine('$(_IntermediateAliasedContentDir)', '%(_AliasedContent.Identity)'))" />
 
   </Target>
 
   <!-- Clean aliased content intermediate directory on clean. -->
 
-  <Target Name="_CleanAliasedContentIntermediateDirectory" AfterTargets="BeforeClean" DependsOnTargets="_CopyAliasedContentToIntermediateDirectory">
+  <Target Name="_CleanAliasedContentIntermediateDirectory"
+          AfterTargets="BeforeClean"
+          DependsOnTargets="_CopyAliasedContentToIntermediateDirectory">
 
     <RemoveDir Directories="$(_IntermediateAliasedContentDir)" />
 
@@ -173,7 +183,8 @@
     <BeforePack>$(BeforePack);_IncludeAliasedContentInPackage</BeforePack>
   </PropertyGroup>
 
-  <Target Name="_IncludeAliasedContentInPackage" DependsOnTargets="_ComputeAliasedContentPaths;_CopyAliasedContentToIntermediateDirectory">
+  <Target Name="_IncludeAliasedContentInPackage"
+          DependsOnTargets="_ComputeAliasedContentPaths;_CopyAliasedContentToIntermediateDirectory">
 
     <ItemGroup>
       <_CopiedAliasedContent Include="$(_IntermediateAliasedContentDir)**\*" />
@@ -205,5 +216,76 @@
           PackagePath="analyzers/dotnet/$(BV_SourceGeneratorsPackageFolder)"
           Visible="false" />
   </ItemGroup>
+
+  <!--
+    ================
+    PUBLISH BINARIES
+    ================
+  -->
+
+  <!-- NOTE @rdeago 2020-12-02
+       Do not include symbols in Release package.
+       Otherwise, .pdb files for published binaries will be in BOTH the .nupkg and .snupkg files.
+       This is maybe due to the fact that published binaries are packaged as content, not build output.
+       I've already wasted enough time investigating this. Help / suggestions welcome. -->
+
+  <PropertyGroup>
+    <IncludeSymbols Condition="'$(Configuration)' != 'Debug'">false</IncludeSymbols>
+  </PropertyGroup>
+
+  <!-- Define the list of projects to publish. -->
+
+  <ItemGroup>
+    <_BinaryProject Include="..\Buildvana.Sdk.Tasks\Buildvana.Sdk.Tasks.csproj" />
+  </ItemGroup>
+
+  <!-- During build, publish projects to this project's output directory. -->
+
+  <Target Name="PublishBinariesInOutputDirectory"
+          AfterTargets="CoreBuild">
+
+    <!-- Publish binary projects.
+         Do not delete existing files, as some files are in common between projects and we don't want a second Publish to delete them. -->
+
+    <MSBuild Projects="%(_BinaryProject.Identity)"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);
+                         PublishProtocol=FileSystem;
+                         PublishDir=$(MSBuildProjectDirectory)\$(OutputPath);
+                         TargetFramework=$(TargetFramework);
+                         SelfContained=false;
+                         DeleteExistingFiles=false;
+                         ExcludeGeneratedDebugSymbols=false" />
+
+  </Target>
+
+  <!-- During pack, include published binaries as package content. -->
+
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>IncludePublishedBinariesInPackage</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <Target Name="IncludePublishedBinariesInPackage">
+
+    <ItemGroup>
+
+      <!-- Include published binaries. -->
+      <_PublishedBinaries Include="$(OutputPath)\**\*" />
+
+      <!-- Never include the automatically created .deps.json file. -->
+      <_PublishedBinaries Remove="$(OutputPath)\*.deps.json" />
+
+      <!-- Never include XML documentations and external annotations. -->
+      <_PublishedBinaries Remove="$(OutputPath)\**\*.xml" />
+
+      <!-- Don't include .pdb files in non-debug configurations (i.e. Release). -->
+      <_PublishedBinaries Remove="$(OutputPath)\**\*.pdb" Condition="'$(Configuration)' != 'Debug'" />
+
+      <TfmSpecificPackageFile Include="@(_PublishedBinaries)" PackagePath="bin\%(RecursiveDir)%(Filename)%(Extension)" />
+      <_PublishedBinaries Remove="@(_PublishedBinaries)" /> <!-- Free up some memory. -->
+
+    </ItemGroup>
+
+  </Target>
 
 </Project>

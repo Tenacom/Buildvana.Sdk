@@ -1,0 +1,32 @@
+<Project>
+
+  <!-- Define the temporary SNK path. -->
+  <PropertyGroup>
+    <BV_TempSnkPath>$(IntermediateOutputPath)BuildvanaTemp.snk</BV_TempSnkPath>
+  </PropertyGroup>
+
+  <!-- Delete the temporary SNK file when cleaning. -->
+  <Target Name="BV_DeleteTempSnkBeforeClean"
+          BeforeTargets="Clean">
+
+    <Delete Condition="Exists($(BV_TempSnkPath))"
+            Files="$(BV_TempSnkPath)" />
+
+  </Target>
+
+  <!-- Convert the PFX file to SNK before building. -->
+  <Target Name="BV_ConvertPfxToSnkBeforeBuild"
+          BeforeTargets="Build"
+          Condition="$(BV_ConvertPfxToSnk)">
+
+    <ConvertPfxToSnk PfxPath="$(AssemblyOriginatorKeyFile)"
+                     PfxPassword="$(AssemblyOriginatorKeyPassword)"
+                     OutputPath="$(BV_TempSnkPath)" />
+
+    <PropertyGroup>
+      <AssemblyOriginatorKeyFile>$(BV_TempSnkPath)</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
+
+  </Target>
+
+</Project>
