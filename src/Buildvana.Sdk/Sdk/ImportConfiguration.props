@@ -1,0 +1,59 @@
+<Project>
+
+  <!--
+    Special folder locations on Windows and Mac: https://johnkoerner.com/csharp/special-folder-values-on-windows-versus-mac/
+    Special folder locations on Linux: https://developers.redhat.com/blog/2018/11/07/dotnet-special-folder-api-linux
+  -->
+
+  <!-- Initialize "local" properties. -->
+  <PropertyGroup>
+    <_Import_RelativePath>buildvana\Buildvana.Sdk.props</_Import_RelativePath>
+    <_Import_Directory />
+    <_Import_Path />
+  </PropertyGroup>
+
+  <!-- Load configuration if found in /etc, except on Windows that has no concept of a /etc folder and uses ProgramData or the system registry. -->
+  <!-- NOTE: The property group's condition will work while .NET SDK runs only on Windows and Unix-like operating systems. -->
+  <PropertyGroup Condition="!$([MSBuild]::IsOsPlatform('Windows'))">
+    <_Import_Directory>/etc</_Import_Directory>
+    <_Import_Path Condition="'$(_Import_Directory)' != ''">$([MSBuild]::NormalizePath('$(_Import_Directory)', '$(_Import_RelativePath)'))</_Import_Path>
+  </PropertyGroup>
+  <Import Condition="'$(_Import_Path)' != '' And Exists($(_Import_Path))" Project="$(_Import_Path)" />
+
+  <!-- Load configuration if found in CommonApplicationData (C:\ProgramData on Windows; /usr/share on MacOS and Linux) -->
+  <PropertyGroup>
+    <_Import_Directory>$([System.Environment]::GetFolderPath(SpecialFolder.CommonApplicationData))</_Import_Directory>
+    <_Import_Path Condition="'$(_Import_Directory)' != ''">$([MSBuild]::NormalizePath('$(_Import_Directory)', '$(_Import_RelativePath)'))</_Import_Path>
+  </PropertyGroup>
+  <Import Condition="'$(_Import_Path)' != '' And Exists($(_Import_Path))" Project="$(_Import_Path)" />
+
+  <!-- Load configuration if found in UserProfile (C:\Users\UserName on Windows; /Users/username on MacOS; /home/username on Linux) -->
+  <!-- Not that in this case the relevant subdirectory is .buildvana (with a leading dot), not buildvana -->
+  <PropertyGroup>
+    <_Import_Directory>$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))</_Import_Directory>
+    <_Import_Path Condition="'$(_Import_Directory)' != ''">$([MSBuild]::NormalizePath('$(_Import_Directory)', '.$(_Import_RelativePath)'))</_Import_Path>
+  </PropertyGroup>
+  <Import Condition="'$(_Import_Path)' != '' And Exists($(_Import_Path))" Project="$(_Import_Path)" />
+
+  <!-- Load configuration if found in ApplicationData (C:\Users\UserName\AppData\Roaming on Windows; /Users/username/.config on MacOS; /home/username/.config on Linux) -->
+  <PropertyGroup>
+    <_Import_Directory>$([System.Environment]::GetFolderPath(SpecialFolder.ApplicationData))</_Import_Directory>
+    <_Import_Path Condition="'$(_Import_Directory)' != ''">$([MSBuild]::NormalizePath('$(_Import_Directory)', '$(_Import_RelativePath)'))</_Import_Path>
+  </PropertyGroup>
+  <Import Condition="'$(_Import_Path)' != '' And Exists($(_Import_Path))" Project="$(_Import_Path)" />
+
+  <!-- Load configuration if found in LocalApplicationData (C:\Users\UserName\AppData\Local on Windows; /Users/username/.local/share on MacOS; /home/username/.local/share on Linux) -->
+  <PropertyGroup>
+    <_Import_Directory>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</_Import_Directory>
+    <_Import_Path Condition="'$(_Import_Directory)' != ''">$([MSBuild]::NormalizePath('$(_Import_Directory)', '$(_Import_RelativePath)'))</_Import_Path>
+  </PropertyGroup>
+  <Import Condition="'$(_Import_Path)' != '' And Exists($(_Import_Path))" Project="$(_Import_Path)" />
+
+  <!-- Reset "local" properties. -->
+  <PropertyGroup>
+    <_Import_RelativePath />
+    <_Import_Directory />
+    <_Import_Path />
+  </PropertyGroup>
+
+</Project>

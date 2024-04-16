@@ -85,6 +85,9 @@
   <UsingTask TaskName="WriteLiteralAssemblyAttributes" AssemblyFile="$(BV_SdkTasksAssembly)" />
   <UsingTask TaskName="WriteThisAssemblyClass" AssemblyFile="$(BV_SdkTasksAssembly)" />
 
+  <!-- Import Buildvana configuration -->
+  <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)ImportConfiguration.props" />
+
   <!-- Import modules -->
   <ImportGroup Condition="$(BV_IsConfigured)">
     <Import Project="$(BuildvanaModulesDirectory)**\BeforeModules.props" />
