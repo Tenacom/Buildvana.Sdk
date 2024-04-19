@@ -29,7 +29,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Documentation", "- Documentation", "{F2FA2D74-645C-4F7A-A60D-EE2355E5CBA1}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
-		docs\Diagnostics.md = docs\Diagnostics.md
 		LICENSE = LICENSE
 		README.md = README.md
 		THIRD-PARTY-NOTICES = THIRD-PARTY-NOTICES
@@ -40,6 +39,17 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk.SourceGenerators", "src\Buildvana.Sdk.SourceGenerators\Buildvana.Sdk.SourceGenerators.csproj", "{A9CB2A6D-93AD-4028-8FE1-274319D03A58}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buildvana.Sdk.Tasks", "src\Buildvana.Sdk.Tasks\Buildvana.Sdk.Tasks.csproj", "{C03D0CDC-05CF-42EE-B2CB-1429F2AE7CC9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{5FB50816-1652-40FB-9644-0BEA9F6661B3}"
+	ProjectSection(SolutionItems) = preProject
+		docs\ConfigurationFiles.md = docs\ConfigurationFiles.md
+		docs\Diagnostics.md = docs\Diagnostics.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{0F127F03-0B13-4180-84C8-FFFEA6861915}"
+	ProjectSection(SolutionItems) = preProject
+		docs\modules\Wine.md = docs\modules\Wine.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +77,8 @@ Global
 		{3D872329-6B84-4739-B727-1AED462DFD5A} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
 		{A9CB2A6D-93AD-4028-8FE1-274319D03A58} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
 		{C03D0CDC-05CF-42EE-B2CB-1429F2AE7CC9} = {FDDF51C9-C7BF-4F06-BEBD-485006512357}
+		{5FB50816-1652-40FB-9644-0BEA9F6661B3} = {F2FA2D74-645C-4F7A-A60D-EE2355E5CBA1}
+		{0F127F03-0B13-4180-84C8-FFFEA6861915} = {5FB50816-1652-40FB-9644-0BEA9F6661B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {97D994FA-A1EC-459B-8072-7688E21AC205}

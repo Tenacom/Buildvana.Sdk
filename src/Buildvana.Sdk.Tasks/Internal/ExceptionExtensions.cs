@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using System.Threading;
 
-namespace Buildvana.Sdk.Tasks.Internal;
+namespace Buildvana.Sdk.Internal;
 
 /// <summary>
 /// Provides extension methods for <see cref="Exception"/> and derived classes.

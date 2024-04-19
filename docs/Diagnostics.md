@@ -1,4 +1,7 @@
-# Diagnostics
+# Diagnostics issued by Buildvana SDK
+
+<details>
+<summary><b>Table of contents</b></summary>
 
 - [Overview](#overview)
 - [Buildvana SDK core (1000-1049)](#buildvana-sdk-core-1000-1049)
@@ -14,6 +17,9 @@
 - [AlternatePack module (1900-1999)](#alternatepack-module-1900-1999)
 - [NerdbankGitVersioning module (2000-2099)](#nerdbankgitversioning-module-2000-2099)
 - [ReleaseAssetList module (2100-2199)](#releaseassetlist-module-2100-2199)
+- [Wine module (2200-2299)](#wine-module-2200-2299)
+
+</details>
 
 ## Overview
 
@@ -109,3 +115,9 @@ This module has no associated diagnostics.
 ## ReleaseAssetList module (2100-2199)
 
 This module has no associated diagnostics.
+
+## Wine module (2200-2299)
+
+| Code | Severity | Message | Description |
+| -----| :------: | ------- | ----------- |
+| BVSDK2200 | Error | One or more tools need Wine to run on this system, but no Wine invocation command has been defined: ...[;...] | One or more tools needed to build and/or distribute your project need [Wine](https://winehq.org) to run under a non-Windows operating system. In order to use Wine with Buildvana SDK, the `WineInvocationCommand` property must be set to the name of a command (or the full path of a script) that will be called with the |

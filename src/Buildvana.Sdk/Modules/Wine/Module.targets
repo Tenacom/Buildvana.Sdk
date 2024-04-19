@@ -1,0 +1,24 @@
+<Project InitialTargets="BV_InitializeWineModule;BV_CheckWineAvailability">
+
+  <Target Name="BV_InitializeWineModule">
+
+    <PropertyGroup>
+      <UseWine>false</UseWine>
+    </PropertyGroup>
+
+  </Target>
+
+  <Target Name="BV_CheckWineAvailability"
+          Condition="$([MSBuild]::IsOSPlatform('Linux')) And @(NeedWine->Count()) > 0">
+
+    <PropertyGroup>
+      <UseWine>true</UseWine>
+    </PropertyGroup>
+
+    <Error Condition="'$(WineCommand)' == ''"
+           Code="BVSDK2200"
+           Text="One or more tools need Wine to run on this system, but no Wine invocation command has been defined: @(NeedWine->Distinct())" />
+
+  </Target>
+
+</Project>

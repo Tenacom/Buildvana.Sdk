@@ -2,10 +2,10 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using Buildvana.Sdk.Tasks.Internal;
+using Buildvana.Sdk.Internal;
 using Microsoft.Build.Utilities;
 
-namespace Buildvana.Sdk.Tasks.Base;
+namespace Buildvana.Sdk.Tasks;
 
 public abstract class BuildvanaSdkTask : Task
 {
@@ -13,7 +13,7 @@ public abstract class BuildvanaSdkTask : Task
     {
         try
         {
-            Run();
+            _ = Run();
         }
         catch (BuildErrorException ex)
         {
@@ -27,5 +27,5 @@ public abstract class BuildvanaSdkTask : Task
         return !Log.HasLoggedErrors;
     }
 
-    protected abstract void Run();
+    protected abstract Undefined Run();
 }

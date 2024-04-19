@@ -76,6 +76,9 @@
   </PropertyGroup>
 
   <UsingTask TaskName="ConvertPfxToSnk" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="GetWinePath" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="GetWinePaths" AssemblyFile="$(BV_SdkTasksAssembly)" />
+  <UsingTask TaskName="ConvertToWinePaths" AssemblyFile="$(BV_SdkTasksAssembly)" />
 
   <!-- Import Buildvana configuration -->
   <Import Condition="$(BV_IsConfigured)" Project="$(BuildvanaSdkDirectory)ImportConfiguration.props" />
