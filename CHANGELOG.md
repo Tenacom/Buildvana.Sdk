@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 (Please note that the `PfxPassword` property has also been renamed to `AssemblyOriginatorKeyPassword`, as noted below in the "Changes to existing features" section.)
 - Some support has been added for running Windows-only tools under [Wine](https://winehq.org) when building under Linux or macOS. Please refer to the relevant [documentation](docs/modules/Wine.md) for details.
 - In Inno Setup support, when there is no `AssemblyTitle` property, `AppFullName` now defaults to `AssemblyName`.
+- Inno Setup's compiler can now run on macOS and Linux (through Wine):
+  - Wine support must be configured at machine / user level - please refer to the documentation for [configuration files](docs/ConfigurationFiles.md) and the [`Wine` module](docs/modules/Wine.md);
+  - `InnoSetupConstant` items whose `Value` metadata is a filesystem path must have an `IsPath="true"` metadata, so that paths are converted to Windows-style paths when using Wine.
 
 ### Changes to existing features
 

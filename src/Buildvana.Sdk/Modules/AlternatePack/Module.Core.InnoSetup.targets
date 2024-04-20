@@ -8,6 +8,7 @@
 
   <!-- Add references to necessary dependencies. -->
   <ItemGroup Condition="@(InnoSetup->Count()) > 0">
+    <NeedWine Include="InnoSetup" />
     <BV_PackageReference Include="Tools.InnoSetup"
                          IncludeAssets="build"
                          ExcludeAssets="runtime"
@@ -353,17 +354,45 @@
       <_Constant_ Include="SETUP_PUBLISHFOLDER" Value="$(_SourcePublishFolder_)" Condition="'$(_SourcePublishFolder_)' != ''" />
       <_Constant_ Include="SETUP_TARGETFRAMEWORK" Value="$(_TargetFramework_)" Condition="'$(_TargetFramework_)' != ''" />
       <_Constant_ Include="SETUP_RUNTIMEIDENTIFIER" Value="$(_RuntimeIdentifier_)" Condition="'$(_RuntimeIdentifier_)' != ''" />
-      <_Constant_ Include="SETUP_SOURCEDIR" Value="$(_SourceDir_)" Condition="'$(_SourceDir_)' != ''" />
-      <_Constant_ Include="SETUP_OUTPUTDIR" Value="$(_OutputDir_)" Condition="'$(_OutputDir_)' != ''" />
+      <_Constant_ Include="SETUP_SOURCEDIR" IsPath="true" Value="$(_SourceDir_)" Condition="'$(_SourceDir_)' != ''" />
+      <_Constant_ Include="SETUP_OUTPUTDIR" IsPath="true" Value="$(_OutputDir_)" Condition="'$(_OutputDir_)' != ''" />
       <_Constant_ Include="SETUP_OUTPUTNAME" Value="$(_OutputName_)" Condition="'$(_OutputName_)' != ''" />
       <_Constant_ Include="@(InnoSetupConstant)" Exclude="@(_Constant_)"/>
     </ItemGroup>
 
     <!-- Define some [Setup] directives if they have been given values. -->
     <ItemGroup>
-      <_SetupDirective_ Include="SourceDir" Value="$(_SourceDir_)" Condition="'$(_SourceDir_)' != ''" />
-      <_SetupDirective_ Include="OutputDir" Value="$(_OutputDir_)" Condition="'$(_OutputDir_)' != ''" />
+      <_SetupDirective_ Include="SourceDir" IsPath="true" Value="$(_SourceDir_)" Condition="'$(_SourceDir_)' != ''" />
+      <_SetupDirective_ Include="OutputDir" IsPath="true" Value="$(_OutputDir_)" Condition="'$(_OutputDir_)' != ''" />
       <_SetupDirective_ Include="OutputBaseFilename" Value="$(_OutputName_)" Condition="'$(_OutputName_)' != ''" />
+    </ItemGroup>
+
+    <!-- Convert paths in _Constant_ items if needed for Wine. -->
+    <ConvertToWinePaths Condition="$(UseWine)"
+                        Items="@(_Constant_)"
+                        MetadataName="Value"
+                        OnlyIfMetadata="IsPath">
+      <Output TaskParameter="ConvertedItems"
+              ItemName="_Constant_Temp_"/>
+    </ConvertToWinePaths>
+    <ItemGroup Condition="$(UseWine)">
+      <_Constant_ Remove="@(_Constant_)" />
+      <_Constant_ Include="@(_Constant_Temp_)" />
+      <_Constant_Temp_ Remove="@(_Constant_Temp_)" />
+    </ItemGroup>
+
+    <!-- Convert paths in _SetupDirective_ items if needed for Wine. -->
+    <ConvertToWinePaths Condition="$(UseWine)"
+                        Items="@(_SetupDirective_)"
+                        MetadataName="Value"
+                        OnlyIfMetadata="IsPath">
+      <Output TaskParameter="ConvertedItems"
+              ItemName="_SetupDirective_Temp_"/>
+    </ConvertToWinePaths>
+    <ItemGroup Condition="$(UseWine)">
+      <_SetupDirective_ Remove="@(_SetupDirective_)" />
+      <_SetupDirective_ Include="@(_SetupDirective_Temp_)" />
+      <_SetupDirective_Temp_ Remove="@(_SetupDirective_Temp_)" />
     </ItemGroup>
 
     <!-- Generate the contents of the include file. -->
@@ -424,13 +453,32 @@
     <!-- Copy metadata from the current item to properties. -->
     <PropertyGroup>
       <_Identity_>%(InnoSetup.Identity)</_Identity_>
+      <_InnoSetupCompiler_>$(InnoSetupCompiler)</_InnoSetupCompiler_>
       <_ScriptFullPath_>%(InnoSetup.ScriptFullPath)</_ScriptFullPath_>
       <_IncludeFileFullPath_>%(InnoSetup.IncludeFileFullPath)</_IncludeFileFullPath_>
+      <_InnoDownloadPluginDir_>$(InnoDownloadPluginDir)</_InnoDownloadPluginDir_>
     </PropertyGroup>
 
-    <!-- Build the command line for InnoSetup. -->
+
+    <!-- Convert paths if needed for Wine. -->
+    <GetWinePaths Condition="$(UseWine)"
+                  HostPath1="$(_InnoSetupCompiler_)"
+                  HostPath2="$(_ScriptFullPath_)"
+                  HostPath3="$(_IncludeFileFullPath_)"
+                  HostPath4="$(_InnoDownloadPluginDir_)">
+      <Output TaskParameter="WinePath1" PropertyName="_InnoSetupCompiler_" />
+      <Output TaskParameter="WinePath2" PropertyName="_ScriptFullPath_" />
+      <Output TaskParameter="WinePath3" PropertyName="_IncludeFileFullPath_" />
+      <Output TaskParameter="WinePath4" PropertyName="_InnoDownloadPluginDir_" />
+    </GetWinePaths>
+
+    <!--
+      Build the command line for InnoSetup.
+      If running in a buildvana-builder container, prepend the path of the Wine invocation script to the command line.
+    -->
     <PropertyGroup>
-      <_CommandLine_>&quot;$(InnoSetupCompiler)&quot; &quot;/I$(InnoDownloadPluginDir)&quot; &quot;/J$(_IncludeFileFullPath_)&quot; &quot;$(_ScriptFullPath_)&quot;</_CommandLine_>
+      <_CommandLine_>&quot;$(_InnoSetupCompiler_)&quot; &quot;/I$(_InnoDownloadPluginDir_)&quot; &quot;/J$(_IncludeFileFullPath_)&quot; &quot;$(_ScriptFullPath_)&quot;</_CommandLine_>
+      <_CommandLine_ Condition="$(UseWine)">$(WineCommand) $(_CommandLine_)</_CommandLine_>
     </PropertyGroup>
 
     <!-- Execute InnoSetup. -->
@@ -439,8 +487,10 @@
     <!-- Don't leave stray properties around. -->
     <PropertyGroup>
       <_Identity_ />
+      <_InnoSetupCompiler_ />
       <_ScriptFullPath_ />
       <_IncludeFileFullPath_ />
+      <_InnoDownloadPluginDir_ />
       <_CommandLine_ />
     </PropertyGroup>
 
