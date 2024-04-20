@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A `.pfx` file used to sign an assembly through the `AssemblySigning` module can now have no password. Previous versions issued an error if the `PfxPassword` property was empty or not defined.  
 (Please note that the `PfxPassword` property has also been renamed to `AssemblyOriginatorKeyPassword`, as noted below in the "Changes to existing features" section.)
 - Some support has been added for running Windows-only tools under [Wine](https://winehq.org) when building under Linux or macOS. Please refer to the relevant [documentation](docs/modules/Wine.md) for details.
+- In Inno Setup support, when there is no `AssemblyTitle` property, `AppFullName` now defaults to `AssemblyName`.
 
 ### Changes to existing features
 

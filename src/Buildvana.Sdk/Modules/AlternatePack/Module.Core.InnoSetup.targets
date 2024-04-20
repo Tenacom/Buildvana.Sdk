@@ -80,6 +80,7 @@
       <CompanyFullName Condition="'$(CompanyFullName)' == ''">$(Company)</CompanyFullName>
       <AppShortName Condition="'$(AppShortName)' == ''">$(AssemblyName)</AppShortName>
       <AppFullName Condition="'$(AppFullName)' == ''">$(AssemblyTitle)</AppFullName>
+      <AppFullName Condition="'$(AppFullName)' == ''">$(AssemblyName)</AppFullName>
       <AppCopyright Condition="'$(AppCopyright)' == ''">$(Copyright)</AppCopyright>
       <AppDescription Condition="'$(AppDescription)' == ''">$(Description)</AppDescription>
       <AppVersion Condition="'$(AppVersion)' == ''">$(VersionPrefix)</AppVersion>
