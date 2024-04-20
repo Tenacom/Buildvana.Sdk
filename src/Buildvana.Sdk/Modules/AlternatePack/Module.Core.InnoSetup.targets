@@ -284,7 +284,7 @@
       <_OutputDir_>%(InnoSetup.OutputDir)</_OutputDir_>
       <_OutputName_>%(InnoSetup.OutputName)</_OutputName_>
       <_IsReleaseAsset_>%(InnoSetup.IsReleaseAsset)</_IsReleaseAsset_>
-      <_ReleaseAssetDecsription_>%(InnoSetup.ReleaseAssetDecsription)</_ReleaseAssetDecsription_>
+      <_ReleaseAssetDescription_>%(InnoSetup.ReleaseAssetDescription)</_ReleaseAssetDescription_>
     </PropertyGroup>
 
     <!-- Add the generated setup to the release asset list. -->
@@ -322,7 +322,7 @@
       <_OutputDir_ />
       <_OutputName_ />
       <_IsReleaseAsset_ />
-      <_ReleaseAssetDecsription_ />
+      <_ReleaseAssetDescription_ />
     </PropertyGroup>
 
   </Target>
