@@ -19,7 +19,7 @@
 
 ## Overview
 
-This module provides support for running Windows-only tools using [Wine](https://winehq.org) when building under Linux or Mac OS.
+This module provides support for running Windows-only tools using [Wine](https://winehq.org) when building under Linux or macOS.
 
 ## Configuration
 
@@ -53,7 +53,7 @@ For an example of script used to run Wine. you can take a look at [`buildvana-bu
 
 ### `NeedWine` items
 
-If you use a Windows-only tool in your build process, and you want to run it with Wine when building on Linux or Mac OS, you must define a `NeedWine` item with the name of the tool, like this:
+If you use a Windows-only tool in your build process, and you want to run it with Wine when building on Linux or macOS, you must define a `NeedWine` item with the name of the tool, like this:
 
 ```xml
   <ItemGroup>
@@ -239,7 +239,7 @@ If we only built our application on Windows, the code would be pretty straightfo
 </Target>
 ```
 
-Here's how we can support running _ExeMangler_ through Wine when building on Linux or Mac OS. Note that nothing changes when the `UseWine` property is `false`, i.e. on Windows:
+Here's how we can support running _ExeMangler_ through Wine when building on Linux or macOS. Note that nothing changes when the `UseWine` property is `false`, i.e. on Windows:
 
 ```xml
 <!-- Trigger Wine module -->

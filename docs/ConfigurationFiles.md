@@ -32,8 +32,8 @@ Configuration files are the exception to the basic rule that every file needed f
 
 Buildvana SDK looks for configuration files in the following directories, according to the operating system:
 
-| Windows | Mac OS | Linux |
-|---------|--------|-------|
+| Windows | macOS | Linux |
+|---------|-------|-------|
 | | /etc/buildvana | /etc/buildvana |
 | C:\\ProgramData\\buildvana | /usr/share/buildvana | /usr/share/buildvana |
 | C:\\Users\\John\\.buildvana | /Users/john/.buildvana | /home/john/.buildvana |
