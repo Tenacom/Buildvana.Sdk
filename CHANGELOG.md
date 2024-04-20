@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+### Changes to existing features
+
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [1.0.154-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.154-preview) (2024-04-20)
+
+### New features
+
 - Buildvana SDK now supports loading a machine- and/or user-scoped configuration file named `Buildvana.Sdk.props`. Please refer to the relevant [documentation](docs/ConfigurationFiles.md) for details.
 - A `.pfx` file used to sign an assembly through the `AssemblySigning` module can now have no password. Previous versions issued an error if the `PfxPassword` property was empty or not defined.  
 (Please note that the `PfxPassword` property has also been renamed to `AssemblyOriginatorKeyPassword`, as noted below in the "Changes to existing features" section.)
@@ -30,8 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `AssemblySigning` module did not work any more, due to the removal of `Buildvana.Sdk.Tasks.dll` in version 1.0.0-alpha.21. The compiled tasks have been brought back and are now compiled for .NET Standard 2.0, so that the same DLL can be used for both Visual Studio and the .NET SDK.
 - Due to a typo in Inno Setup support code, `ReleaseAssetDescription` metadata for `InnoSetup` items were not honored and the default asset description was always used.
 - `AppShortName` and `AppFullName` properties were not honored by Inno Setup support code; `AssemblyName` was used in their place.
-
-### Known problems introduced by this release
 
 ## [1.0.131-preview](https://github.com/Tenacom/Buildvana.Sdk/releases/tag/1.0.131-preview) (2024-01-21)
 
