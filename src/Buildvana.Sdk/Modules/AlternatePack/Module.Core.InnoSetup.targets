@@ -94,8 +94,8 @@
       <_StandardConstant_ Include="COMPANY_WEBSITE" Value="$(CompanyWebSite)" />
       <_StandardConstant_ Include="COMPANY_SUPPORTPHONE" Value="$(CompanySupportPhone)" />
       <_StandardConstant_ Include="APP_EXENAME" Value="$(AssemblyName)" />
-      <_StandardConstant_ Include="APP_SHORTNAME" Value="$(AssemblyName)" />
-      <_StandardConstant_ Include="APP_FULLNAME" Value="$(AssemblyName)" />
+      <_StandardConstant_ Include="APP_SHORTNAME" Value="$(AppShortName)" />
+      <_StandardConstant_ Include="APP_FULLNAME" Value="$(AppFullName)" />
       <_StandardConstant_ Include="APP_COMMENTS" Value="$(AppComments)" />
       <_StandardConstant_ Include="APP_CONTACT" Value="$(AppContact)" />
       <_StandardConstant_ Include="APP_COPYRIGHT" Value="$(AppCopyright)" />

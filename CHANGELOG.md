@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The `AssemblySigning` module did not work any more, due to the removal of `Buildvana.Sdk.Tasks.dll` in version 1.0.0-alpha.21. The compiled tasks have been brought back and are now compiled for .NET Standard 2.0, so that the same DLL can be used for both Visual Studio and the .NET SDK.
 - Due to a typo in Inno Setup support code, `ReleaseAssetDescription` metadata for `InnoSetup` items were not honored and the default asset description was always used.
+- `AppShortName` and `AppFullName` properties were not honored by Inno Setup support code; `AssemblyName` was used in their place.
 
 ### Known problems introduced by this release
 
