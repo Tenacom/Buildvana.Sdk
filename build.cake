@@ -1,3 +1,3 @@
-#load nuget:?package=Buildvana.Cake&version=1.0.4-preview
+#load nuget:?package=Buildvana.Cake&version=1.0.23-preview
 
-RunTarget(Argument("target", "Default"));
+Run();
