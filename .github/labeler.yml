@@ -1,40 +1,40 @@
 'area:code':
-  - 'changed-files':
-    - 'any-glob-to-any-file':
+ - changed-files:
+    - any-glob-to-any-file:
       - '*.sln'
       - 'src/**/*'
 
 'area:style':
-  - 'changed-files':
-    - 'any-glob-to-any-file':
+ - changed-files:
+    - any-glob-to-any-file:
       - '**/.editorconfig'
       - '**/.globalconfig'
       - '**/stylecop.json'
       - '**/*.DotSettings'
 
 'area:build':
-  - 'changed-files':
-    - 'any-glob-to-any-file':
+ - changed-files:
+    - any-glob-to-any-file:
       - '**/*.cake'
       - 'build/**/*'
 
 'area:repo':
-  - 'changed-files':
-    - 'any-glob-to-any-file':
+ - changed-files:
+    - any-glob-to-any-file:
       - '.github/*.yml'
       - '.github/**/*.md'
       - CODEOWNERS
       - '.github/CODEOWNERS'
 
 'area:ci':
-  - 'changed-files':
-    - 'any-glob-to-any-file':
+ - changed-files:
+    - any-glob-to-any-file:
       - '.github/workflows/**/*'
       - 'lgtm.yml'
 
 'area:deps':
-  - 'changed-files':
-    - 'any-glob-to-any-file':
+ - changed-files:
+    - any-glob-to-any-file:
       - '**/Directory.Packages.props'
       - Directory.Build.props
       - Directory.Build.targets
@@ -42,8 +42,8 @@
       - .config/dotnet-tools.json
 
 'area:docs':
-  - 'changed-files':
-    - 'any-glob-to-any-file':
+ - changed-files:
+    - any-glob-to-any-file:
       - 'docs/**/*'
       - '.all-contributorsrc'
       - '**/CHANGELOG.md'

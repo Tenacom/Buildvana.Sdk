@@ -98,9 +98,10 @@ jobs:
         if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
         dotnet cake --target Release --verbosity %CAKE_VERBOSITY%
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      if: ${{ hashFiles('TestResults/Cobertura.xml') != '' }}
+      uses: codecov/codecov-action@v5
       with:
-        working-directory: ./TestResults/
+        working-directory: TestResults
         files: Cobertura.xml
         name: v${{ steps.build.outputs.version }}
         verbose: true
