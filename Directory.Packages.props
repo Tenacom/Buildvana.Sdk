@@ -2,7 +2,7 @@
 
   <!--
     Minimum version of Roslyn supporting our source generators.
-    These properties MUST be kept in sync with the version of Microsoft.CodeAnalysis.CSharp.
+    These properties MUST be kept in sync with the version of Microsoft.CodeAnalysis packages.
   -->
   <PropertyGroup>
 
@@ -32,7 +32,6 @@
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.14.8" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.14.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     <PackageVersion Include="PolyKit.Embedded" Version="3.0.27-preview" />
   </ItemGroup>
 
