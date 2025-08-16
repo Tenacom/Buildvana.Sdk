@@ -17,7 +17,7 @@
     <PackageReference Include="Microsoft.Build.Framework" ExcludeAssets="Runtime" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" ExcludeAssets="Runtime" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" ExcludeAssets="Runtime" PrivateAssets="All" />
-    <PackageReference Include="PolyKit.Embedded" ExcludeAssets="Runtime" PrivateAssets="all" />
+    <PackageReference Include="PolyKit.Embedded" ExcludeAssets="Runtime" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
