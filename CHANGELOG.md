@@ -11,7 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- The minimum supported version of Roslyn is now 4.14
+- The minimum supported version of Visual Studio is now VS2022 17.14
+- The minimum supported version of the .NET SDK is now 8.0.403
+
 ### Bugs fixed in this release
+
+- Additional assembly info generation failed on Visual Basic projects, because the source generator depended on `Microsoft.CodeAnalysis.CSharp`. It now depends on `Microsoft.CodeAnalysis.Common` instead, which is available in all Roslyn compilations.
 
 ### Known problems introduced by this release
 
