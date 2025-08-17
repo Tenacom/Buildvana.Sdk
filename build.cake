@@ -1,3 +1,3 @@
-#load nuget:?package=Buildvana.Cake&version=1.0.29-preview
+#load nuget:?package=Buildvana.Cake&version=1.0.36-preview
 
 Run();
