@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       DOTNET_NOLOGO: 'true'
       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
@@ -42,13 +42,11 @@ jobs:
     - name: Restore .NET tools
       run: dotnet tool restore
     - name: Build solution
+      shell: cmd
       run: |
-        if test "$RUNNER_DEBUG" == "1"; then
-          CAKE_VERBOSITY="Diagnostic"
-        elif test -z "$CAKE_VERBOSITY"; then
-          CAKE_VERBOSITY="Normal"
-        fi
-        dotnet cake --target Build --verbosity $CAKE_VERBOSITY
+        if [%CAKE_VERBOSITY%]==[] set CAKE_VERBOSITY=Normal
+        if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
+        dotnet cake --target Build --verbosity %CAKE_VERBOSITY%
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
